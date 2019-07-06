@@ -1,0 +1,8 @@
+.navbar.is-dark .navbar-start .navbar-item.active {
+    color: #ffdd57;
+    background-color: #050505;
+}
+
+.navbar.is-dark .navbar-start .navbar-item.active:hover {
+    color: #ffdd57;
+}
