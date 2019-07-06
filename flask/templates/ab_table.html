@@ -1,0 +1,14 @@
+<!doctype html>
+<title> Player Search for {{player}}</title>
+<table>
+    <tr>
+        <th>Session</th>
+        <th>Pitch</th>
+    </tr>
+    {% for row in results %}
+    <tr>
+        <th>{{ row.player }}</th>
+        <th>{{ row.pitch }}</th>
+    </tr>
+    {% endfor %}
+</table>

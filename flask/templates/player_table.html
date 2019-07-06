@@ -1,0 +1,18 @@
+<!doctype html>
+<title> Player Search for {{player}}</title>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Reddit Name</th>
+        <th>Batting Type</th>
+        <th>Team</th>
+    </tr>
+    {% for player_row in search_results %}
+        <tr>
+            <th>{{player_row.name}}</th>
+            <th>{{player_row.redditName}}</th>
+            <th>{{player_row.battingType.name}}</th>
+            <th>{{player_row.team.name}}</th>
+        </tr>
+    {% endfor %}
+</table>
