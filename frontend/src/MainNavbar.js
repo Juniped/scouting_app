@@ -5,16 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon'
 import MenuIcon from '@material-ui/icons/Menu';
 import {NavLink} from 'react-router-dom';
-import {Link} from 'react-router-dom';
 import "./Navbar.css";
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 const useStyles = makeStyles(theme => ({
@@ -40,9 +35,9 @@ function MainNavbar(){
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
-    function handleChange(event) {
-      setAuth(event.target.checked);
-    }
+    // function handleChange(event) {
+    //   setAuth(event.target.checked);
+    // }
 
     function handleMenu(event) {
       setAnchorEl(event.currentTarget);

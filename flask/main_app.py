@@ -3,11 +3,13 @@ from __future__ import print_function
 from flask import Flask
 from flask import render_template
 from flask import jsonify
+from flask_cors import CORS
 from credentials import client_id, client_secret
 import requests
 import json
 
 app = Flask(__name__)
+CORS(app)
 
 # Google API Shit
 import pickle
@@ -18,6 +20,8 @@ from google.auth.transport.requests import Request
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 prospect_spreadsheet_id = "1v_5ky7VlQALcHoAxkqQfoK9cnSroUlnc_Fsu609Iu1k"
 prospect_range_name = "Pitcher Data!A:J"
+
+
 @app.route('/')
 def index():
     return "INDEX"
@@ -31,8 +35,8 @@ def player_search(player):
     json_results = r.json()
     return render_template('player_table.html', player=player, search_results=json_results)
 
-@app.route('/info/prospects')
-def pull_prospect_data():
+@app.route('/info', methods=['GET'])
+def pull_data():
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -54,6 +58,7 @@ def pull_prospect_data():
 
     service = build('sheets', 'v4', credentials=creds)
 
+    print("Getting Data")
     # Call the Sheets API
     sheet = service.spreadsheets()
     result = sheet.values().get(spreadsheetId=prospect_spreadsheet_id, range=prospect_range_name).execute()
@@ -64,9 +69,7 @@ def pull_prospect_data():
     if not values:
         print('No data found.')
     else:
-        print('Name, Major:')
         for row in values:
-            # print(row)
             if len(row) > 0:
                 # is_first = False
                 # if row[8] != "":
