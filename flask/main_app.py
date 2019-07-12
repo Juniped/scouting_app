@@ -26,7 +26,7 @@ prospect_range_name = "Pitcher Data!A:J"
 def index():
     return "INDEX"
 
-@app.route('/search/player/<player', methods=['GET'])
+@app.route('/search/player/<player>', methods=['GET'])
 def player_search(player):
     search_url = "https://redditball.xyz/api/v1/players/search"
     params = {"query": player}
@@ -75,16 +75,19 @@ def pull_data():
                 # if row[8] != "":
                 #     is_first = True
                 # Name	Session	Innings	Outs	Pitch	Result	Swing	Diff	OBC	First Pitch
-                response.append(
-                    {
-                        'player_name':row[0],
-                        'inning': row[2],
-                        'outs': row[3],
-                        'pitch':row[4],
-                        'result':row[5],
-                        'swing': row[6],
-                        'difference':row[7]
-                        # 'is_first': is_first,
-                    }
-                )
+                try:
+                    response.append(
+                        {
+                            'player_name':row[0],
+                            'inning': row[2],
+                            'outs': row[3],
+                            'pitch':row[4],
+                            'result':row[5],
+                            'swing': row[6],
+                            'difference':row[7]
+                            # 'is_first': is_first,
+                        }
+                    )
+                except:
+                    continue
     return jsonify(response)
