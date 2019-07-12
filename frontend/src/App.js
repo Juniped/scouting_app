@@ -20,6 +20,10 @@ const useStyles = makeStyles({
   },
 });
 
+class PlayerSearch extends Component {
+  
+}
+
 
 function Main() {
   const classes = useStyles();
