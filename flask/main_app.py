@@ -26,14 +26,14 @@ prospect_range_name = "Pitcher Data!A:J"
 def index():
     return "INDEX"
 
-@app.route('/search/player/<player>')
+@app.route('/search/player/<player', methods=['GET'])
 def player_search(player):
     search_url = "https://redditball.xyz/api/v1/players/search"
     params = {"query": player}
     r = requests.get(search_url, params=params)
-    text = r.text
     json_results = r.json()
-    return render_template('player_table.html', player=player, search_results=json_results)
+    return json_results
+    # return render_template('player_table.html', player=player, search_results=json_results)
 
 @app.route('/info', methods=['GET'])
 def pull_data():
