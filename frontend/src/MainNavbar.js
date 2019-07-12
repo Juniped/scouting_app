@@ -12,6 +12,11 @@ import {NavLink} from 'react-router-dom';
 import "./Navbar.css";
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Avatar from '@material-ui/core/Avatar';
+
+import panda from './panda.png';
+
+
 const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1,
@@ -26,12 +31,17 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(2),
       color: "#DF4601",
     },
+    avatar: {
+      margin: 10,
+    },
   }));
 
 
 function MainNavbar(){
     const classes = useStyles();
-    const [auth, setAuth] = React.useState(true);
+    // const [auth, setAuth] = React.useState(true);
+    const [auth] = React.useState(true);
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
@@ -107,7 +117,8 @@ function MainNavbar(){
                 <Typography variant="h6" className={classes.title}>
                     Scouting Application
                 </Typography>
-                <Icon className={clsx(classes.icon,'fas fa-chart-line fa-2x')} />
+                {/* <Icon className={clsx(classes.icon,'fas fa-chart-line fa-2x')} /> */}
+            <Avatar alt="Juniped" src={panda} className={classes.avatar} />
             </Toolbar>
 
             </AppBar>

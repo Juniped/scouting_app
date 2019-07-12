@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 function Line(props) {
-    if (props.value['inning'] == "Innings"){
+    if (props.value['inning'] === "Innings"){
         return(null)
     }
     return (
@@ -23,9 +23,6 @@ function Line(props) {
 }
 
 class PitchInfo extends Component{
-    constructor(props){
-        super(props);
-    }
     getLines() {
         let d = [];
         for(let i=0; i < this.props.examples.length; i++){
