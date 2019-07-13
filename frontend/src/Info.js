@@ -67,7 +67,7 @@ class PitchInfo extends Component{
 }
 
 
-class Info extends Component{
+class ProspectData extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -135,6 +135,16 @@ class Info extends Component{
                 />
             </div>
             
+        )
+    }
+}
+
+class Info extends Component {
+    render(){
+        return(
+            <div className="Info">
+                <h1> Coming Soon</h1>
+            </div>
         )
     }
 }
