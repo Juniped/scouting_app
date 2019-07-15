@@ -2,34 +2,34 @@ import React, { Component } from 'react';
 import {HashRouter as Router, Route} from "react-router-dom";
 import './App.css';
 import MainNavbar from './MainNavbar';
-import PlayerSearch from './PlayerSearch';
+// import PlayerSearch from './PlayerSearch';
 import Info from './Info.js';
 import TeamStats from './TeamStats';
-import { makeStyles} from '@material-ui/core/styles';
+// import { makeStyles} from '@material-ui/core/styles';
 import { Card, Typography, CardContent } from '@material-ui/core';
 
 
 
 
-const useStyles = makeStyles(theme =>({
-  avatar: {
-    margin: 10,
-  },
-  bigAvatar: {
-    margin: 10,
-    width: 60,
-    height: 60,
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
-  },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-}));
+// const useStyles = makeStyles(theme =>({
+//   avatar: {
+//     margin: 10,
+//   },
+//   bigAvatar: {
+//     margin: 10,
+//     width: 60,
+//     height: 60,
+//   },
+//   textField: {
+//     marginLeft: theme.spacing(1),
+//     marginRight: theme.spacing(1),
+//     width: 200,
+//   },
+//   container: {
+//     display: 'flex',
+//     flexWrap: 'wrap',
+//   },
+// }));
 
 
 

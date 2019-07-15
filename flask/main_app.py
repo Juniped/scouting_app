@@ -7,7 +7,7 @@ from flask_cors import CORS
 from credentials import client_id, client_secret
 import requests
 import json
-
+import mlr_math
 app = Flask(__name__)
 CORS(app)
 
@@ -91,3 +91,13 @@ def pull_data():
                 except:
                     continue
     return jsonify(response)
+
+@app.route('/info/matrix/<player>', methods=['GET'])
+def get_matrix(player):
+    player_data = player_search(player)
+    player_id = player_data['id']
+    url = f"https://redditball.duckblade.com/api/v1/players/{id}/plays/pitching"
+    r = requests.get(url)
+    pitch_json = r.json()
+    return mlr_math.build_matrix(pitch_json)
+    return 
