@@ -38,7 +38,6 @@ class PlayerSearch extends Component {
             <form onSubmit={this.handleSubmit} className={classes.container} >
                 <TextField
                     className={classes.textField}
-                    fullWidth
                     style={{ margin: 20 }}
                     label="Player Name"
                     id="player-name"
