@@ -79,12 +79,8 @@ class PitchInfo extends Component{
         // console.log(this.props);
         let d = [];
         for(let i=0; i < this.props.pitch_data.length; i++){
-            let id = this.props.pitch_data[i]['id'];
             d.push(
-                <Line 
-                    value={this.props.pitch_data[i]} 
-                    key={id} 
-                    onClick={() => this.props.onClick(id)}/>);
+                <Line value={this.props.pitch_data[i]} key={i} />);
         }
         return d;
     }
@@ -92,9 +88,6 @@ class PitchInfo extends Component{
         const loading = this.props.loading;
         let body = loading ?
             (<div className="has-text-centered">
-                {/* <br />
-                <h1>LOADING . . . .</h1> */}
-                {/* <i className="fas fa-spinner icon fa-spin is-large has-text-info" /> */}
             </div>) : 
             (
             <Table size="small" padding="checkbox">

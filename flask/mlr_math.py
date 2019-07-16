@@ -45,7 +45,7 @@ def build_matrix(pitch_list):
         if next_val:
 
             pitch_result = pitch_set['result']
-            if "Steal" in pitch_result or "CS" in pitch_result or "IBB" in pitch_result:
+            if "Steal" in pitch_result or "CS" in pitch_result or "IBB" in pitch_result or "Auto" in pitch_result:
                 continue
             for x in range(0,len(ranges)):
                 if next_val >= ranges[x][0] and next_val <= ranges[x][1]:
