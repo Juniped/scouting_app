@@ -71,10 +71,6 @@ def pull_data():
     else:
         for row in values:
             if len(row) > 0:
-                # is_first = False
-                # if row[8] != "":
-                #     is_first = True
-                # Name	Session	Innings	Outs	Pitch	Result	Swing	Diff	OBC	First Pitch
                 try:
                     response.append(
                         {
@@ -95,13 +91,9 @@ def pull_data():
 @app.route('/info/matrix/<player>', methods=['GET'])
 def get_matrix(player):
     player_data = player_search(player)
-    print(player_data[0])
     player_id = player_data[0]['id']
-    print(player_id)
     url = f"https://redditball.duckblade.com/api/v1/players/{player_id}/plays/pitching"
-    print(url)
     r = requests.get(url)
-    print(r)
     pitch_json = r.json()
     return jsonify(mlr_math.build_matrix(pitch_json))
 
