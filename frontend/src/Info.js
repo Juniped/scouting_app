@@ -1,83 +1,173 @@
 import React, { Component } from 'react';
-// import Table from '@material-ui/core/table';
-// import TableBody from '@material-ui/core/TableBody';
-// import TableCell from '@material-ui/core/TableCell';
-// import TableHead from '@material-ui/core/TableHead';
-// import TableRow from '@material-ui/core/TableRow';
+import Table from '@material-ui/core/table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import {withStyles} from '@material-ui/styles/withStyles';
 
-// function Line(props) {
-//     if (props.value['inning'] === "Innings"){
-//         return(null)
-//     }
-//     return (
-//         <TableRow>
-//             <TableCell>{props.value['player_name']}</TableCell>
-//             <TableCell>{props.value['inning']}</TableCell>
-//             <TableCell>{props.value['outs']}</TableCell>
-//             <TableCell>{props.value['pitch']}</TableCell>
-//             <TableCell>{props.value['swing']}</TableCell>
-//             <TableCell>{props.value['difference']}</TableCell>
-//             <TableCell>{props.value['result']}</TableCell>
-//         </TableRow>
-//     );
-// }
+function Cell(props){
+    // console.log(props.value);
+    let val = props.value;
+    let colorStyle = {backgroundColor:"#FFFFFF"};
+    if (val === 1){
+        colorStyle = {backgroundColor:"#EEEEEE"};
+    } else if (val === 2){
+        colorStyle = {backgroundColor:"#DDDDDD"};
+    } else if (val === 3){
+        colorStyle = {backgroundColor:"#CCCCCC"};
+    }else if (val === 4){
+        colorStyle = {backgroundColor:"#BBBBB"};
+    }
+    
 
-// class PitchInfo extends Component{
-//     getLines() {
-//         let d = [];
-//         for(let i=0; i < this.props.examples.length; i++){
-//             let id = this.props.examples[i]['id'];
-//             d.push(
-//                 <Line 
-//                     value={this.props.examples[i]} 
-//                     key={id} 
-//                     onClick={() => this.props.onClick(id)}/>);
-//         }
-//         return d;
-//     }
-//     render() {
-//         const loading = this.props.loading;
-//         let body = loading ?
-//             (<div className="has-text-centered">
-//                 <br />
-//                 <i className="fas fa-spinner icon fa-spin is-large has-text-info" />
-//             </div>) : 
-//             (
-//             <Table size="small">
-//                 <TableHead>
-//                     <TableRow>
-//                         <TableCell>Name</TableCell>
-//                         <TableCell>Inning</TableCell>
-//                         <TableCell>Outs</TableCell>
-//                         <TableCell>Pitch</TableCell>
-//                         <TableCell>Swing</TableCell>
-//                         <TableCell>Difference</TableCell>
-//                         <TableCell>result</TableCell>
-//                     </TableRow>
-//                 </TableHead>
-//                 <TableBody>            
-//                     {this.getLines()}
-//                 </TableBody>
-//             </Table>
-//             );
-//         return(
-//             <div>{body}</div>
-//         );
-//     }
-// }
+    return(
+        <TableCell style={colorStyle}>{props.value}</TableCell>
+    );
+}
+
+function Line(props) {
+    function getCell(value){
+        console.log(value);
+        return (
+            <Cell value={value}/>
+        )
+    }
+    return (
+        <TableRow>
+            <TableCell>{props.value['range']}</TableCell>
+
+            {getCell(props.value['HR'])}
+            {getCell(props.value['3B'])}
+            {getCell(props.value['2B'])}
+            {getCell(props.value['1B'])}
+            {getCell(props.value['BB'])}
+            {getCell(props.value['FO'])}
+            {getCell(props.value['K'])}
+            {getCell(props.value['PO'])}
+            {getCell(props.value['LGO'])}
+            {getCell(props.value['RGO'])}
+            {getCell(props.value['IBB'])}
+        </TableRow>
+    );
+}
+
+class PitchInfo extends Component{
+    // constructor(props){
+    //     super(props);   
+    
+    // }
+    getLines() {
+        // console.log(this.props);
+        let d = [];
+        for(let i=0; i < this.props.pitch_data.length; i++){
+            let id = this.props.pitch_data[i]['id'];
+            d.push(
+                <Line 
+                    value={this.props.pitch_data[i]} 
+                    key={id} 
+                    onClick={() => this.props.onClick(id)}/>);
+        }
+        return d;
+    }
+    render() {
+        const loading = this.props.loading;
+        let body = loading ?
+            (<div className="has-text-centered">
+                <br />
+                <h1>LOADING . . . .</h1>
+                {/* <i className="fas fa-spinner icon fa-spin is-large has-text-info" /> */}
+            </div>) : 
+            (
+            <Table size="small">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Range</TableCell>
+                        <TableCell>HR</TableCell>
+                        <TableCell>3B</TableCell>
+                        <TableCell>2B</TableCell>
+                        <TableCell>1B</TableCell>
+                        <TableCell>BB</TableCell>
+                        <TableCell>FO</TableCell>
+                        <TableCell>K</TableCell>
+                        <TableCell>PO</TableCell>
+                        <TableCell>LGO</TableCell>
+                        <TableCell>RGO</TableCell>
+                        <TableCell>IBB</TableCell>
+
+                    </TableRow>
+                </TableHead>
+                <TableBody>            
+                    {this.getLines()}
+                </TableBody>
+            </Table>
+            );
+        return(
+            <div>{body}</div>
+        );
+    }
+}
 
 class PitchMatrix extends Component{
-    // constructor(props){
-    //     super(props);
-    // }
+    constructor(props){
+        super(props);
+        this.state = {
+            pitch_data: [],
+            loading: true,
+        }
+        this.getMatrix = this.getMatrix.bind(this);
+        this.addData = this.addData.bind(this);
+    }
     componentDidMount(){
         this.getMatrix();
     }
     getMatrix(){
         this.setState({loading:true});
-        let url = "https://localhost:5000/info/matrix/" + this.props.player;
+        let player_name = encodeURIComponent(this.props.player.trim());
+        let url = "http://localhost:5000/info/matrix/" + player_name;
         console.log(url);
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then((res) => res.json())
+        .then((result) => {
+            console.log(result);
+            const pitch_data = this.state.pitch_data.slice();
+            let new_pitches = [];
+            for(let i = 0; i < result.length; i++){
+                let res = result[i];
+                console.log(res)
+                new_pitches.push(res);
+            }
+            // console.log(new_pitches);
+            this.setState({
+                pitch_data: pitch_data.concat(new_pitches),
+                loading: false,
+            });
+        })
+        .catch(() => {
+            console.log('Request Swallowed!');
+        });
     }
+    addData(i) {
+        const pitch_data = this.state.pitch_data.slice();
+        let new_data = []
+        new_data.push(i);
+        this.setState({
+            pitch_data: pitch_data.concat(new_data),
+        });
+    }
+    render(){
+        return(
+            <div className="Pitch Matrix Root">
+                <PitchInfo loading={this.state.loading} pitch_data={this.state.pitch_data}/>
+            </div>
+        )
+    }
+
 
 }
 
@@ -117,7 +207,7 @@ class PitchMatrix extends Component{
 //                 (result) => {
 //                     console.log(result)
 //                     const examples = this.state.examples.slice()
-//                     let new_data = []
+//                     let new_Data = []
 //                     for(let i = 0; i < result.length; i++) {
 //                         let res = result[i];
 //                         new_data.push(res)
@@ -157,8 +247,8 @@ class Info extends Component {
     render(){
         return(
             <div className="Info">
-                <h1> Coming Soon</h1>
-                <PitchMatrix player="Bobo Bones" />
+                {/* <h1> Coming Soon</h1> */}
+                <PitchMatrix player="Lefty Louis" />
             </div>
         )
     }

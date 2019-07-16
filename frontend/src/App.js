@@ -52,8 +52,8 @@ class App extends Component{
             <MainNavbar />
             <div className="container">
               <Route exact path="/" component={Main} />
-              <Route path="info/pitchers" component={Info} />
-              <Route path="team-stats" compont={TeamStats} />
+              <Route path="/info" component={Info} />
+              <Route path="/team-stats" compont={TeamStats} />
             </div>
           </div>
         </Router>

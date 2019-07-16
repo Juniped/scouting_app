@@ -3,7 +3,7 @@ import React from "react";
 import { loadCSS } from 'fg-loadcss';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 // import Icon from '@material-ui/core/Icon'
 import MenuIcon from '@material-ui/icons/Menu';
@@ -59,14 +59,6 @@ const useStyles = makeStyles(theme => ({
     },
     
 }));
-
-function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
-}
 
 
 function BMenu() {
@@ -158,6 +150,10 @@ function BMenu() {
 
 export default function MainNavbar(){
   const classes = useStyles();
+  const [value, setValue] = React.useState();
+  function handleChange(event, newValue) {
+    setValue(newValue);
+  }
 
   return (
     <div className={classes.root}>
@@ -165,11 +161,11 @@ export default function MainNavbar(){
         <Toolbar>
           <MediaQuery maxWidth={600}><BMenu /></MediaQuery>
           <MediaQuery minWidth={601}>
-          <Tabs>
+          <Tabs value={value} onChange={handleChange}>
             <Link to="/" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
               <Tab label="Home" />
             </Link>
-            <Link to="/info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
+            <Link to="info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
               <Tab label="Player Info"/>
             </Link>
           </Tabs>

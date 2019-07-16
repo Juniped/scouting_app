@@ -26,9 +26,9 @@ prospect_range_name = "Pitcher Data!A:J"
 def index():
     return "INDEX"
 
-@app.route('/search/player/<player>', methods=['GET'])
+# @app.route('/search/player/<player>', methods=['GET'])
 def player_search(player):
-    search_url = "https://redditball.xyz/api/v1/players/search"
+    search_url = "https://redditball.duckblade.com/api/v1/players/search"
     params = {"query": player}
     r = requests.get(search_url, params=params)
     json_results = r.json()
@@ -95,9 +95,15 @@ def pull_data():
 @app.route('/info/matrix/<player>', methods=['GET'])
 def get_matrix(player):
     player_data = player_search(player)
-    player_id = player_data['id']
-    url = f"https://redditball.duckblade.com/api/v1/players/{id}/plays/pitching"
+    print(player_data[0])
+    player_id = player_data[0]['id']
+    print(player_id)
+    url = f"https://redditball.duckblade.com/api/v1/players/{player_id}/plays/pitching"
+    print(url)
     r = requests.get(url)
+    print(r)
     pitch_json = r.json()
-    return mlr_math.build_matrix(pitch_json)
-    return 
+    return jsonify(mlr_math.build_matrix(pitch_json))
+
+if __name__ == "__main__":
+    app.run(ssl_context='adhoc')
