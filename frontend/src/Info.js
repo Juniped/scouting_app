@@ -14,6 +14,7 @@ import { Grid, Container, Card, Paper } from '@material-ui/core';
 const useStyles = theme => ({
     root: {
         overflowX: 'auto',
+        margin: theme.spacing(1),
     },
     container: {
         display: 'flex',
@@ -70,13 +71,20 @@ function Line(props) {
     );
 }
 
+function L6Line(props) {
+    return (
+        <TableRow>
+            <TableCell>{props.value['pitch']}</TableCell>
+            <TableCell>{props.value['swing']}</TableCell>
+            <TableCell>{props.value['result']}</TableCell>
+            <TableCell>{props.value['diff']}</TableCell>
+            <TableCell>{props.value['change']}</TableCell>
+        </TableRow>
+    );
+}
+
 class PitchInfo extends Component{
-    // constructor(props){
-    //     super(props);   
-    
-    // }
     getLines() {
-        // console.log(this.props);
         let d = [];
         for(let i=0; i < this.props.pitch_data.length; i++){
             d.push(
@@ -117,6 +125,42 @@ class PitchInfo extends Component{
     }
 }
 
+class Last6Table extends Component{
+    getLines() {
+        let d = [];
+        for(let i=0; i < this.props.pitch_data.length; i++){
+            d.push(
+                <L6Line value={this.props.pitch_data[i]} key={i} />);
+        }
+        return d;
+    }
+    render() {
+        const loading = this.props.loading;
+        let body = loading ?
+            (<div className="has-text-centered">
+            </div>) : 
+            (
+            <Table size="small" padding="checkbox" hover="true">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Pitch</TableCell>
+                        <TableCell>Swing</TableCell>
+                        <TableCell>Result</TableCell>
+                        <TableCell>Diff</TableCell>
+                        <TableCell>Change</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>            
+                    {this.getLines()}
+                </TableBody>
+            </Table>
+            );
+        return(
+            <div>{body}</div>
+        );
+    }
+}
+
 class PitchMatrix extends Component{
     constructor(props){
         super(props);
@@ -128,15 +172,9 @@ class PitchMatrix extends Component{
         this.addData = this.addData.bind(this);
     }
     componentDidMount(){
-        // if (this.props.player !== ""){
         this.getMatrix();
-        // }
     }
     componentDidUpdate(prevProps) {
-        console.log("UPDATE");
-        console.log(prevProps);
-        console.log(this.props);
-        // Typical usage (don't forget to compare props):
         if (this.props.player !== prevProps.player) {
             this.getMatrix();
         }
@@ -162,7 +200,6 @@ class PitchMatrix extends Component{
                 let res = result[i];
                 new_pitches.push(res);
             }
-            // console.log(new_pitches);
             this.setState({
                 pitch_data: pitch_data.concat(new_pitches),
                 loading: false,
@@ -188,6 +225,80 @@ class PitchMatrix extends Component{
                 <PitchInfo loading={this.state.loading} pitch_data={this.state.pitch_data}/>
             </div>
         )
+    }
+}
+
+class Last6 extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            pitch_data: [],
+            loading:true,
+        }
+        this.getL6 = this.getL6.bind(this);
+        this.addData = this.addData.bind(this);
+    }
+    componentDidMount(){
+        this.getL6();
+    }
+    componentDidUpdate(prevProps) {
+        if (this.props.player !== prevProps.player) {
+            this.getL6();
+        }
+    }
+    getL6(){
+        this.setState({loading:true, pitch_data:[]});
+        if (this.props.player === undefined){
+            return;
+        }
+        let player_name = encodeURIComponent(this.props.player.trim());
+        let url = "http://localhost:5000/info/l6/" + player_name;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then((res) => res.json())
+        .then((result) => {
+            const pitch_data = this.state.pitch_data.slice();
+            let new_pitches = [];
+            for(let i = 0; i < result.length; i++){
+                let res = result[i];
+                new_pitches.push(res);
+            }
+            console.log(new_pitches)
+            this.setState({
+                pitch_data: pitch_data.concat(new_pitches),
+                loading: false,
+            });
+        })
+        .catch(() => {
+            console.log('Request Swallowed!');
+        });
+    }
+    addData(i) {
+        const pitch_data = this.state.pitch_data.slice();
+        let new_data = []
+        new_data.push(i);
+        this.setState({
+            pitch_data: pitch_data.concat(new_data),
+        });
+    }
+    render() {
+        const loading = this.state.loading;
+        let body = loading ?
+            (<div className="has-text-centered">
+            </div>) : 
+            (
+            <div>
+                <h3>Last 6 Pitch Trends</h3>
+                <Last6Table pitch_data={this.state.pitch_data} />
+            </div>
+            )
+        return(
+            <div>{body}</div>
+        );
     }
 }
 
@@ -236,6 +347,14 @@ class Info extends Component {
                             <Paper>
                             <PitchMatrix player={this.state.player} />
                         </Paper>
+                    </Container>
+                </Grid>
+                <br/>
+                <Grid item xs={12} md={6}>
+                    <Container className={classes.container}>
+                        <Card>
+                            <Last6 player={this.state.player} />
+                        </Card>
                     </Container>
                 </Grid>
             </div>);
