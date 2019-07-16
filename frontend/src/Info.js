@@ -1,26 +1,47 @@
 import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+
 import Table from '@material-ui/core/table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {withStyles} from '@material-ui/styles/withStyles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import { withStyles, fade } from '@material-ui/core/styles';
+import { Grid, Container, Card, Paper } from '@material-ui/core';
 
+const useStyles = theme => ({
+    root: {
+        overflowX: 'auto',
+    },
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+    },
+    button: {
+        marginTop: theme.spacing(3),
+        marginBottom: theme.spacing(3),
+        backgroundColor: "#fb4f14",
+    },
+    paper: {
+        padding: theme.spacing(3, 2),
+    },
+    table: {
+        minWidth: 550,
+    },
+});
 function Cell(props){
-    // console.log(props.value);
     let val = props.value;
-    let colorStyle = {backgroundColor:"#FFFFFF"};
-    if (val === 1){
-        colorStyle = {backgroundColor:"#EEEEEE"};
-    } else if (val === 2){
-        colorStyle = {backgroundColor:"#DDDDDD"};
-    } else if (val === 3){
-        colorStyle = {backgroundColor:"#CCCCCC"};
-    }else if (val === 4){
-        colorStyle = {backgroundColor:"#BBBBB"};
-    }
-    
-
+    var color_value = 0xFFFFFF
+    var sub_color = 0x003333 * val
+    var result = color_value = color_value - sub_color;
+    var colorHex = "#" +result.toString(16)
+    let colorStyle = { backgroundColor: colorHex};
     return(
         <TableCell style={colorStyle}>{props.value}</TableCell>
     );
@@ -28,15 +49,13 @@ function Cell(props){
 
 function Line(props) {
     function getCell(value){
-        console.log(value);
         return (
             <Cell value={value}/>
         )
     }
     return (
         <TableRow>
-            <TableCell>{props.value['range']}</TableCell>
-
+            <TableCell component="th" scope="row">{props.value['range']}</TableCell>
             {getCell(props.value['HR'])}
             {getCell(props.value['3B'])}
             {getCell(props.value['2B'])}
@@ -47,7 +66,6 @@ function Line(props) {
             {getCell(props.value['PO'])}
             {getCell(props.value['LGO'])}
             {getCell(props.value['RGO'])}
-            {getCell(props.value['IBB'])}
         </TableRow>
     );
 }
@@ -74,12 +92,12 @@ class PitchInfo extends Component{
         const loading = this.props.loading;
         let body = loading ?
             (<div className="has-text-centered">
-                <br />
-                <h1>LOADING . . . .</h1>
+                {/* <br />
+                <h1>LOADING . . . .</h1> */}
                 {/* <i className="fas fa-spinner icon fa-spin is-large has-text-info" /> */}
             </div>) : 
             (
-            <Table size="small">
+            <Table size="small" padding="checkbox">
                 <TableHead>
                     <TableRow>
                         <TableCell>Range</TableCell>
@@ -93,8 +111,6 @@ class PitchInfo extends Component{
                         <TableCell>PO</TableCell>
                         <TableCell>LGO</TableCell>
                         <TableCell>RGO</TableCell>
-                        <TableCell>IBB</TableCell>
-
                     </TableRow>
                 </TableHead>
                 <TableBody>            
@@ -119,13 +135,26 @@ class PitchMatrix extends Component{
         this.addData = this.addData.bind(this);
     }
     componentDidMount(){
+        // if (this.props.player !== ""){
         this.getMatrix();
+        // }
+    }
+    componentDidUpdate(prevProps) {
+        console.log("UPDATE");
+        console.log(prevProps);
+        console.log(this.props);
+        // Typical usage (don't forget to compare props):
+        if (this.props.player !== prevProps.player) {
+            this.getMatrix();
+        }
     }
     getMatrix(){
-        this.setState({loading:true});
+        this.setState({loading:true, pitch_data:[]});
+        if (this.props.player === undefined){
+            return;
+        }
         let player_name = encodeURIComponent(this.props.player.trim());
         let url = "http://localhost:5000/info/matrix/" + player_name;
-        console.log(url);
         fetch(url, {
             method: 'GET',
             headers: {
@@ -134,12 +163,10 @@ class PitchMatrix extends Component{
         })
         .then((res) => res.json())
         .then((result) => {
-            console.log(result);
             const pitch_data = this.state.pitch_data.slice();
             let new_pitches = [];
             for(let i = 0; i < result.length; i++){
                 let res = result[i];
-                console.log(res)
                 new_pitches.push(res);
             }
             // console.log(new_pitches);
@@ -161,97 +188,68 @@ class PitchMatrix extends Component{
         });
     }
     render(){
+        const { classes } = this.props;
         return(
             <div className="Pitch Matrix Root">
+                <h3> Pitch Matrix</h3>
                 <PitchInfo loading={this.state.loading} pitch_data={this.state.pitch_data}/>
             </div>
         )
     }
-
-
 }
 
-// class ProspectData extends Component{
-//     constructor(props){
-//         super(props);
-//         this.state = {
-//             examples: [],
-//             loading: true,
-//         };
-//         this.sleep = this.sleep.bind(this);
-//         this.getData = this.getData.bind(this);
-//         this.addData = this.addData.bind(this);
-//     }
-//     componentDidMount(){
-//         // Ensure mounting before accessing API
-//         this.getData();
-//     }
-//     sleep(milliseconds) {
-//         var start = new Date().getTime();
-//         for (var i = 0; i < 1e7; i++) {
-//           if ((new Date().getTime() - start) > milliseconds){
-//             break;
-//           }
-//         }
-//       }
-//     getData(){
-//         this.setState({loading:true});
-//         let url = "http://localhost:5000/info";
-//         fetch(url, {
-//             method: 'GET',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         }).then((res) => res.json())
-//             .then(
-//                 (result) => {
-//                     console.log(result)
-//                     const examples = this.state.examples.slice()
-//                     let new_Data = []
-//                     for(let i = 0; i < result.length; i++) {
-//                         let res = result[i];
-//                         new_data.push(res)
-//                     }
-//                     this.setState({
-//                         examples: examples.concat(new_data),
-//                         loading: false,
-//                     });
-//                 },
-//             )
-//             .catch(() => {
-//                 console.log('Swallowed!')
-//             });
-//     }
-//     addData(i) {
-//         const examples = this.state.examples.slice();
-//         let new_data = []
-//         new_data.push(i);
-//         this.setState({
-//             examples: examples.concat(new_data),
-//         });
-//     }
-//     render(){
-//         return(
-//             <div>
-//                 <PitchInfo 
-//                     loading={this.state.loading} 
-//                     examples={this.state.examples}
-//                 />
-//             </div>
-            
-//         )
-//     }
-// }
-
 class Info extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isOpened:false,
+            value:"", 
+            loading: true,
+            player:"",
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleChange(event) {
+        this.setState({value: event.target.value});
+    }
+    handleSubmit(event) {
+        event.preventDefault();
+        this.setState({loading: false});
+        this.setState({player:this.state.value});
+        this.setState({ value:""});
+    }
     render(){
+        const { classes } = this.props;
+        const loading = this.state.loading;
+        let body = loading ?
+            (<div>
+                <Grid item xs={12}>
+                    <form onSubmit={this.handleSubmit} className={classes.container} >
+                        <TextField className={classes.textField} style={{ margin: 20 }} label="Player Name" id="player-name" type="text" value={this.state.value} onChange={this.handleChange} variant="outlined" margin="normal" InputLabelProps={{shrink: true,}} />
+                        <Button variant="contained" className={classes.button} type="submit" size="small">Submit</ Button>
+                    </form>
+                </Grid>
+            </div>) :
+            (<div>
+                <Grid item xs={12}>
+                    <form onSubmit={this.handleSubmit} className={classes.container} >
+                        <TextField className={classes.textField} style={{ margin: 20 }} label="Player Name" id="player-name" type="text" value={this.state.value} onChange={this.handleChange} variant="outlined" margin="normal" InputLabelProps={{ shrink: true, }} />
+                        <Button variant="contained" className={classes.button} type="submit" size="small">Submit</ Button>
+                    </form>
+                </Grid>
+                <Grid item xs={12}>
+                    <Container>
+                            <Paper>
+                            <PitchMatrix player={this.state.player} />
+                        </Paper>
+                    </Container>
+                </Grid>
+            </div>);
         return(
-            <div className="Info">
-                {/* <h1> Coming Soon</h1> */}
-                <PitchMatrix player="Lefty Louis" />
-            </div>
-        )
+            body
+        );
     }
 }
 
-export default Info;
+export default withStyles(useStyles)(Info);
