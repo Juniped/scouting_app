@@ -55,4 +55,23 @@ def build_matrix(pitch_list):
     for key, value in range_dict.items():
         ret_list.append(value)
     return ret_list
+
+def get_last_6_pitches(pitch_list):
+    pitches = pitch_list[-6:]
+    print(pitches)
+    # Get -> Pitch, Result, Swing, Diff, Change
+    # pitch_info = {
+    l6 = []
+    for pitch in pitches:
+        l6.append({
+            'pitch':pitch['pitch'],
+            'swing':pitch['swing'],
+            'diff':pitch['diff'],
+            'result':pitch['result'],
+            'change':0,
+        })
+    for x in range(0, len(l6)-1 ):
+        l6[x]['change'] = l6[x+1]['pitch'] - l6[x]['pitch']
+    return l6
+
     

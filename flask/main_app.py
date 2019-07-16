@@ -81,7 +81,6 @@ def pull_data():
                             'result':row[5],
                             'swing': row[6],
                             'difference':row[7]
-                            # 'is_first': is_first,
                         }
                     )
                 except:
@@ -96,6 +95,15 @@ def get_matrix(player):
     r = requests.get(url)
     pitch_json = r.json()
     return jsonify(mlr_math.build_matrix(pitch_json))
+
+@app.route('/info/l6/<player>', methods=['GET'])
+def get_6(player):
+    player_data = player_search(player)
+    player_id = player_data[0]['id']
+    url = f"https://redditball.duckblade.com/api/v1/players/{player_id}/plays/pitching"
+    r = requests.get(url)
+    pitch_json = r.json()
+    return jsonify(mlr_math.get_last_6_pitches(pitch_json))
 
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')
