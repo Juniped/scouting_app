@@ -17,7 +17,13 @@ class Main extends Component{
 }
 
 class App extends Component{
-  render() {
+	constructor(props){
+		super(props);
+		this.state = {
+			authorized: false,
+		}
+	}
+	render() {
     return (
       <div className="App">
         <Router>
