@@ -1,22 +1,16 @@
 import React from "react";
-// import clsx from 'clsx';
 import { loadCSS } from 'fg-loadcss';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-// import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-// import Icon from '@material-ui/core/Icon'
 import MenuIcon from '@material-ui/icons/Menu';
 import {Link} from 'react-router-dom';
 import "./Navbar.css";
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-// import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { fade } from '@material-ui/core/styles';
 import { makeStyles } from "@material-ui/styles";
-// import panda from './panda.png';
 import { red } from '@material-ui/core/colors';
-// import Responsive from 'react-responsive';
 import MediaQuery from 'react-responsive';
 import { Tabs, Tab } from "@material-ui/core";
 

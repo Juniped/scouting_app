@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import Table from '@material-ui/core/table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { withStyles, fade } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { Grid, Container, Card, Paper } from '@material-ui/core';
 
 import RawData from './data_components/RawData';
@@ -37,6 +31,9 @@ const useStyles = theme => ({
     },
     table: {
         minWidth: 550,
+    },
+    card: {
+        backgroundColor: "#FFFFFF",
     },
 });
 class Info extends Component {
@@ -88,7 +85,7 @@ class Info extends Component {
                 <br/>
                 <Grid item xs={12} md={6}>
                     <Container className={classes.container}>
-                        <Card>
+                        <Card className={classes.card}>
                             <LastSix player={this.state.player} />
                         </Card>
                     </Container>
