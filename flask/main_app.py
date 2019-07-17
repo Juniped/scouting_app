@@ -106,14 +106,24 @@ def get_6(player):
     pitch_json = r.json()
     return jsonify(mlr_math.get_last_6_pitches(pitch_json))
 
-@app.route("/login", methods=['POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+@app.route('/info/raw/<player>', methods=['GET'])
+def get_raw(player):
+    player_data = player_search(player)
+    player_id = player_data[0]['id']
+    url = f"https://redditball.duckblade.com/api/v1/players/{player_id}/plays/pitching"
+    r = requests.get(url)
+    pitch_json = r.json()
+    print(pitch_json)
+    return jsonify(pitch_json)
 
-        return auth.check_user(username, password)
-    else:
-        return False
+# @app.route("/login", methods=['POST'])
+# def login():
+#     if request.method == 'POST':
+#         username = request.form.get('username')
+#         password = request.form.get('password')
+
+#         return auth.check_user(username, password)
+#     else:
+#         return False
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')

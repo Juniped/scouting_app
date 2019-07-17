@@ -91,9 +91,9 @@ class Info extends Component {
                     </Container>
                 </Grid>
                 <hr />
-                <Grid item xs={12}>
+                <Grid item xs={12} >
                     <Container className={classes.container}>
-                        <RawData />
+                        <RawData player={this.state.player}/>
                     </Container>
                 </Grid>
             </div>);
