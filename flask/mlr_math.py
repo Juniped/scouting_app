@@ -58,9 +58,6 @@ def build_matrix(pitch_list):
 
 def get_last_6_pitches(pitch_list):
     pitches = pitch_list[-6:]
-    print(pitches)
-    # Get -> Pitch, Result, Swing, Diff, Change
-    # pitch_info = {
     l6 = []
     for pitch in pitches:
         l6.append({
@@ -73,5 +70,8 @@ def get_last_6_pitches(pitch_list):
     for x in range(0, len(l6)-1 ):
         l6[x]['change'] = l6[x+1]['pitch'] - l6[x]['pitch']
     return l6
+
+def random_stats(pitch_list):
+    return "yadayadayadayadayadayadayadayadayadaydaydaydaydaydayda"
 
     

@@ -8,6 +8,7 @@ from credentials import client_id, client_secret
 import requests
 import json
 import mlr_math
+import auth
 app = Flask(__name__)
 CORS(app)
 
@@ -105,5 +106,14 @@ def get_6(player):
     pitch_json = r.json()
     return jsonify(mlr_math.get_last_6_pitches(pitch_json))
 
+@app.route("/login", methods=['POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        return auth.check_user(username, password)
+    else:
+        return False
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')

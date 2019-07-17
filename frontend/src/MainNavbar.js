@@ -25,16 +25,13 @@ const functionStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   menuButton: {
-    // marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
   },
   icon: {
-    // margin: theme.spacing(2),
   },
   iconHover: {
-    // margin: theme.spacing(2),
     '&:hover': {
       color: red[800],
     },
@@ -43,9 +40,7 @@ const functionStyles = makeStyles(theme => ({
 
 const useStyles = makeStyles(theme => ({
     root: {flexGrow: 1, },
-    // menuButton: { marginRight: theme.spacing(1),},
     title: { flexGrow: 1,},
-    // icon: {margin: theme.spacing(2),color: "#DF4601",},
     avatar: {margin: 10, },
     tab: {
       '&:hover': {
@@ -63,10 +58,8 @@ const useStyles = makeStyles(theme => ({
 
 function BMenu() {
   const classes = functionStyles();
-  // const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  // function handleChange(event) { setAuth(event.target.checked); }
   function handleMenu(event) { setAnchorEl(event.currentTarget); }
   function handleClose() { setAnchorEl(null); }
   React.useEffect(() => {loadCSS('https://use.fontawesome.com/releases/v5.1.0/css/all.css',document.querySelector('#font-awesome-css'), ); }, []);
@@ -90,63 +83,11 @@ function BMenu() {
         <Link to="info" style={{ textDecoration: 'none', color: '#000000' }}>
           <MenuItem onClick={handleClose}>Info</MenuItem>
         </Link>
-        {/* <MenuItem>
-          <a href="https://github.com/Juniped/scouting_app">
-            <Icon className={clsx(classes.icon, 'fab fa-github')} style={{ color: '#000000' }} />
-          </a>
-        </MenuItem> */}
       </Menu>
       </div>
         
   );
 }
-
-// function NavTabs() {
-//   const classes = tabStyles();
-//   // var value = 0
-//   // function setValue(newValue){
-//   //   value = newValue;
-//   // }
-//   const [value, setValue] = React.useState(0);
-
-//   function handleChange(event, newValue) {
-//     console.log(newValue);
-//     setValue(newValue);
-//   }
-//   return (
-//     <Tabs value={value} onChange={handleChange}>
-//       <NavLink to="/" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}><Tab label="Home" /> </ NavLink>
-//       <NavLink to="info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}><Tab label="Player Info" /></NavLink>
-//     </Tabs>
-//   );
-
-// }
-
-// class MainNavbar extends Component{
-//   constructor(props){
-//     super(props);
-//     this.value = 0;
-//   }
-//   auth() {
-//     React.useState(true);
-//   }
-//   render(){
-//     const { classes } = this.props;
-//     return (
-        // <div className={classes.root}>
-        //   <AppBar style={{backgroundColor: '#080808'}} position='sticky' >
-        //     <Toolbar>
-        //       <MediaQuery maxWidth={600}><BMenu /></MediaQuery>
-        //       <MediaQuery minWidth={601}>
-        //         <NavTabs />
-        //       </MediaQuery>
-        //     </Toolbar>
-        //     </AppBar>
-            
-        // </div>
-//     );
-//   }
-// }
 
 export default function MainNavbar(){
   const classes = useStyles();
@@ -157,7 +98,7 @@ export default function MainNavbar(){
 
   return (
     <div className={classes.root}>
-      <AppBar style={{backgroundColor: '#080808'}} position='sticky' >
+      <AppBar style={{backgroundColor: '#0c0c0c'}} position='sticky' >
         <Toolbar>
           <MediaQuery maxWidth={600}><BMenu /></MediaQuery>
           <MediaQuery minWidth={601}>
@@ -175,8 +116,4 @@ export default function MainNavbar(){
     </div>
     
   )
-
-
 }
-
-// export default withStyles(useStyles)(MainNavbar);
