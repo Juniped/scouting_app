@@ -14,6 +14,9 @@ import { red } from '@material-ui/core/colors';
 import MediaQuery from 'react-responsive';
 import { Tabs, Tab } from "@material-ui/core";
 
+import { hasRole} from './auth';
+
+
 const functionStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -83,13 +86,14 @@ function BMenu() {
   );
 }
 
-export default function MainNavbar(){
+export default function MainNavbar(props){
   const classes = useStyles();
   const [value, setValue] = React.useState();
   function handleChange(event, newValue) {
     setValue(newValue);
   }
-
+  // console.log(props.user)
+  // console.log(hasRole(props.user, ['user']));
   return (
     <div className={classes.root}>
       <AppBar style={{backgroundColor: '#0c0c0c'}} position='sticky' >
@@ -97,12 +101,13 @@ export default function MainNavbar(){
           <MediaQuery maxWidth={600}><BMenu /></MediaQuery>
           <MediaQuery minWidth={601}>
           <Tabs value={value} onChange={handleChange}>
-            <Link to="/" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
+          {hasRole(props.user, ['user']) &&<Link to="/" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
               <Tab label="Home" />
-            </Link>
+            </Link> }
+            {hasRole(props.user, ['user']) &&
             <Link to="info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
               <Tab label="Player Info"/>
-            </Link>
+            </Link> }
           </Tabs>
           </MediaQuery>
         </Toolbar>

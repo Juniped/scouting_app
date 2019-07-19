@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+// import TextField from '@material-ui/core/TextField';
+// import Typography from '@material-ui/core/Typography';
 import { withStyles} from '@material-ui/core/styles';
 
 const useStyles = theme => ({
@@ -37,7 +37,7 @@ const useStyles = theme => ({
 function Cell(props) {
     let val = props.value;
     var color_value = 0xFFFFFF
-    var sub_color = 0x003333 * val
+    var sub_color = 0x001111 * val
     var result = color_value = color_value - sub_color;
     var colorHex = "#" + result.toString(16)
     let colorStyle = { backgroundColor: colorHex };
