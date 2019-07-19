@@ -68,7 +68,14 @@ def get_last_6_pitches(pitch_list):
             'change':0,
         })
     for x in range(0, len(l6)-1 ):
-        l6[x]['change'] = l6[x+1]['pitch'] - l6[x]['pitch']
+        if "Auto" in l6[x+1]['result']:
+            l6[x]['change'] = l6[x+2]['pitch'] - l6[x]['pitch']
+        elif "Auto" in l6[x]['result']:
+            l6[x]['change'] = "-"
+        else:
+            l6[x]['change'] = l6[x+1]['pitch'] - l6[x]['pitch']
+        # except TypeError as :
+            # l6[x]['change']
     return l6
 
 def random_stats(pitch_list):

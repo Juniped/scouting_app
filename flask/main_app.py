@@ -113,7 +113,6 @@ def get_raw(player):
     url = f"https://redditball.duckblade.com/api/v1/players/{player_id}/plays/pitching"
     r = requests.get(url)
     pitch_json = r.json()
-    print(pitch_json)
     return jsonify(pitch_json)
 
 # @app.route("/login", methods=['POST'])
