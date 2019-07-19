@@ -25,6 +25,7 @@ def build_matrix(pitch_list):
         "PO":0,
         "RGO":0,
         "LGO":0,
+        "total":0,
     }
     range_dict = {
         "0":{**{"range":"1-100"}, **pitch_dict.copy()},
@@ -50,9 +51,11 @@ def build_matrix(pitch_list):
             for x in range(0,len(ranges)):
                 if next_val >= ranges[x][0] and next_val <= ranges[x][1]:
                     range_dict[str(x)][pitch_result] += 1
+                    range_dict[str(x)]['total'] += 1
                     break
     ret_list = []
     for key, value in range_dict.items():
+
         ret_list.append(value)
     return ret_list
 
