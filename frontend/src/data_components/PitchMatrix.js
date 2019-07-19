@@ -65,6 +65,7 @@ function Line(props) {
             {getCell(props.value['PO'])}
             {getCell(props.value['LGO'])}
             {getCell(props.value['RGO'])}
+            <TableCell style={{ backgroundColor:"#cfed9a"}}>{props.value['total']}</TableCell>
         </TableRow>
     );
 }
@@ -97,6 +98,7 @@ class PitchInfo extends Component {
                             <TableCell>PO</TableCell>
                             <TableCell>LGO</TableCell>
                             <TableCell>RGO</TableCell>
+                            <TableCell>Total</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
