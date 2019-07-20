@@ -3,6 +3,7 @@ from __future__ import print_function
 from flask import Flask
 from flask import render_template
 from flask import jsonify
+from flask import request
 from flask_cors import CORS
 from credentials import client_id, client_secret
 import requests
@@ -115,13 +116,14 @@ def get_raw(player):
     pitch_json = r.json()
     return jsonify(pitch_json)
 
-# @app.route("/login", methods=['POST'])
-# def login():
-#     if request.method == 'POST':
-#         username = request.form.get('username')
-#         password = request.form.get('password')
+@app.route("/login", methods=['POST'])
+def login():
+    if request.method == 'POST':
+        print(request.get_json())
+        username = request.get_json().get('username')
+        password = request.get_json().get('password')
 
-#         return auth.check_user(username, password)
+        return  {'correct':auth.check_user(username, password)}
 #     else:
 #         return False
 if __name__ == "__main__":
