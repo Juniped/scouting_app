@@ -92,7 +92,8 @@ export default function MainNavbar(props){
   function handleChange(event, newValue) {
     setValue(newValue);
   }
-  console.log(props.user)
+  console.log("MainNavbar");
+  console.log(props.user);
   // console.log(hasRole(props.user, ['user']));
   return (
     <div className={classes.root}>
