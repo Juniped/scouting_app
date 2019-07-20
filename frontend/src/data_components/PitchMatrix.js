@@ -36,8 +36,8 @@ const useStyles = theme => ({
 });
 function Cell(props) {
     let val = props.value;
-    var color_value = 0xFFFFFF
-    var sub_color = 0x001111 * val
+    var color_value = 0xEEEEEE
+    var sub_color = 0x111111 * val
     var result = color_value = color_value - sub_color;
     var colorHex = "#" + result.toString(16)
     let colorStyle = { backgroundColor: colorHex };
