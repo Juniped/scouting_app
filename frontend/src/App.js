@@ -30,65 +30,51 @@ class App extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			user:{
-        name:"Non-User",
-        roles:["non-user"],
-      },
+			// user:{
+      username:"Non-User",
+      userRoles:["non-user"],
+      // },
     }
     this.checkLogin = this.checkLogin.bind(this);
   }
   checkLogin(username, password){
     console.log("Login Form Submitted");
-    console.log(username);
-    console.log(password);
     // Check Login with Home DB
-    let username = encodeURIComponent(username.trim());
-    let url = "http://localhost:5000/login/";
+
+    let url = "http://localhost:5000/login";
     fetch(url, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-        }),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({username: username, password: password}),
     })
-        .then((res) => res.json())
-        .then((result) => {
-          if (result['correct'] === false){
-            console.profile("Invalid Username/Password")
-          }
-            // const pitch_data = this.state.pitch_data.slice();
-            // let new_pitches = [];
-            // for (let i = 0; i < result.length; i++) {
-            //     let res = result[i];
-            //     new_pitches.push(res);
-            // }
-            // console.log(new_pitches)
-            // this.setState({
-            //     pitch_data: pitch_data.concat(new_pitches),
-            //     loading: false,
-            // });
-        })
-        .catch(() => {
-            console.log('Request Swallowed!');
-        });
-}
-    return
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result);
+      if (result['correct']){
+        console.log("Successful Login Bitches");
+        this.setState({username: "Oriole_Player"})
+        this.setState({userRoles: ["user"] })
+
+       
+      } else {
+        alert('Invalid Username/Password, please try again');
+      }
+    })
+    .catch(() => {
+        console.log('Request Swallowed!');
+    });
   }
 	render() {
     return (
       <div className="App">
         <Router>
           <div className="content">
-            <MainNavbar user={this.state.user}/>
+            <MainNavbar user={this.state.userRoles}/>
             <div className="container">
-              {hasRole(this.state.user, ['user']) &&<Route exact path="/" component={Main} /> }
-              {hasRole(this.state.user, ['user']) &&<Route path="/info" component={Info} /> }
-              {hasRole(this.state.user, ['user']) &&<Route path="/team-stats" compont={TeamStats} /> }
-              {!hasRole(this.state.user,['user']) &&<Login checkLogin={this.checkLogin} />}
+              {hasRole(this.state.userRoles, ['user']) &&<Route exact path="/" component={Main} /> }
+              {hasRole(this.state.userRoles, ['user']) &&<Route path="/info" component={Info} /> }
+              {hasRole(this.state.userRoles, ['user']) &&<Route path="/team-stats" compont={TeamStats} /> }
+              {!hasRole(this.state.userRoles,['user']) &&<Login checkLogin={this.checkLogin} />}
             </div>
           </div>
         </Router>

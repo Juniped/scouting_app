@@ -92,19 +92,19 @@ export default function MainNavbar(props){
   function handleChange(event, newValue) {
     setValue(newValue);
   }
-  // console.log(props.user)
+  console.log(props.user)
   // console.log(hasRole(props.user, ['user']));
   return (
     <div className={classes.root}>
       <AppBar style={{backgroundColor: '#0c0c0c'}} position='sticky' >
         <Toolbar>
-          <MediaQuery maxWidth={600}><BMenu /></MediaQuery>
+          {hasRole(props.user, ['user']) &&<MediaQuery maxWidth={600}><BMenu /></MediaQuery>}
           <MediaQuery minWidth={601}>
           <Tabs value={value} onChange={handleChange}>
-          {hasRole(props.user, ['user']) &&<Link to="/" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
+              {hasRole(props.user, ['user']) &&<Link to="/" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
               <Tab label="Home" />
             </Link> }
-            {hasRole(props.user, ['user']) &&
+              {hasRole(props.user, ['user']) &&
             <Link to="info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
               <Tab label="Player Info"/>
             </Link> }
