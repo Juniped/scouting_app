@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
 import {HashRouter as Router, Route} from "react-router-dom";
 import { Card, Typography, CardContent } from '@material-ui/core';
+import cookie from "react-cookies";
 import './App.css';
 import MainNavbar from './MainNavbar';
 import Info from './Info.js';
 import TeamStats from './TeamStats';
 import Login from './Login';
-
 import { hasRole } from './auth';
-
-// const user  ={
-//   name: 'Juniped',
-//   roles:['admin'],
-//   right:['can_view_all']
-// };
 
 class Main extends Component{
   render(){
@@ -25,15 +19,12 @@ class Main extends Component{
   }
 }
 
-
 class App extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			// user:{
       username:"Non-User",
       userRoles:["non-user"],
-      // },
     }
     this.checkLogin = this.checkLogin.bind(this);
   }
@@ -49,7 +40,6 @@ class App extends Component{
     })
     .then((res) => res.json())
     .then((result) => {
-      console.log(result);
       if (result['correct']){
         console.log("Successful Login Bitches");
         this.setState({username: "Oriole_Player"})
@@ -65,6 +55,7 @@ class App extends Component{
     });
   }
 	render() {
+    console.log(this.state.userRoles);
     return (
       <div className="App">
         <Router>
