@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-// import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-// import TextField from '@material-ui/core/TextField';
-// import Typography from '@material-ui/core/Typography';
-import { withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = theme => ({
     root: {
@@ -37,7 +34,7 @@ const useStyles = theme => ({
 function Cell(props) {
     let val = props.value;
     var color_value = 0xEEEEEE
-    var sub_color = 0x111111 * val
+    var sub_color = 0x110011 * val
     var result = color_value = color_value - sub_color;
     var colorHex = "#" + result.toString(16)
     let colorStyle = { backgroundColor: colorHex };
@@ -55,17 +52,7 @@ function Line(props) {
     return (
         <TableRow>
             <TableCell component="th" scope="row">{props.value['range']}</TableCell>
-            {getCell(props.value['HR'])}
-            {getCell(props.value['3B'])}
-            {getCell(props.value['2B'])}
-            {getCell(props.value['1B'])}
-            {getCell(props.value['BB'])}
-            {getCell(props.value['FO'])}
-            {getCell(props.value['K'])}
-            {getCell(props.value['PO'])}
-            {getCell(props.value['LGO'])}
-            {getCell(props.value['RGO'])}
-            <TableCell style={{ backgroundColor:"#cfed9a"}}>{props.value['total']}</TableCell>
+            {getCell(props.value['count'])}
         </TableRow>
     );
 }
@@ -84,21 +71,11 @@ class PitchInfo extends Component {
             (<div className="has-text-centered">
             </div>) :
             (
-                <Table size="small" padding="checkbox">
+                <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell>Range</TableCell>
-                            <TableCell>HR</TableCell>
-                            <TableCell>3B</TableCell>
-                            <TableCell>2B</TableCell>
-                            <TableCell>1B</TableCell>
-                            <TableCell>BB</TableCell>
-                            <TableCell>FO</TableCell>
-                            <TableCell>K</TableCell>
-                            <TableCell>PO</TableCell>
-                            <TableCell>LGO</TableCell>
-                            <TableCell>RGO</TableCell>
-                            <TableCell>Total</TableCell>
+                            <TableCell>Count</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -112,7 +89,7 @@ class PitchInfo extends Component {
     }
 }
 
-class PitchMatrix extends Component {
+class FirstInning extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -136,7 +113,7 @@ class PitchMatrix extends Component {
             return;
         }
         let player_name = encodeURIComponent(this.props.player.trim());
-        let url = "http://24.163.45.209/api/info/matrix/" + player_name;
+        let url = "http://24.163.45.209/api/info/first_inning/" + player_name;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -170,12 +147,12 @@ class PitchMatrix extends Component {
     }
     render() {
         return (
-            <div className="Pitch Matrix Root">
-                <h3> Pitch Matrix</h3>
+            <div className="First Inning Root">
+                <h3>First Inning Pitches</h3>
                 <PitchInfo loading={this.state.loading} pitch_data={this.state.pitch_data} />
             </div>
         )
     }
 }
 
-export default withStyles(useStyles)(PitchMatrix);
+export default withStyles(useStyles)(FirstInning);

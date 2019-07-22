@@ -108,7 +108,7 @@ class LastSix extends Component {
             return;
         }
         let player_name = encodeURIComponent(this.props.player.trim());
-        let url = "http://localhost:5000/info/l6/" + player_name;
+        let url = "http://24.163.45.209/api/info/l6/" + player_name;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -123,7 +123,6 @@ class LastSix extends Component {
                     let res = result[i];
                     new_pitches.push(res);
                 }
-                console.log(new_pitches)
                 this.setState({
                     pitch_data: pitch_data.concat(new_pitches),
                     loading: false,
@@ -149,7 +148,7 @@ class LastSix extends Component {
             (
                 <div>
                     <h3>Last 6 Pitch Trends</h3>
-                    <Last6Table pitch_data={this.state.pitch_data} />
+                    <Last6Table loading={this.state.loading} pitch_data={this.state.pitch_data} />
                 </div>
             )
         return (
