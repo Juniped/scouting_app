@@ -45,7 +45,7 @@ class App extends Component{
     console.log("Login Form Submitted");
     // Check Login with Home DB
 
-    let url = "http://localhost:5000/login";
+	  let url = "http://24.163.45.209/api/login";
     fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
