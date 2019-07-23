@@ -109,10 +109,11 @@ def get_raw(player):
 def get_raw_split(player):
     player_data = player_search(player)
     player_id = player_data[0]['id']
+    pitcher_team = playuer_data[0]['team']['id']
     url = f"https://redditball.xyz/api/v1/players/{player_id}/plays/pitching"
     r = requests.get(url)
     pitch_json = r.json()
-    return jsonify(mlr_math.get_split_raw(pitch_json))
+    return jsonify(mlr_math.get_split_raw(pitch_json, pitcher_team))
 
 @app.route('/info/first_inning/<player>', methods=['GET'])
 def get_first_inning(player):
