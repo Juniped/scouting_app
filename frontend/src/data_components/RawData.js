@@ -26,7 +26,6 @@ const rawStyles = theme => ({
 });
 
 function RawLine(props) {
-    console.log(props);
     var homeColor = "#" + props.value['game']['homeTeam']['colorDiscord'].toString(16);
     var homeStyle = {backgroundColor:homeColor};
     var awayColor = "#" + props.value['game']['awayTeam']['colorDiscord'].toString(16);
@@ -123,7 +122,7 @@ class RawData extends Component{
             return;
         }
         let player_name = encodeURIComponent(this.props.player.trim());
-        let url = "http://localhost:5000/info/raw/" + player_name;
+        let url = "http://24.163.45.209/api/info/raw/" + player_name;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -138,7 +137,6 @@ class RawData extends Component{
                     let res = result[i];
                     new_pitches.push(res);
                 }
-                console.log(new_pitches)
                 this.setState({
                     pitch_data: pitch_data.concat(new_pitches),
                     loading: false,

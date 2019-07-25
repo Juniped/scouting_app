@@ -1,5 +1,4 @@
 from __future__ import print_function
-
 from flask import Flask
 from flask import render_template
 from flask import jsonify
@@ -30,7 +29,7 @@ def index():
 
 # @app.route('/search/player/<player>', methods=['GET'])
 def player_search(player):
-    search_url = "https://redditball.duckblade.com/api/v1/players/search"
+    search_url = "https://redditball.xyz/api/v1/players/search"
     params = {"query": player}
     r = requests.get(search_url, params=params)
     json_results = r.json()
@@ -74,17 +73,7 @@ def pull_data():
         for row in values:
             if len(row) > 0:
                 try:
-                    response.append(
-                        {
-                            'player_name':row[0],
-                            'inning': row[2],
-                            'outs': row[3],
-                            'pitch':row[4],
-                            'result':row[5],
-                            'swing': row[6],
-                            'difference':row[7]
-                        }
-                    )
+                    response.append( {'player_name':row[0], 'inning': row[2], 'outs': row[3], 'pitch':row[4], 'result':row[5], 'swing': row[6], 'difference':row[7]})
                 except:
                     continue
     return jsonify(response)
@@ -93,7 +82,7 @@ def pull_data():
 def get_matrix(player):
     player_data = player_search(player)
     player_id = player_data[0]['id']
-    url = f"https://redditball.duckblade.com/api/v1/players/{player_id}/plays/pitching"
+    url = f"https://redditball.xyz/api/v1/players/{player_id}/plays/pitching"
     r = requests.get(url)
     pitch_json = r.json()
     return jsonify(mlr_math.build_matrix(pitch_json))
@@ -102,7 +91,7 @@ def get_matrix(player):
 def get_6(player):
     player_data = player_search(player)
     player_id = player_data[0]['id']
-    url = f"https://redditball.duckblade.com/api/v1/players/{player_id}/plays/pitching"
+    url = f"https://redditball.xyz/api/v1/players/{player_id}/plays/pitching"
     r = requests.get(url)
     pitch_json = r.json()
     return jsonify(mlr_math.get_last_6_pitches(pitch_json))
@@ -111,20 +100,36 @@ def get_6(player):
 def get_raw(player):
     player_data = player_search(player)
     player_id = player_data[0]['id']
-    url = f"https://redditball.duckblade.com/api/v1/players/{player_id}/plays/pitching"
+    url = f"https://redditball.xyz/api/v1/players/{player_id}/plays/pitching"
     r = requests.get(url)
     pitch_json = r.json()
     return jsonify(pitch_json)
 
+@app.route('/info/raw/split/<player>',methods=['GET'])
+def get_raw_split(player):
+    player_data = player_search(player)
+    player_id = player_data[0]['id']
+    pitcher_team = playuer_data[0]['team']['id']
+    url = f"https://redditball.xyz/api/v1/players/{player_id}/plays/pitching"
+    r = requests.get(url)
+    pitch_json = r.json()
+    return jsonify(mlr_math.get_split_raw(pitch_json, pitcher_team))
+
+@app.route('/info/first_inning/<player>', methods=['GET'])
+def get_first_inning(player):
+    player_data = player_search(player)
+    player_id = player_data[0]['id']
+    url = f"https://redditball.xyz/api/v1/players/{player_id}/plays/pitching"
+    r = requests.get(url)
+    pitch_json = r.json()
+    return jsonify(mlr_math.get_first_inning(pitch_json))
+
+
 @app.route("/login", methods=['POST'])
 def login():
     if request.method == 'POST':
-        print(request.get_json())
         username = request.get_json().get('username')
         password = request.get_json().get('password')
-
         return  {'correct':auth.check_user(username, password)}
-#     else:
-#         return False
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')

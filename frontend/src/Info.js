@@ -7,6 +7,7 @@ import { Grid, Container, Card, Paper } from '@material-ui/core';
 import RawData from './data_components/RawData';
 import LastSix from './data_components/LastSix';
 import PitchMatrix from './data_components/PitchMatrix';
+import FirstInning from './data_components/FirstInning';
 
 const useStyles = theme => ({
     root: {
@@ -69,32 +70,41 @@ class Info extends Component {
                 </Grid>
             </div>) :
             (<div>
-                <Grid item xs={12}>
-                    <form onSubmit={this.handleSubmit} className={classes.container} >
-                        <TextField className={classes.textField} style={{ margin: 20 }} label="Player Name" id="player-name" type="text" value={this.state.value} onChange={this.handleChange} variant="outlined" margin="normal" InputLabelProps={{ shrink: true, }} />
-                        <Button variant="contained" className={classes.button} type="submit" size="small">Submit</ Button>
-                    </form>
-                </Grid>
-                <Grid item xs={12}>
-                    <Container>
-                            <Paper>
-                            <PitchMatrix player={this.state.player} />
-                        </Paper>
-                    </Container>
-                </Grid>
-                <br/>
-                <Grid item xs={12} md={6}>
-                    <Container className={classes.container}>
-                        <Card className={classes.card}>
-                            <LastSix player={this.state.player} />
-                        </Card>
-                    </Container>
-                </Grid>
-                <hr />
-                <Grid item xs={12} >
-                    <Container className={classes.container}>
-                        <RawData player={this.state.player}/>
-                    </Container>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <form onSubmit={this.handleSubmit} className={classes.container} >
+                            <TextField className={classes.textField} style={{ margin: 20 }} label="Player Name" id="player-name" type="text" value={this.state.value} onChange={this.handleChange} variant="outlined" margin="normal" InputLabelProps={{ shrink: true, }} />
+                            <Button variant="contained" className={classes.button} type="submit" size="small">Submit</ Button>
+                        </form>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Container>
+                                <Paper>
+                                <PitchMatrix player={this.state.player} />
+                            </Paper>
+                        </Container>
+                    </Grid>
+                    <br/>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Container className={classes.container}>
+                            <Card className={classes.card}>
+                                <LastSix player={this.state.player} />
+                            </Card>
+                        </Container>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <Container className={classes.container}>
+                            <Card className={classes.card}>
+                                <FirstInning player={this.state.player} />
+                            </Card>
+                        </Container>
+                    </Grid>
+                    <Grid item xs={12} >
+                        <hr />
+                        <Container className={classes.container}>
+                            <RawData player={this.state.player}/>
+                        </Container>
+                    </Grid>
                 </Grid>
             </div>);
         return(
