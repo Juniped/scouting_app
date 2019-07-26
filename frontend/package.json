@@ -16,7 +16,8 @@
     "react-fontawesome": "^1.6.1",
     "react-responsive": "^7.0.0",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "serve": "^11.1.0"
   },
   "scripts": {
     "start": "PORT=8080 react-scripts start",
