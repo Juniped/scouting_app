@@ -113,7 +113,7 @@ class FirstInning extends Component {
             return;
         }
         let player_name = encodeURIComponent(this.props.player.trim());
-        let url = "http://24.163.45.209/api/info/first_inning/" + player_name;
+        let url = this.props.api_url + "/api/info/first_inning/" + player_name;
         fetch(url, {
             method: 'GET',
             headers: {

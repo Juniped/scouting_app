@@ -80,7 +80,7 @@ class Info extends Component {
                     <Grid item xs={12}>
                         <Container>
                                 <Paper>
-                                <PitchMatrix player={this.state.player} />
+                                <PitchMatrix player={this.state.player} api_url={this.props.api_url} />
                             </Paper>
                         </Container>
                     </Grid>
@@ -88,21 +88,21 @@ class Info extends Component {
                     <Grid item xs={12} sm={6} md={3}>
                         <Container className={classes.container}>
                             <Card className={classes.card}>
-                                <LastSix player={this.state.player} />
+                                <LastSix player={this.state.player} api_url={this.props.api_url} />
                             </Card>
                         </Container>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Container className={classes.container}>
                             <Card className={classes.card}>
-                                <FirstInning player={this.state.player} />
+                                <FirstInning player={this.state.player} api_url={this.props.api_url} />
                             </Card>
                         </Container>
                     </Grid>
                     <Grid item xs={12} >
                         <hr />
                         <Container className={classes.container}>
-                            <RawData player={this.state.player}/>
+                            <RawData player={this.state.player} api_url={this.props.api_url} />
                         </Container>
                     </Grid>
                 </Grid>

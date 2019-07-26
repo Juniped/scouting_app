@@ -123,23 +123,23 @@ def get_first_inning(pitch_list):
         ret_list.append(value)
     return ret_list
 
-def get_raw_split(pitch_list, pitcher_team):
-    from_behind = []
-    from_ahead = []
-    for pitch in pitch_list:
-        home_score = int(pitch['beforeState']['homeScore'])
-        away_score = int(pitch['beforeState']['awayScore'])
-        if pitcher_team = pitch['game']['homeTeam']['id']:
-            pitcher_score = home_score
-            opposing_score = away_score
-        else:
-            pitcher_score = away_score
-            opposing_score = home_score
-        if pitcher_score > opposing_score:
-            from_ahead.append(pitch)
-        else:
-            from_behind.append(pitch)
-    return {"behind":from_behind, "ahead":from_ahead}
+# def get_raw_split(pitch_list, pitcher_team):
+#     from_behind = []
+#     from_ahead = []
+#     for pitch in pitch_list:
+#         home_score = int(pitch['beforeState']['homeScore'])
+#         away_score = int(pitch['beforeState']['awayScore'])
+#         if pitcher_team = pitch['game']['homeTeam']['id']:
+#             pitcher_score = home_score
+#             opposing_score = away_score
+#         else:
+#             pitcher_score = away_score
+#             opposing_score = home_score
+#         if pitcher_score > opposing_score:
+#             from_ahead.append(pitch)
+#         else:
+#             from_behind.append(pitch)
+#     return {"behind":from_behind, "ahead":from_ahead}
 
 def random_stats(pitch_list):
     return "yadayadayadayadayadayadayadayadayadaydaydaydaydaydayda"
