@@ -102,10 +102,17 @@ export default function MainNavbar(props){
               {hasRole(props.user, ['user']) &&<Link to="/" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
               <Tab label="Home" />
             </Link> }
-              {hasRole(props.user, ['user']) &&
-            <Link to="info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
-              <Tab label="Player Info"/>
-            </Link> }
+            {
+              hasRole(props.user, ['user']) &&
+              <Link to="info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
+                <Tab label="Pitcher Info"/>
+              </Link> }
+            
+            {hasRole(props.user, ['user']) &&
+              <Link to="batter_info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
+                <Tab label="Batter Info" />
+              </Link> 
+            }
           </Tabs>
           </MediaQuery>
         </Toolbar>

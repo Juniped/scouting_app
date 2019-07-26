@@ -9,6 +9,12 @@ import Login from './Login';
 import { hasRole } from './auth';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
+// import Config from './config.json';
+
+// Dev Mode
+const api_url = "http://localhost:5000";
+//Prod Mode
+// const api_url = "http://24.163.45.209"
 
 class Main extends Component{
   render(){
@@ -45,7 +51,7 @@ class App extends Component{
     console.log("Login Form Submitted");
     // Check Login with Home DB
 
-	  let url = "http://24.163.45.209/api/login";
+	  let url = api_url + "/api/login";
     fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -78,7 +84,7 @@ class App extends Component{
             <MainNavbar user={this.state.userRoles}/>
             <div className="container">
               {hasRole(this.state.userRoles, ['user']) &&<Route exact path="/" component={Main}  cookies={this.props.cookies} /> }
-              {hasRole(this.state.userRoles, ['user']) &&<Route path="/info" component={Info} cookies={this.props.cookies} /> }
+              {hasRole(this.state.userRoles, ['user']) &&<Route path="/info" component={Info} cookies={this.props.cookies} api_url={api_url} /> }
               {hasRole(this.state.userRoles, ['user']) &&<Route path="/team-stats" compont={TeamStats}cookies={this.props.cookies} /> }
               {!hasRole(this.state.userRoles,['user']) &&<Login checkLogin={this.checkLogin} cookies={this.props.cookies} />}
             </div>
