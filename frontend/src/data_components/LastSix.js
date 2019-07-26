@@ -63,7 +63,7 @@ class Last6Table extends Component {
             (<div className="has-text-centered">
             </div>) :
             (
-                <Table size="small" padding="checkbox" hover="true">
+                <Table size="small" padding="checkbox" hover="true" stripedRows>
                     <TableHead>
                         <TableRow>
                             <TableCell>Pitch</TableCell>

@@ -60,7 +60,6 @@ class App extends Component{
 			this.setState({userRoles: ["user"] })
 			const logged_in = true;
 			cookies.set('logged_in', true, {pathj: '/' } );
-			this.setState( { logged_in } );
       } else {
         alert('Invalid Username/Password, please try again');
       }
