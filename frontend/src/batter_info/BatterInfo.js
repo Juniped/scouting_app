@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { Table, Card, CardContent, Typography, Grid, Paper } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Card, CardContent, Typography, Grid, Paper } from '@material-ui/core';
 import PlayerSelect from './PlayerSelect';
 let config = require('../config/config.json');
 
@@ -11,10 +11,6 @@ let config = require('../config/config.json');
 const useStyles = theme => ({
     root: {
         flexGrow: 1,
-    },
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
     },
     formControl: {
         margin: theme.spacing(1),
@@ -33,8 +29,73 @@ const useStyles = theme => ({
     },
 });
 
+function Line(props) {
+    var homeColor = "#" + props.value['game']['homeTeam']['colorDiscord'].toString(16);
+    var homeStyle = { backgroundColor: homeColor };
+    var awayColor = "#" + props.value['game']['awayTeam']['colorDiscord'].toString(16);
+    var awayStyle = { backgroundColor: awayColor };
+    var basesOccupied = 0;
+    if (props.value['beforeState']['firstOccupied']) {
+        basesOccupied++;
+    }
+    if (props.value['beforeState']['secondOccupied']) {
+        basesOccupied++;
+    } if (props.value['beforeState']['thirdOccupied']) {
+        basesOccupied++;
+    }
+    return (
+        <TableRow>
+            <TableCell>{props.value['pitch']}</TableCell>
+            <TableCell>{props.value['swing']}</TableCell>
+            <TableCell>{props.value['result']}</TableCell>
+            <TableCell>{props.value['diff']}</TableCell>
+            <TableCell>{basesOccupied}</TableCell>
+            <TableCell style={homeStyle}>{props.value['game']['homeTeam']['tag']}</TableCell>
+            <TableCell style={awayStyle}>{props.value['game']['awayTeam']['tag']}</TableCell>
+            <TableCell>{props.value['beforeState']['outs']}</TableCell>
+            <TableCell>{props.value['beforeState']['inning']}</TableCell>
+            <TableCell>{props.value['pitcher']['name']}</TableCell>
+        </TableRow>
+    );
+}
 
-
+class BatterTable extends Component{
+    getLines() {
+        let d = [];
+        for (let i = 0; i < this.props.data.length; i++) {
+            d.push(
+                <Line value={this.props.data[i]} key={i} />);
+        }
+        return d;
+    }
+    render() {
+        let body = 
+            (
+                <Table size="small" padding="checkbox" hover="true">
+                    <TableHead >
+                        <TableRow style={{ backroundColor: "#737475" }}>
+                            <TableCell>Pitch</TableCell>
+                            <TableCell>Swing</TableCell>
+                            <TableCell>Result</TableCell>
+                            <TableCell>Diff</TableCell>
+                            <TableCell>Bases Occupied</TableCell>
+                            <TableCell>Home Team</TableCell>
+                            <TableCell>Away Team</TableCell>
+                            <TableCell>Outs</TableCell>
+                            <TableCell>Inning</TableCell>
+                            <TableCell>Pitcher</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody stripedrows="true">
+                        {this.getLines()}
+                    </TableBody>
+                </Table>
+            );
+        return (
+            <div>{body}</div>
+        );
+    }
+}
 
 class BatterInfo extends Component {
     constructor(props){
@@ -43,12 +104,15 @@ class BatterInfo extends Component {
             currentTeam: "",
             team: "",
             players: [],
+            playerData: [],
+            playerFav:"",
         }
         this.handleChange = this.handleChange.bind(this);
+        this.getPlayerData = this.getPlayerData.bind(this);
     }
     getTeam(){
         if (this.state.currentTeam === ""){
-            this.setState({team:""})
+            this.setState({team:"", players:[]})
             return;
         }
         let teamName = encodeURIComponent(this.state.currentTeam.trim())
@@ -96,10 +160,26 @@ class BatterInfo extends Component {
     handleChange(event){
         event.preventDefault();
         this.setState(
-            {currentTeam :event.target.value},
+            {currentTeam :event.target.value, players:[]},
             this.getTeam
             );
         
+    }
+    getPlayerData(playerID) {
+        let url = this.props.api_url + "/api/info/batter/" + playerID;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then((res) => res.json())
+        .then((result) => {
+            this.setState({ playerData: result.data, playerFav:result.fav });
+        })
+        .catch(() => {
+            console.log('Request Swallowed!');
+        });
     }
     render() {
         const { classes } = this.props;
@@ -120,36 +200,50 @@ class BatterInfo extends Component {
                                         <option value="Boston Red Sox">Boston Red Sox</option>
                                         <option value="Chicago Cubs">Chicago Cubs</option>
                                         <option value="Chicago White Sox">Chicago White Sox</option>
-                                        <option value="Cintinnati Reds">Cintinnati Reds"</option>
+                                        <option value="Cincinnati Red">Cincinnati Red</option>
                                         <option value="Cleveland Indians">Cleveland Indians</option>
                                         <option value="Colorado Rockies">Colorado Rockies</option>
                                         <option value="Detroit Tigers">Detroit Tigers</option>
-                                        <option value="Huston Colt 45's">Huston Colt 45's</option>
+                                        <option value="Houston Colt 45's">Houston Colt 45's</option>
                                         <option value="Kansas City Royals">Kansas City Royals</option>
                                         <option value="Los Angeles Angels">Los Angeles Angels</option>
                                         <option value="Los Angeles Dodgers">Los Angeles Dodgers</option>
-                                        <option value="Miama Marlins">Miama Marlins</option>
+                                        <option value="Miami Marlins">Miami Marlins</option>
                                         <option value="Milwaukee Brewers">Milwaukee Brewers</option>
                                         <option value="Minnesota Twins">Minnesota Twins</option>
-                                        <option value="Montral Expos">Montral Expos</option>
+                                        <option value="Montreal Expos">Montreal Expos</option>
                                         <option value="New York Mets">New York Mets</option>
-                                        <option value="New York Yankees">New York Yankees"</option>
+                                        <option value="New York Yankees">New York Yankees</option>
                                         <option value="Oakland Athletics">Oakland Athletics</option>
-                                        <option value="Philidelphia Phillies">Philidelphia Phillies</option>
+                                        <option value="Philadelphia Phillies">Philadelphia Phillies</option>
                                         <option value="Pittsburgh Pirates">Pittsburgh Pirates</option>
                                         <option value="San Diego Padres">San Diego Padres</option>
                                         <option value="San Francisco Giants">San Francisco Giants</option>
                                         <option value="St. Louis Cardinals">St. Louis Cardinals</option>
-                                        <option value="Tama Bay Devil Rays">Tama Bay Devil Rays</option>
+                                        <option value="Tampa Bay Devil Rays">Tampa Bay Devil Rays</option>
                                         <option value="Texas Rangers">Texas Rangers</option>
-                                        <option value="Torono Blue Jays">Torono Blue Jays</option>
+                                        <option value="Toronto Blue Jays">Toronto Blue Jays</option>
                                     </NativeSelect>
                                 </FormControl>
                         </Paper>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        {this.state.players.length > 0 && <PlayerSelect players={this.state.players} /> }
+                        {this.state.players.length > 0 && <PlayerSelect players={this.state.players} api_url={this.props.api_url} getPlayerData={this.getPlayerData}/> }
                     </Grid>
+                    <Grid item xs={12} sm={6}>
+                        {this.state.playerData.length > 0 && (
+                            <Paper className={classes.paper}>
+                                <Typography className={classes.Title}>
+                                    Batter Data
+                                </Typography>
+                                <Typography variant="subtitle1">
+                                    Favorite Swing: {this.state.playerFav}
+                                </Typography>
+                                <BatterTable data={this.state.playerData} />
+                            </Paper>
+                        )}
+                    </Grid>
+                   
                 </Grid>
             </div>
         );
