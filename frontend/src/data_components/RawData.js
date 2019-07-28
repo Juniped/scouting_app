@@ -87,7 +87,7 @@ class RawDataTable extends Component{
                             <TableCell>Batter</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody stripedrows>
+                    <TableBody stripedrows="true">
                         {this.getLines()}
                     </TableBody>
                 </Table>
