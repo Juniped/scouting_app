@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 // import TextField from '@material-ui/core/TextField';
 // import Typography from '@material-ui/core/Typography';
 import { withStyles} from '@material-ui/core/styles';
-
+let config = require('../config/config.json');
 const useStyles = theme => ({
     root: {
         overflowX: 'auto',
@@ -109,6 +109,7 @@ class LastSix extends Component {
         }
         let player_name = encodeURIComponent(this.props.player.trim());
         let url = this.props.api_url + "/api/info/l6/" + player_name;
+        console.log(url);
         fetch(url, {
             method: 'GET',
             headers: {

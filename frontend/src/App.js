@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import {HashRouter as Router, Route} from "react-router-dom";
 import { Card, Typography, CardContent } from '@material-ui/core';
-import './App.css';
+import './static/App.css';
 import MainNavbar from './MainNavbar';
 import Info from './Info.js';
 import TeamStats from './TeamStats';
 import Login from './Login';
+import BatterInfo from './batter_info/BatterInfo';
 import { hasRole } from './auth';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 // import Config from './config.json';
 
 // Dev Mode
-const api_url = "http://localhost:5000";
+// const api_url = "http://localhost:5000";
 //Prod Mode
-// const api_url = "http://24.163.45.209"
+const api_url = "http://24.163.45.209"
 
 class Main extends Component{
   render(){
@@ -75,17 +76,22 @@ class App extends Component{
     });
   }
 	render() {
-	console.log(this.state.userRoles);
+    let customProps = { api_url: api_url, cookies:this.props.cookies };
     return (
       <div className="App">
         <Router>
           <div className="content">
             <MainNavbar user={this.state.userRoles}/>
             <div className="container">
-              {hasRole(this.state.userRoles, ['user']) &&<Route exact path="/" component={Main}  cookies={this.props.cookies} /> }
-              {hasRole(this.state.userRoles, ['user']) &&<Route path="/info" component={Info} cookies={this.props.cookies} api_url={api_url} /> }
-              {hasRole(this.state.userRoles, ['user']) &&<Route path="/team-stats" compont={TeamStats}cookies={this.props.cookies} /> }
-              {!hasRole(this.state.userRoles,['user']) &&<Login checkLogin={this.checkLogin} cookies={this.props.cookies} />}
+              {hasRole(this.state.userRoles, ['user']) && <Route exact path="/" render={(customProps) =>(
+                <Main {...customProps} cookies={this.props.cookies}/>)} /> }
+              {hasRole(this.state.userRoles, ['user']) && <Route path="/info/pitchers/search" render={(customProps) => (
+                <Info {...customProps} cookies={this.props.cookies} api_url={api_url} /> )} /> }
+              {hasRole(this.state.userRoles, ['user']) && <Route path="/info/batters" render={(customProps) => (
+                <BatterInfo {...customProps} cookies={this.props.cookies} api_url={api_url}/>)} />}
+              {hasRole(this.state.userRoles, ['user']) && <Route path="/team-stats" render={(customProps) => (
+                <TeamStats {...customProps} cookies={this.props.cookies} api_url={api_url}/>)} />}
+              {!hasRole(this.state.userRoles, ['user']) && <Login checkLogin={this.checkLogin} cookies={this.props.cookies} api_url={api_url} />}
             </div>
           </div>
         </Router>

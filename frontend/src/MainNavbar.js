@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Link} from 'react-router-dom';
-import "./Navbar.css";
+import "./static/Navbar.css";
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles';
@@ -77,8 +77,11 @@ function BMenu() {
         <Link to="/" style={{ textDecoration: 'none', color: '#000000' }}>
           <MenuItem onClick={handleClose} >Home</MenuItem>
         </Link>
-        <Link to="info" style={{ textDecoration: 'none', color: '#000000' }}>
-          <MenuItem onClick={handleClose}>Info</MenuItem>
+        <Link to="info/pitchers/search" style={{ textDecoration: 'none', color: '#000000' }}>
+          <MenuItem onClick={handleClose}>Search Pitchers</MenuItem>
+        </Link>
+        <Link to="info/batters" style={{ textDecoration: 'none', color: '#000000' }}>
+          <MenuItem onClick={handleClose}>Batters</MenuItem>
         </Link>
       </Menu>
       </div>
@@ -104,12 +107,12 @@ export default function MainNavbar(props){
             </Link> }
             {
               hasRole(props.user, ['user']) &&
-              <Link to="info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
-                <Tab label="Pitcher Info"/>
+              <Link to="/info/pitchers/search" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
+                <Tab label="Search Pitchers"/>
               </Link> }
             
             {hasRole(props.user, ['user']) &&
-              <Link to="batter_info" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
+              <Link to="/info/batters" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
                 <Tab label="Batter Info" />
               </Link> 
             }
