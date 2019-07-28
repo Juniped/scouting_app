@@ -4,12 +4,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { Table, Card, CardContent, Typography, Grid, Paper } from '@material-ui/core';
+import BatterData from './BatterData';
 let config = require('../config/config.json');
 
 const useStyles = theme => ({
     root: {
-        overflowX: 'auto',
-        margin: theme.spacing(1),
+        flexGrow: 1,
     },
     container: {
         display: 'flex',
@@ -50,13 +50,16 @@ class PlayerSelect extends Component {
         return d;
     }
     handleChange(event) {
-        console.log(event);
-        this.setState({ currentPlayer: event.target.value });
+        this.props.getPlayerData(event.target.value);
+        this.setState(
+            { currentPlayer: event.target.value },  // Set Current Selected Player 
+            );
     }
     render() {
         const { classes } = this.props;
         return (
-            <Paper className={classes.paper}>
+
+            <Paper className={classes.paper} >
                     <Typography className={classes.Title} color="textSecondary" gutterBottom>
                         Select a Player
                     </Typography>
@@ -67,6 +70,7 @@ class PlayerSelect extends Component {
                         </NativeSelect>
                     </FormControl>
             </Paper>
+
         )
     }
 }
