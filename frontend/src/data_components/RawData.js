@@ -46,10 +46,6 @@ function RawLine(props) {
             <TableCell>{props.value['result']}</TableCell>
             <TableCell>{props.value['diff']}</TableCell>
             <TableCell>{basesOccupied}</TableCell>
-            {/* <TableCell>{props.value['beforeState']['secondOccupied']}</TableCell>
-            <TableCell>{props.value['beforeState']['thirdOccupied']}</TableCell> */}
-            <TableCell style={homeStyle}>{props.value['game']['homeTeam']['tag']}</TableCell>
-            <TableCell style={awayStyle}>{props.value['game']['awayTeam']['tag']}</TableCell>
             <TableCell>{props.value['beforeState']['outs']}</TableCell>
             <TableCell>{props.value['beforeState']['inning']}</TableCell>
             <TableCell>{props.value['batter']['name']}</TableCell>
@@ -79,9 +75,7 @@ class RawDataTable extends Component{
                             <TableCell>Swing</TableCell>
                             <TableCell>Result</TableCell>
                             <TableCell>Diff</TableCell>
-                            <TableCell>Bases Occupied</TableCell>
-                            <TableCell>Home Team</TableCell>
-                            <TableCell>Away Team</TableCell>
+                            <TableCell>OBC</TableCell>
                             <TableCell>Outs</TableCell>
                             <TableCell>Inning</TableCell>
                             <TableCell>Batter</TableCell>

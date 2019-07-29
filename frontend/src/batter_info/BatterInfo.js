@@ -3,10 +3,11 @@ import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Card, CardContent, Typography, Grid, Paper } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Card, CardContent, Typography, Grid, Paper, Container } from '@material-ui/core';
 import PlayerSelect from './PlayerSelect';
+import {PieChart, Pie, Cell} from 'recharts';
 let config = require('../config/config.json');
-
+const colors = ['#DF4400', '#000000'];
 
 const useStyles = theme => ({
     root: {
@@ -30,10 +31,6 @@ const useStyles = theme => ({
 });
 
 function Line(props) {
-    var homeColor = "#" + props.value['game']['homeTeam']['colorDiscord'].toString(16);
-    var homeStyle = { backgroundColor: homeColor };
-    var awayColor = "#" + props.value['game']['awayTeam']['colorDiscord'].toString(16);
-    var awayStyle = { backgroundColor: awayColor };
     var basesOccupied = 0;
     if (props.value['beforeState']['firstOccupied']) {
         basesOccupied++;
@@ -48,10 +45,7 @@ function Line(props) {
             <TableCell>{props.value['pitch']}</TableCell>
             <TableCell>{props.value['swing']}</TableCell>
             <TableCell>{props.value['result']}</TableCell>
-            <TableCell>{props.value['diff']}</TableCell>
             <TableCell>{basesOccupied}</TableCell>
-            <TableCell style={homeStyle}>{props.value['game']['homeTeam']['tag']}</TableCell>
-            <TableCell style={awayStyle}>{props.value['game']['awayTeam']['tag']}</TableCell>
             <TableCell>{props.value['beforeState']['outs']}</TableCell>
             <TableCell>{props.value['beforeState']['inning']}</TableCell>
             <TableCell>{props.value['pitcher']['name']}</TableCell>
@@ -69,30 +63,23 @@ class BatterTable extends Component{
         return d;
     }
     render() {
-        let body = 
-            (
-                <Table size="small" padding="checkbox" hover="true">
-                    <TableHead >
-                        <TableRow style={{ backroundColor: "#737475" }}>
-                            <TableCell>Pitch</TableCell>
-                            <TableCell>Swing</TableCell>
-                            <TableCell>Result</TableCell>
-                            <TableCell>Diff</TableCell>
-                            <TableCell>Bases Occupied</TableCell>
-                            <TableCell>Home Team</TableCell>
-                            <TableCell>Away Team</TableCell>
-                            <TableCell>Outs</TableCell>
-                            <TableCell>Inning</TableCell>
-                            <TableCell>Pitcher</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody stripedrows="true">
-                        {this.getLines()}
-                    </TableBody>
-                </Table>
-            );
         return (
-            <div>{body}</div>
+            <Table size="small" padding="checkbox" hover="true">
+                <TableHead >
+                    <TableRow style={{ backroundColor: "#737475" }}>
+                        <TableCell>Pitch</TableCell>
+                        <TableCell>Swing</TableCell>
+                        <TableCell>Result</TableCell>
+                        <TableCell>OBC</TableCell>
+                        <TableCell>Outs</TableCell>
+                        <TableCell>Inning</TableCell>
+                        <TableCell>Pitcher</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody stripedrows="true">
+                    {this.getLines()}
+                </TableBody>
+            </Table>
         );
     }
 }
@@ -106,13 +93,14 @@ class BatterInfo extends Component {
             players: [],
             playerData: [],
             playerFav:"",
+            edgeVmiddle: [],
         }
         this.handleChange = this.handleChange.bind(this);
         this.getPlayerData = this.getPlayerData.bind(this);
     }
     getTeam(){
         if (this.state.currentTeam === ""){
-            this.setState({team:"", players:[]})
+            this.setState({team:"", players:[], playerData:[], playerFav:"", edge:0, middle:0})
             return;
         }
         let teamName = encodeURIComponent(this.state.currentTeam.trim())
@@ -165,6 +153,10 @@ class BatterInfo extends Component {
             );
         
     }
+    renderLabel = function (entry) {
+        let label = entry.name + "(" + entry.value + ")";
+        return label
+    }
     getPlayerData(playerID) {
         let url = this.props.api_url + "/api/info/batter/" + playerID;
         fetch(url, {
@@ -175,7 +167,7 @@ class BatterInfo extends Component {
         })
         .then((res) => res.json())
         .then((result) => {
-            this.setState({ playerData: result.data, playerFav:result.fav });
+            this.setState({ playerData: result.data, playerFav: result.fav, edgeVmiddle: result.edge_vs_middle,});
         })
         .catch(() => {
             console.log('Request Swallowed!');
@@ -183,6 +175,7 @@ class BatterInfo extends Component {
     }
     render() {
         const { classes } = this.props;
+       
         return(
             <div className={classes.root}>
                 <Grid container spacing={1}>
@@ -219,6 +212,7 @@ class BatterInfo extends Component {
                                         <option value="Pittsburgh Pirates">Pittsburgh Pirates</option>
                                         <option value="San Diego Padres">San Diego Padres</option>
                                         <option value="San Francisco Giants">San Francisco Giants</option>
+                                        <option value="Seattle Mariners">Seattle Mariners</option>
                                         <option value="St. Louis Cardinals">St. Louis Cardinals</option>
                                         <option value="Tampa Bay Devil Rays">Tampa Bay Devil Rays</option>
                                         <option value="Texas Rangers">Texas Rangers</option>
@@ -230,19 +224,42 @@ class BatterInfo extends Component {
                     <Grid item xs={12} sm={6}>
                         {this.state.players.length > 0 && <PlayerSelect players={this.state.players} api_url={this.props.api_url} getPlayerData={this.getPlayerData}/> }
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        {this.state.playerData.length > 0 && (
-                            <Paper className={classes.paper}>
-                                <Typography className={classes.Title}>
-                                    Batter Data
-                                </Typography>
-                                <Typography variant="subtitle1">
-                                    Favorite Swing: {this.state.playerFav}
-                                </Typography>
-                                <BatterTable data={this.state.playerData} />
-                            </Paper>
-                        )}
-                    </Grid>
+                    {this.state.playerData.length > 0  && (
+                        <>
+                        <Grid item sm={12} md={6}>
+                            <Container minWidth={500}>
+                            {/* {this.state.playerData.length > 0 && ( */}
+                                <Paper className={classes.paper}>
+                                    <Typography className={classes.Title}>
+                                        Batter Data
+                                    </Typography>
+                                    <Typography variant="subtitle1">
+                                        Favorite Swing: {this.state.playerFav}
+                                    </Typography>
+                                    <BatterTable data={this.state.playerData} />
+                                </Paper>
+                            {/* )} */}
+                            </Container>
+                        </Grid>
+                        <Grid item sm={12} md={6}>
+                            <Container>
+                                <Paper className={classes.paper}>
+                                    <Container>
+                                    <PieChart width={400} height={400}>
+                                            <Pie data={this.state.edgeVmiddle} cx="50%" cy="50%" nameKey="name" outerRadius={100} label={this.renderLabel} >
+                                        {
+                                                this.state.edgeVmiddle.map((entry, index) => (
+                                                    <Cell key={`cell-${index}`} fill={colors[index]} />
+                                            ))
+                                        }
+                                        </Pie>
+                                    </PieChart>
+                                    </Container>
+                                </Paper>
+                            </Container>
+                        </Grid>
+                    </>
+                    )}
                    
                 </Grid>
             </div>
