@@ -17,6 +17,7 @@
     "react-responsive": "^7.0.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "recharts": "^1.6.2",
     "serve": "^11.1.0"
   },
   "scripts": {
