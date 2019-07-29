@@ -5,7 +5,7 @@ import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Card, CardContent, Typography, Grid, Paper, Container } from '@material-ui/core';
 import PlayerSelect from './PlayerSelect';
-import {PieChart, Pie, Cell} from 'recharts';
+import {PieChart, Pie, Cell, ResponsiveContainer} from 'recharts';
 let config = require('../config/config.json');
 const colors = ['#DF4400', '#000000'];
 
@@ -244,8 +244,9 @@ class BatterInfo extends Component {
                         <Grid item sm={12} md={6}>
                             <Container>
                                 <Paper className={classes.paper}>
-                                    <Container>
-                                    <PieChart width={400} height={400}>
+                                        <div style={{ width: '100%', height: 300}}>
+                                    <ResponsiveContainer>
+                                    <PieChart>
                                             <Pie data={this.state.edgeVmiddle} cx="50%" cy="50%" nameKey="name" outerRadius={100} label={this.renderLabel} >
                                         {
                                                 this.state.edgeVmiddle.map((entry, index) => (
@@ -254,7 +255,8 @@ class BatterInfo extends Component {
                                         }
                                         </Pie>
                                     </PieChart>
-                                    </Container>
+                                    </ResponsiveContainer>
+                                    </div> 
                                 </Paper>
                             </Container>
                         </Grid>
