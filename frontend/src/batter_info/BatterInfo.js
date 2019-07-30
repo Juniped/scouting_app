@@ -6,6 +6,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Card, CardContent, Typography, Grid, Paper, Container } from '@material-ui/core';
 import PlayerSelect from './PlayerSelect';
 import {PieChart, Pie, Cell, ResponsiveContainer} from 'recharts';
+import MediaQuery from 'react-responsive';
 let config = require('../config/config.json');
 const colors = ['#DF4400', '#000000'];
 
@@ -28,6 +29,9 @@ const useStyles = theme => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
+    table: {
+        padding: theme.spacing(1)
+    },
 });
 
 function Line(props) {
@@ -42,13 +46,13 @@ function Line(props) {
     }
     return (
         <TableRow>
-            <TableCell>{props.value['pitch']}</TableCell>
-            <TableCell>{props.value['swing']}</TableCell>
-            <TableCell>{props.value['result']}</TableCell>
-            <TableCell>{basesOccupied}</TableCell>
-            <TableCell>{props.value['beforeState']['outs']}</TableCell>
-            <TableCell>{props.value['beforeState']['inning']}</TableCell>
-            <TableCell>{props.value['pitcher']['name']}</TableCell>
+            <TableCell padding="checkbox">{props.value['pitch']}</TableCell>
+            <TableCell padding="checkbox">{props.value['swing']}</TableCell>
+            <TableCell padding="checkbox">{props.value['result']}</TableCell>
+            <TableCell padding="none" align="center">{basesOccupied}</TableCell>
+            <TableCell padding="none" align="center">{props.value['beforeState']['outs']}</TableCell>
+            <TableCell padding="checkbox">{props.value['beforeState']['inning']}</TableCell>
+            <TableCell padding="none">{props.value['pitcher']['name']}</TableCell>
         </TableRow>
     );
 }
@@ -63,23 +67,37 @@ class BatterTable extends Component{
         return d;
     }
     render() {
+        let body = (
+        <>
+            <TableHead >
+                <TableRow style={{ backroundColor: "#737475" }}>
+                    <TableCell padding="checkbox">Pitch</TableCell>
+                    <TableCell padding="checkbox">Swing</TableCell>
+                    <TableCell padding="checkbox">Result</TableCell>
+                    <TableCell padding="none">OBC</TableCell>
+                    <TableCell padding="none">Outs</TableCell>
+                    <TableCell padding="checkbox">Inning</TableCell>
+                    <TableCell padding="none">Pitcher</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody stripedrows="true">
+                {this.getLines()}
+            </TableBody>
+        </>
+        );
         return (
-            <Table size="small" padding="checkbox" hover="true">
-                <TableHead >
-                    <TableRow style={{ backroundColor: "#737475" }}>
-                        <TableCell>Pitch</TableCell>
-                        <TableCell>Swing</TableCell>
-                        <TableCell>Result</TableCell>
-                        <TableCell>OBC</TableCell>
-                        <TableCell>Outs</TableCell>
-                        <TableCell>Inning</TableCell>
-                        <TableCell>Pitcher</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody stripedrows="true">
-                    {this.getLines()}
-                </TableBody>
-            </Table>
+            <div>
+                <MediaQuery minWidth={601}>
+                    <Table size="small" >
+                        {body}
+                    </Table>
+                </MediaQuery>
+                <MediaQuery maxWidth={600}>
+                    <Table size="small"style={{width:'100%'}}>
+                        {body}
+                    </Table>
+                </MediaQuery>
+            </div>
         );
     }
 }
@@ -137,7 +155,6 @@ class BatterInfo extends Component {
         })
             .then((res) => res.json())
             .then((result) => {
-                console.log(result);
                 this.setState({ players: result });
             })
             .catch((error) => {
@@ -185,7 +202,7 @@ class BatterInfo extends Component {
                                     Select a Team
                                 </Typography>
                                 <FormControl className={classes.formControl}>
-                                    <NativeSelect native value={this.state.currentTeam} onChange={this.handleChange} inputProps={{name: 'currentTeam', id: 'team-native-simple',}}>
+                                    <NativeSelect value={this.state.currentTeam} onChange={this.handleChange} inputProps={{name: 'currentTeam', id: 'team-native-simple',}}>
                                         <option value="" />
                                         <option value="Arizona Diamondbacks">Arizona Diamondbacks</option>
                                         <option value="Atlanta Braves">Atlanta Braves</option>
@@ -227,7 +244,7 @@ class BatterInfo extends Component {
                     {this.state.playerData.length > 0  && (
                         <>
                         <Grid item sm={12} md={6}>
-                            <Container minWidth={500}>
+                            <Container >
                             {/* {this.state.playerData.length > 0 && ( */}
                                 <Paper className={classes.paper}>
                                     <Typography className={classes.Title}>
@@ -243,19 +260,37 @@ class BatterInfo extends Component {
                         </Grid>
                         <Grid item sm={12} md={6}>
                             <Container>
-                                <Paper className={classes.paper}>
-                                        <div style={{ width: '100%', height: 300}}>
-                                    <ResponsiveContainer>
-                                    <PieChart>
-                                            <Pie data={this.state.edgeVmiddle} cx="50%" cy="50%" nameKey="name" outerRadius={100} label={this.renderLabel} >
-                                        {
-                                                this.state.edgeVmiddle.map((entry, index) => (
-                                                    <Cell key={`cell-${index}`} fill={colors[index]} />
-                                            ))
-                                        }
-                                        </Pie>
-                                    </PieChart>
-                                    </ResponsiveContainer>
+                                <Paper className={classes.paper} >
+                                    <Typography variant="h5">
+                                        Edge vs Middle Swing Graph
+                                    </Typography>
+                                    <div style={{ width: '100%', height: 300}}>
+                                        <MediaQuery minWidth={601}>
+                                            <ResponsiveContainer>
+                                                <PieChart minWidth={600}>
+                                                        <Pie data={this.state.edgeVmiddle} dataKey="value" cx="50%" cy="50%" nameKey="name" outerRadius={100} label={this.renderLabel} >
+                                                    {
+                                                            this.state.edgeVmiddle.map((entry, index) => (
+                                                                <Cell key={`cell-${index}`} fill={colors[index]} />
+                                                        ))
+                                                    }
+                                                    </Pie>
+                                                </PieChart>
+                                            </ResponsiveContainer>
+                                        </MediaQuery>
+                                            <MediaQuery maxWidth={600}>
+                                                <ResponsiveContainer minWidth={400}>
+                                                    <PieChart>
+                                                        <Pie data={this.state.edgeVmiddle} dataKey="value" cx="50%" cy="50%" nameKey="name" outerRadius={100} label={this.renderLabel} >
+                                                            {
+                                                                this.state.edgeVmiddle.map((entry, index) => (
+                                                                    <Cell key={`cell-${index}`} fill={colors[index]} />
+                                                                ))
+                                                            }
+                                                        </Pie>
+                                                    </PieChart>
+                                                </ResponsiveContainer>
+                                            </MediaQuery>
                                     </div> 
                                 </Paper>
                             </Container>

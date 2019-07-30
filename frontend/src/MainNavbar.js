@@ -12,7 +12,7 @@ import { fade } from '@material-ui/core/styles';
 import { makeStyles } from "@material-ui/styles";
 import { red } from '@material-ui/core/colors';
 import MediaQuery from 'react-responsive';
-import { Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab, Typography, Box } from "@material-ui/core";
 
 import { hasRole} from './auth';
 
@@ -88,39 +88,49 @@ function BMenu() {
         
   );
 }
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      <Box p={3}>{children}</Box>
+    </Typography>
+  );
+}
 export default function MainNavbar(props){
   const classes = useStyles();
-  const [value, setValue] = React.useState();
+  const [value, setValue] = React.useState(0);
   function handleChange(event, newValue) {
     setValue(newValue);
   }
   return (
     <div className={classes.root}>
-      <AppBar style={{backgroundColor: '#0c0c0c'}} position='sticky' >
+      <AppBar style={{backgroundColor: '#0c0c0c'}} position='static'>
+        {hasRole(props.user, ['user']) &&
         <Toolbar>
-          {hasRole(props.user, ['user']) &&<MediaQuery maxWidth={600}><BMenu /></MediaQuery>}
+          <MediaQuery maxWidth={600}><BMenu /></MediaQuery>
           <MediaQuery minWidth={601}>
-          <Tabs value={value} onChange={handleChange}>
-              {hasRole(props.user, ['user']) &&<Link to="/" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
-              <Tab label="Home" />
-            </Link> }
-            {
-              hasRole(props.user, ['user']) &&
-              <Link to="/info/pitchers/search" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
-                <Tab label="Search Pitchers"/>
-              </Link> }
-            
-            {hasRole(props.user, ['user']) &&
-              <Link to="/info/batters" style={{ textDecoration: 'none', color: '#FFFFFF' }} className={classes.tab}>
-                <Tab label="Batter Info" />
-              </Link> 
-            }
-          </Tabs>
+            <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+              <Tab label="Home" to="/" component={Link} {...a11yProps(0)} />
+              <Tab label="Search Pitchers" component={Link} to="/info/pitchers/search" {...a11yProps(1)} />
+              <Tab label="Batter Info" to="/info/batters" component={Link} {...a11yProps(2)} />
+            </Tabs>
           </MediaQuery>
-        </Toolbar>
+        </Toolbar>}
         </AppBar>
     </div>
-    
   )
 }

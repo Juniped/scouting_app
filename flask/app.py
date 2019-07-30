@@ -148,8 +148,6 @@ def get_teams(name):
 def get_players_via_team_id(team_id):
     url =  f"https://redditball.xyz/api/v1/players/byTeam/{team_id}"
     r = requests.get(url)
-    print(url)
-    print(r.json())
     batters = []
     for player in r.json():
         if player['positionPrimary'] != "P":
@@ -167,18 +165,19 @@ def get_batter_info(id):
     middle_num = 0
     for swing in r.json():
         sw = swing['swing']
-        swint = int(sw)
-        if swint > 250 and swint < 750:
-            middle_num += 1
-        else:
-            edge_num += 1
+        try:
+            swint = int(sw)
+            if swint > 250 and swint < 750:
+                middle_num += 1
+            else:
+                edge_num += 1
+        except:
+            pass
         swings.append(sw)
     data['edge_vs_middle'] = [
         {"name": "Edge", "value": edge_num},
         {"name": "Middle", "value": middle_num},
     ]
-    # data['edge'] = edge_num
-    # data['middle'] = middle_num
     try:
         data['fav'] = statistics.mode(swings)
     except:
