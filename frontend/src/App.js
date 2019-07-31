@@ -87,7 +87,6 @@ class App extends Component{
               {hasRole(this.state.userRoles, ['user']) && (
                 <>
                   <Route exact path="/" render={(customProps) =>(<Main />)} /> 
-                  {/* <Route path="/info/pitchers/search" render={(customProps) => (<Search {...customProps} api_url={api_url} /> )} />  */}
                   <Route path="/info/pitchers" render={() => (<PitcherInfo />)} />
                   <Route path="/info/batters" render={(customProps) => (<BatterInfo {...customProps} api_url={api_url}/>)} />
                   <Route path="/team-stats" render={(customProps) => (<TeamStats {...customProps} api_url={api_url}/>)} />
