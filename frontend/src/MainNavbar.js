@@ -74,40 +74,13 @@ function BMenu() {
                     vertical: 'top',
                     horizontal: 'right',
                   }} >
-        <Link to="/" style={{ textDecoration: 'none', color: '#000000' }}>
-          <MenuItem onClick={handleClose} >Home</MenuItem>
-        </Link>
-        <Link to="info/pitchers/search" style={{ textDecoration: 'none', color: '#000000' }}>
-          <MenuItem onClick={handleClose}>Search Pitchers</MenuItem>
-        </Link>
-        <Link to="info/batters" style={{ textDecoration: 'none', color: '#000000' }}>
-          <MenuItem onClick={handleClose}>Batters</MenuItem>
-        </Link>
+        <Link to="/" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose} >Home</MenuItem></Link>
+        <Link to="info/pitchers" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>Pitchers</MenuItem></Link>
+        <Link to="info/batters" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>Batters</MenuItem></Link>
+        {/* <Link to="info/pitchers/search" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>Search Pitchers</MenuItem></Link> */}
       </Menu>
       </div>
         
-  );
-}
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      <Box p={3}>{children}</Box>
-    </Typography>
   );
 }
 export default function MainNavbar(props){
@@ -123,10 +96,11 @@ export default function MainNavbar(props){
         <Toolbar>
           <MediaQuery maxWidth={600}><BMenu /></MediaQuery>
           <MediaQuery minWidth={601}>
-            <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-              <Tab label="Home" to="/" component={Link} {...a11yProps(0)} />
-              <Tab label="Search Pitchers" component={Link} to="/info/pitchers/search" {...a11yProps(1)} />
-              <Tab label="Batter Info" to="/info/batters" component={Link} {...a11yProps(2)} />
+            <Tabs value={value} onChange={handleChange} aria-label="navtabs">
+              <Tab label="Home" to="/" component={Link} />
+              <Tab label="Pitcher Info" to="/info/pitchers" component={Link} />
+              <Tab label="Batter Info" to="/info/batters" component={Link}/>
+              {/* <Tab label="Search Pitchers" component={Link} to="/info/pitchers/search" {...a11yProps(3)} /> */}
             </Tabs>
           </MediaQuery>
         </Toolbar>}
