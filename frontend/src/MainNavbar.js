@@ -12,7 +12,7 @@ import { fade } from '@material-ui/core/styles';
 import { makeStyles } from "@material-ui/styles";
 import { red } from '@material-ui/core/colors';
 import MediaQuery from 'react-responsive';
-import { Tabs, Tab, Typography, Box } from "@material-ui/core";
+import { Tabs, Tab } from "@material-ui/core";
 
 import { hasRole} from './auth';
 

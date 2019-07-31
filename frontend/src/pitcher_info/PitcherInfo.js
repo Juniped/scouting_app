@@ -1,17 +1,8 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableRow,
-  Card,
-  CardContent,
   Typography,
   Grid,
   Paper,
@@ -25,6 +16,9 @@ import LastSix from "../data_components/LastSix";
 import PitchMatrix from "../data_components/PitchMatrix";
 import RawData from "../data_components/RawData";
 import FirstInning from "../data_components/FirstInning";
+import Jumps from "../data_components/Jumps";
+import LastFirst from "../data_components/LastFirst";
+
 
 const colors = ["#DF4400", "#000000"];
 
@@ -52,75 +46,75 @@ const useStyles = theme => ({
   }
 });
 
-function Line(props) {
-  var basesOccupied = 0;
-  if (props.value["beforeState"]["firstOccupied"]) {
-    basesOccupied++;
-  }
-  if (props.value["beforeState"]["secondOccupied"]) {
-    basesOccupied++;
-  }
-  if (props.value["beforeState"]["thirdOccupied"]) {
-    basesOccupied++;
-  }
-  return (
-    <TableRow>
-      <TableCell padding="checkbox">{props.value["pitch"]}</TableCell>
-      <TableCell padding="checkbox">{props.value["swing"]}</TableCell>
-      <TableCell padding="checkbox">{props.value["result"]}</TableCell>
-      <TableCell padding="none" align="center">
-        {basesOccupied}
-      </TableCell>
-      <TableCell padding="none" align="center">
-        {props.value["beforeState"]["outs"]}
-      </TableCell>
-      <TableCell padding="checkbox">
-        {props.value["beforeState"]["inning"]}
-      </TableCell>
-      <TableCell padding="none">{props.value["pitcher"]["name"]}</TableCell>
-    </TableRow>
-  );
-}
+// function Line(props) {
+//   var basesOccupied = 0;
+//   if (props.value["beforeState"]["firstOccupied"]) {
+//     basesOccupied++;
+//   }
+//   if (props.value["beforeState"]["secondOccupied"]) {
+//     basesOccupied++;
+//   }
+//   if (props.value["beforeState"]["thirdOccupied"]) {
+//     basesOccupied++;
+//   }
+//   return (
+//     <TableRow>
+//       <TableCell padding="checkbox">{props.value["pitch"]}</TableCell>
+//       <TableCell padding="checkbox">{props.value["swing"]}</TableCell>
+//       <TableCell padding="checkbox">{props.value["result"]}</TableCell>
+//       <TableCell padding="none" align="center">
+//         {basesOccupied}
+//       </TableCell>
+//       <TableCell padding="none" align="center">
+//         {props.value["beforeState"]["outs"]}
+//       </TableCell>
+//       <TableCell padding="checkbox">
+//         {props.value["beforeState"]["inning"]}
+//       </TableCell>
+//       <TableCell padding="none">{props.value["pitcher"]["name"]}</TableCell>
+//     </TableRow>
+//   );
+// }
 
-class PitcherTable extends Component {
-  getLines() {
-    let d = [];
-    for (let i = 0; i < this.props.data.length; i++) {
-      d.push(<Line value={this.props.data[i]} key={i} />);
-    }
-    return d;
-  }
-  render() {
-    let body = (
-      <>
-        <TableHead>
-          <TableRow style={{ backroundColor: "#737475" }}>
-            <TableCell padding="checkbox">Pitch</TableCell>
-            <TableCell padding="checkbox">Swing</TableCell>
-            <TableCell padding="checkbox">Result</TableCell>
-            <TableCell padding="none">OBC</TableCell>
-            <TableCell padding="none">Outs</TableCell>
-            <TableCell padding="checkbox">Inning</TableCell>
-            <TableCell padding="none">Pitcher</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody stripedrows="true">{this.getLines()}</TableBody>
-      </>
-    );
-    return (
-      <div>
-        <MediaQuery minWidth={601}>
-          <Table size="small">{body}</Table>
-        </MediaQuery>
-        <MediaQuery maxWidth={600}>
-          <Table size="small" style={{ width: "100%" }}>
-            {body}
-          </Table>
-        </MediaQuery>
-      </div>
-    );
-  }
-}
+// class PitcherTable extends Component {
+//   getLines() {
+//     let d = [];
+//     for (let i = 0; i < this.props.data.length; i++) {
+//       d.push(<Line value={this.props.data[i]} key={i} />);
+//     }
+//     return d;
+//   }
+//   render() {
+//     let body = (
+//       <>
+//         <TableHead>
+//           <TableRow style={{ backroundColor: "#737475" }}>
+//             <TableCell padding="checkbox">Pitch</TableCell>
+//             <TableCell padding="checkbox">Swing</TableCell>
+//             <TableCell padding="checkbox">Result</TableCell>
+//             <TableCell padding="none">OBC</TableCell>
+//             <TableCell padding="none">Outs</TableCell>
+//             <TableCell padding="checkbox">Inning</TableCell>
+//             <TableCell padding="none">Pitcher</TableCell>
+//           </TableRow>
+//         </TableHead>
+//         <TableBody stripedrows="true">{this.getLines()}</TableBody>
+//       </>
+//     );
+//     return (
+//       <div>
+//         <MediaQuery minWidth={601}>
+//           <Table size="small">{body}</Table>
+//         </MediaQuery>
+//         <MediaQuery maxWidth={600}>
+//           <Table size="small" style={{ width: "100%" }}>
+//             {body}
+//           </Table>
+//         </MediaQuery>
+//       </div>
+//     );
+//   }
+// }
 
 class PitcherInfo extends Component {
   constructor(props) {
@@ -134,7 +128,9 @@ class PitcherInfo extends Component {
       fav: "",
       lastSix: [],
       matrix: [],
-      firstInning: []
+      firstInning: [],
+      jumps:[],
+      lastFirst:[],
     };
     this.handleChange = this.handleChange.bind(this);
     this.getPlayerData = this.getPlayerData.bind(this);
@@ -154,7 +150,7 @@ class PitcherInfo extends Component {
       return;
     }
     let teamName = encodeURIComponent(this.state.currentTeam.trim());
-    let url = API_URL + "/api/get/team/name/" + teamName;
+    let url = API_URL + "/get/team/name/" + teamName;
     fetch(url, {
       method: "GET",
       headers: {
@@ -175,7 +171,7 @@ class PitcherInfo extends Component {
   }
   getPlayers() {
     let teamID = this.state.team.tag;
-    let player_url = API_URL + "/api/get/pitchers/team/" + teamID;
+    let player_url = API_URL + "/get/pitchers/team/" + teamID;
     fetch(player_url, {
       method: "GET",
       headers: {
@@ -203,7 +199,7 @@ class PitcherInfo extends Component {
     return label;
   };
   getPlayerData(playerID) {
-    let url = API_URL + "/api/info/pitcher/" + playerID;
+    let url = API_URL + "/info/pitcher/" + playerID;
     fetch(url, {
       method: "GET",
       headers: {
@@ -219,7 +215,9 @@ class PitcherInfo extends Component {
           fav: result.fav,
           lastSix: result.last_6,
           matrix: result.matrix,
-          firstInning: result.first_inning
+          firstInning: result.first_inning,
+          jumps: result.jumps,
+          lastFirst: result.last_first,
         });
       })
       .catch(() => {
@@ -316,6 +314,14 @@ class PitcherInfo extends Component {
               <Grid item sm={12} md={6}>
                 <Container>
                   <Paper className={classes.paper}>
+                    <Typography variant="h5">Last 10 First Pitches</Typography>
+                    <LastFirst pitch_data={this.state.lastFirst} />
+                  </Paper>
+                </Container>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Container>
+                  <Paper className={classes.paper}>
                     <Typography variant="h5">
                       Edge vs Middle Pitch Graph
                     </Typography>
@@ -368,7 +374,7 @@ class PitcherInfo extends Component {
                   </Paper>
                 </Container>
               </Grid>
-              <Grid item sm={12} md={9}>
+              <Grid item sm={12} md={6}>
                 <Container>
                   <Paper className={classes.paper}>
                     <Typography variant="h5">Pitch Matrix</Typography>
@@ -376,6 +382,7 @@ class PitcherInfo extends Component {
                   </Paper>
                 </Container>
               </Grid>
+              
               <Grid item xs={12} sm={6} md={3}>
                 <Container className={classes.container}>
                   <Paper className={classes.paper}>
@@ -383,6 +390,14 @@ class PitcherInfo extends Component {
                   </Paper>
                 </Container>
               </Grid>
+              <Grid item xs={12} sm={6} md={3}>
+                <Container className={classes.container}>
+                  <Paper className={classes.paper}>
+                    <Jumps pitch_data={this.state.jumps} />
+                  </Paper>
+                </Container>
+              </Grid>
+
               <Grid item xs={12}>
                 <hr />
                 <Container className={classes.container}>

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import MediaQuery from 'react-responsive';
 import { withStyles} from '@material-ui/core/styles';
-import { mergeClasses } from '@material-ui/styles';
 
 const useStyles = theme => ({
     root: {
@@ -69,9 +68,6 @@ function Line(props) {
 }
 
 class PitchMatrix extends Component {
-    constructor(props) {
-        super(props);
-    }
     getLines() {
         let d = [];
         for (let i = 0; i < this.props.pitch_data.length; i++) {
@@ -84,18 +80,18 @@ class PitchMatrix extends Component {
         const { classes } = this.props;
         let body = (<><TableHead>
             <TableRow>
-                <TableCell>Range</TableCell>
-                <TableCell>HR</TableCell>
-                <TableCell>3B</TableCell>
-                <TableCell>2B</TableCell>
-                <TableCell>1B</TableCell>
-                <TableCell>BB</TableCell>
-                <TableCell>FO</TableCell>
-                <TableCell style={{padding:2}}>K</TableCell>
-                <TableCell>PO</TableCell>
-                <TableCell>LGO</TableCell>
-                <TableCell>RGO</TableCell>
-                <TableCell>Total</TableCell>
+                <TableCell align="center">Range</TableCell>
+                <TableCell align="center">HR</TableCell>
+                <TableCell align="center">3B</TableCell>
+                <TableCell align="center">2B</TableCell>
+                <TableCell align="center">1B</TableCell>
+                <TableCell align="center">BB</TableCell>
+                <TableCell align="center">FO</TableCell>
+                <TableCell align="center" style={{padding:2}}>K</TableCell>
+                <TableCell align="center">PO</TableCell>
+                <TableCell align="center">LGO</TableCell>
+                <TableCell align="center">RGO</TableCell>
+                <TableCell align="center">Total</TableCell>
             </TableRow>
         </TableHead>
             <TableBody>
@@ -104,13 +100,13 @@ class PitchMatrix extends Component {
             </>
         )
         return (
-            <div>
-                <MediaQuery minWidth={661}>
+            <div className={classes.root}>
+                <MediaQuery minWidth={1346}>
                     <Table size="small" padding="checkbox">
                         {body}
                     </Table>
                 </MediaQuery>
-                <MediaQuery maxWidth={660}>
+                <MediaQuery maxWidth={1345}>
                     <Table size="small" padding="none" style={{ width: '100%' }}>
                         {body}
                     </Table>

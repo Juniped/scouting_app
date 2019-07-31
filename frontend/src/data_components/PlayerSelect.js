@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { Table, Card, CardContent, Typography, Grid, Paper } from '@material-ui/core';
-let config = require('../config/config.json');
+import {Typography, Paper } from '@material-ui/core';
 
 const useStyles = theme => ({
     root: {

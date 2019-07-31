@@ -4,7 +4,6 @@ from flask import render_template
 from flask import jsonify
 from flask import request
 from flask_cors import CORS
-from credentials import client_id, client_secret
 import requests
 import json
 import mlr_math
@@ -51,13 +50,13 @@ def login():
 def get_teams(name):
     # Because we define our own names we should only be getting one back per attempt
     params = {"query": name}
-    url = "https://redditball.xyz/api/v1/teams/search"
+    url = "https://redditball.duckblade.com/api/v1/teams/search"
     r = requests.get(url, params=params)
     return jsonify(r.json())
 
 @app.route("/get/batters/team/<team_id>", methods=['GET'])
 def get_batters_via_team_id(team_id):
-    url =  f"https://redditball.xyz/api/v1/players/byTeam/{team_id}"
+    url =  f"https://redditball.duckblade.com/api/v1/players/byTeam/{team_id}"
     r = requests.get(url)
     batters = []
     for player in r.json():
@@ -68,7 +67,7 @@ def get_batters_via_team_id(team_id):
 
 @app.route("/get/pitchers/team/<team_id>", methods=['GET'])
 def get_pitchers_via_team_id(team_id):
-    url =  f"https://redditball.xyz/api/v1/players/byTeam/{team_id}"
+    url =  f"https://redditball.duckblade.com/api/v1/players/byTeam/{team_id}"
     r = requests.get(url)
     pitchers = []
     for player in r.json():
@@ -82,7 +81,7 @@ def get_batter_info(id):
     url = f"https://redditball.xyz/api/v1/players/{id}/plays/batting"
     r = requests.get(url)
     data = { "data": r.json(), "fav":0}
-    pitches = []
+    swings = []
     edge_num = 0
     middle_num = 0
     for swing in r.json():
@@ -109,7 +108,7 @@ def get_batter_info(id):
 
 @app.route("/info/pitcher/<id>")
 def get_pitcher_info(id):
-    url = f"https://redditball.xyz/api/v1/players/{id}/plays/pitching"
+    url = f"https://redditball.duckblade.com/api/v1/players/{id}/plays/pitching"
     r = requests.get(url)
     data = { "data": r.json(), "fav":0}
     pitches = []
@@ -140,6 +139,10 @@ def get_pitcher_info(id):
     data['matrix'] = mlr_math.build_matrix(data['data'])
     # Get First Inning
     data['first_inning'] = mlr_math.get_first_inning(data['data'])
+    # Get last 10 starts:
+    data['last_first'] = mlr_math.last_10_first_pitches(data['data'])
+    # Get Jumps
+    data['jumps'] = mlr_math.get_jumps(data['data'])
     return jsonify(data)
 
 if __name__ == "__main__":

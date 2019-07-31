@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Card, CardContent, Typography, Grid, Paper, Container } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow, Typography, Grid, Paper, Container } from '@material-ui/core';
 import PlayerSelect from '../data_components/PlayerSelect';
 import {PieChart, Pie, Cell, ResponsiveContainer} from 'recharts';
 import MediaQuery from 'react-responsive';
@@ -122,7 +121,7 @@ class BatterInfo extends Component {
             return;
         }
         let teamName = encodeURIComponent(this.state.currentTeam.trim())
-        let url = API_URL + "/api/get/team/name/" + teamName;
+        let url = API_URL + "/get/team/name/" + teamName;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -146,7 +145,7 @@ class BatterInfo extends Component {
     }
     getPlayers(){
         let teamID = this.state.team.tag;
-        let player_url = API_URL + "/api/get/batter/team/" + teamID;
+        let player_url = API_URL + "/get/batter/team/" + teamID;
         fetch(player_url, {
             method: 'GET',
             headers: {
@@ -175,7 +174,7 @@ class BatterInfo extends Component {
         return label
     }
     getPlayerData(playerID) {
-        let url = API_URL + "/api/info/batter/" + playerID;
+        let url = API_URL + "/info/batter/" + playerID;
         fetch(url, {
             method: 'GET',
             headers: {

@@ -135,6 +135,47 @@ def get_first_inning(pitch_list):
         ret_list.append(value)
     return ret_list
 
+def last_10_first_pitches(pitch_list):
+    first_inning_pitches = []
+    inning = ""
+    game_id = ""
+    for pitch in pitch_list:
+        if pitch['game']['id'] != game_id:
+            first_inning_pitches.append(pitch)
+            game_id = pitch['game']['id']
+        elif pitch['beforeState']['inning'] != inning:
+            first_inning_pitches.append(pitch)
+            inning = pitch['beforeState']['inning']
+    return first_inning_pitches[-10:]
+
+def get_jumps(pitch_list):
+    range_dict = {
+        "0":{"range":"1-100","count":0,"range_min":1,"range_max":100},
+        "1":{"range":"101-200","count":0,"range_min":101,"range_max":200},
+        "2":{"range":"201-300","count":0,"range_min":201,"range_max":300},
+        "3":{"range":"301-400","count":0,"range_min":301,"range_max":400},
+        "4":{"range":"401-500","count":0,"range_min":401,"range_max":500},
+    }
+    for i in range(0,len(pitch_list) - 1):
+        current_pitch = pitch_list[i]
+        next_pitch = pitch_list[i+1]
+        val = current_pitch['pitch']
+        next_val = next_pitch['pitch']
+        if "Auto" not in current_pitch['result'] and "Auto" not in next_pitch['result']:
+            if val is None or next_val is None:
+                continue
+            jump = int(val) - int(next_val)
+            if jump > 1000:
+                jump = 1000 - jump
+            for r in range_dict.values():
+                if jump > r['range_min'] and jump <= r['range_max']:
+                    r['count'] += 1
+    ret_list = []
+    for key, value in range_dict.items():
+        ret_list.append(value)
+    return ret_list
+
+
 # def get_raw_split(pitch_list, pitcher_team):
 #     from_behind = []
 #     from_ahead = []
