@@ -56,7 +56,11 @@ function Line(props) {
         </TableRow>
     );
 }
-class PitchInfo extends Component {
+
+class FirstInning extends Component {
+    constructor(props) {
+        super(props);
+    }
     getLines() {
         let d = [];
         for (let i = 0; i < this.props.pitch_data.length; i++) {
@@ -66,11 +70,9 @@ class PitchInfo extends Component {
         return d;
     }
     render() {
-        const loading = this.props.loading;
-        let body = loading ?
-            (<div className="has-text-centered">
-            </div>) :
-            (
+        return (
+            <div className="First Inning Root">
+                <h3>First Inning Pitches</h3>
                 <Table size="small">
                     <TableHead>
                         <TableRow>
@@ -82,74 +84,6 @@ class PitchInfo extends Component {
                         {this.getLines()}
                     </TableBody>
                 </Table>
-            );
-        return (
-            <div>{body}</div>
-        );
-    }
-}
-
-class FirstInning extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            pitch_data: [],
-            loading: true,
-        }
-        this.getMatrix = this.getMatrix.bind(this);
-        this.addData = this.addData.bind(this);
-    }
-    componentDidMount() {
-        this.getMatrix();
-    }
-    componentDidUpdate(prevProps) {
-        if (this.props.player !== prevProps.player) {
-            this.getMatrix();
-        }
-    }
-    getMatrix() {
-        this.setState({ loading: true, pitch_data: [] });
-        if (this.props.player === undefined) {
-            return;
-        }
-        let player_name = encodeURIComponent(this.props.player.trim());
-        let url = this.props.api_url + "/api/info/first_inning/" + player_name;
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                const pitch_data = this.state.pitch_data.slice();
-                let new_pitches = [];
-                for (let i = 0; i < result.length; i++) {
-                    let res = result[i];
-                    new_pitches.push(res);
-                }
-                this.setState({
-                    pitch_data: pitch_data.concat(new_pitches),
-                    loading: false,
-                });
-            })
-            .catch(() => {
-                console.log('Request Swallowed!');
-            });
-    }
-    addData(i) {
-        const pitch_data = this.state.pitch_data.slice();
-        let new_data = []
-        new_data.push(i);
-        this.setState({
-            pitch_data: pitch_data.concat(new_data),
-        });
-    }
-    render() {
-        return (
-            <div className="First Inning Root">
-                <h3>First Inning Pitches</h3>
-                <PitchInfo loading={this.state.loading} pitch_data={this.state.pitch_data} />
             </div>
         )
     }

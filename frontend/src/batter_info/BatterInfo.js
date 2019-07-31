@@ -4,7 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Card, CardContent, Typography, Grid, Paper, Container } from '@material-ui/core';
-import PlayerSelect from './PlayerSelect';
+import PlayerSelect from '../data_components/PlayerSelect';
 import {PieChart, Pie, Cell, ResponsiveContainer} from 'recharts';
 import MediaQuery from 'react-responsive';
 let config = require('../config/config.json');
@@ -146,7 +146,7 @@ class BatterInfo extends Component {
     }
     getPlayers(){
         let teamID = this.state.team.tag;
-        let player_url = this.props.api_url + "/api/get/players/team/" + teamID;
+        let player_url = this.props.api_url + "/api/get/batter/team/" + teamID;
         fetch(player_url, {
             method: 'GET',
             headers: {

@@ -44,15 +44,21 @@ def build_matrix(pitch_list):
         pitch_set = pitch_list[x]
         next_val = pitch_list[x + 1]['pitch']
         if next_val:
-
             pitch_result = pitch_set['result']
             if "Steal" in pitch_result or "CS" in pitch_result or "IBB" in pitch_result or "Auto" in pitch_result:
                 continue
-            for x in range(0,len(ranges)):
-                if next_val >= ranges[x][0] and next_val <= ranges[x][1]:
-                    range_dict[str(x)][pitch_result] += 1
-                    range_dict[str(x)]['total'] += 1
-                    break
+            elif "HRD HR" in pitch_result:
+                continue
+            elif "Bunt DP" in pitch_result:
+                pitch_result = "RGO"
+            try:
+                for x in range(0,len(ranges)):
+                    if next_val >= ranges[x][0] and next_val <= ranges[x][1]:
+                        range_dict[str(x)][pitch_result] += 1
+                        range_dict[str(x)]['total'] += 1
+                        break
+            except:
+                pass #I don't know this result
     ret_list = []
     for key, value in range_dict.items():
 
@@ -84,7 +90,7 @@ def get_last_6_pitches(pitch_list):
             except:
                 l6[x]['change'] = "ER"
         try:
-            if l6[x]['change'] != "-":
+            if l6[x]['change'] != "-" and l6[x]['change'] != "ER":
                 if abs(l6[x]['change']) > 500:
                     l6[x]['change'] = 1000 - abs(l6[x]['change'])
         except IndexError:
