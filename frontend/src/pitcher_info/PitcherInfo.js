@@ -257,23 +257,13 @@ class PitcherInfo extends Component {
                         <Grid item sm={12} md={6}>
                             <Container>
                                 <Paper className={classes.paper}>
+                                    <Typography variant="h5">
+                                            Last 6 Pitches
+                                    </Typography>
                                     <LastSix pitch_data={this.state.lastSix} />
                                 </Paper>
                             </Container>
                         </Grid>
-                        {/* <Grid item sm={12} md={6}>
-                            <Container >
-                                <Paper className={classes.paper}>
-                                    <Typography className={classes.Title}>
-                                        Pitcher Data
-                                    </Typography>
-                                    <Typography variant="subtitle1">
-                                        FavoritePitch: {this.state.playerFav}
-                                    </Typography>
-                                    <PitcherTable data={this.state.playerData} />
-                                </Paper>
-                            </Container>
-                        </Grid> */}
                         <Grid item sm={12} md={6}>
                             <Container>
                                 <Paper className={classes.paper} >
@@ -311,18 +301,21 @@ class PitcherInfo extends Component {
                                 </Paper>
                             </Container>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item sm={12}md={9}>
                             <Container>
                                 <Paper className={classes.paper}>
+                                    <Typography variant="h5">
+                                            Pitch Matrix
+                                    </Typography>
                                     <PitchMatrix pitch_data={this.state.matrix} />
                                 </Paper>
                             </Container>
                         </Grid>
                             <Grid item xs={12} sm={6} md={3}>
                                 <Container className={classes.container}>
-                                    <Card className={classes.card}>
+                                    <Paper className={classes.paper}>
                                         <FirstInning pitch_data={this.state.firstInning} />
-                                    </Card>
+                                    </Paper>
                                 </Container>
                             </Grid>
                         <Grid item xs={12}>
