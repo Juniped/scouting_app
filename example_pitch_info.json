@@ -1,0 +1,43 @@
+{
+    "id":4609,
+    "game":{
+        "id":210,
+        "awayTeam":{
+            "id":16,
+            "name":"Kansas City Royals",
+            "tag":"KCR",
+            "park":14,
+            "colorDiscord":625637,
+            "colorRoster":12426080,
+            "colorRosterBG":18055,
+            "milr":false,
+            "milrTeam":66
+        },
+        "homeTeam":{
+            "id":9,
+            "name":"Arizona Diamondbacks",
+            "tag":"ARI",
+            "park":7,
+            "colorDiscord":3975089,
+            "colorRoster":3528399,
+            "colorRosterBG":7415492,
+            "milr":false,
+            "milrTeam":72
+            },
+            "id36":"9x12fn"
+        },
+    "batter":{
+        "id":13,
+        "name":"Reimer Gonzalez",
+        "redditName":"/u/DeanNeedsANewAccount"
+    },
+    "swing":720,
+    "pitcher":{
+        "id":131,
+        "name":"Nori Aru",
+        "redditName":"/u/Ocelot_Tuga"
+    },
+    "pitch":615,
+    "diff":105,
+    "result":"BB",
+    "beforeState":{"id":4608,"awayScore":4,"homeScore":0,"outs":0,"inning":"B1","firstOccupied":false,"secondOccupied":false,"thirdOccupied":false},"afterState":{"id":4609,"awayScore":4,"homeScore":0,"outs":0,"inning":"B1","firstOccupied":true,"secondOccupied":false,"thirdOccupied":false},"outsTracked":0,"runsScored":0,"scorers":null}
