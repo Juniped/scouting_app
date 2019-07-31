@@ -3,8 +3,6 @@ import { HashRouter as Router, Route } from "react-router-dom";
 import { Card, Typography, CardContent } from "@material-ui/core";
 import "./static/App.css";
 import MainNavbar from "./MainNavbar";
-import Search from "./Search.js";
-import TeamStats from "./TeamStats";
 import Login from "./Login";
 import BatterInfo from "./batter_info/BatterInfo";
 import PitcherInfo from "./pitcher_info/PitcherInfo";
@@ -45,7 +43,7 @@ class App extends Component {
     console.log("Login Form Submitted");
     // Check Login with Home DB
 
-    let url = API_URL + "/api/login";
+    let url = API_URL + "/login";
     fetch(url, {
       method: "POST",
       headers: {

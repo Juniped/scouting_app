@@ -3,7 +3,7 @@ import MediaQuery from 'react-responsive';
 import { withStyles} from '@material-ui/core/styles';
 import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails} from '@material-ui/core/';
 import {Typography, Box} from '@material-ui/core/';
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 
@@ -36,7 +36,7 @@ function RawLine(props) {
             <TableCell align="center" style={{ padding: 5 }}>{props.value['result']}</TableCell>
             <TableCell align="center" style={{ padding: 5 }}>{props.value['diff']}</TableCell>
             <TableCell align="center" style={{ padding: 5 }}>{basesOccupied}</TableCell>
-            <TableCell align="center"  style={{padding:5}} >{props.value['beforeState']['outs']}</TableCell>
+            <TableCell align="center" style={{padding:5}} >{props.value['beforeState']['outs']}</TableCell>
             <TableCell align="center" style={{ padding: 5 }}>{props.value['beforeState']['inning']}</TableCell>
         </TableRow>
     );
@@ -52,7 +52,6 @@ class RawDataTable extends Component{
         return d;
     }
     render() {
-        const loading = this.props.loading;
         let body = (
             <>
                 <TableHead >
@@ -89,10 +88,6 @@ class RawDataTable extends Component{
 }
 
 class RawData extends Component{
-    constructor(props) {
-        super(props);
-    }
-
     render(){
         const { classes } = this.props;
         return(

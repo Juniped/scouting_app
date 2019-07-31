@@ -37,9 +37,6 @@ function L6Line(props) {
 }
 
 class LastSix extends Component {
-    constructor(props) {
-        super(props);
-    }
     getLines() {
         let d = [];
         for (let i = 0; i < this.props.pitch_data.length; i++) {

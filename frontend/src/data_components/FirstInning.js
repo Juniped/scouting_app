@@ -37,9 +37,9 @@ function Cell(props) {
     var sub_color = 0x110011 * val
     var result = color_value = color_value - sub_color;
     var colorHex = "#" + result.toString(16)
-    let colorStyle = { backgroundColor: colorHex };
+    let colorStyle = { backgroundColor: colorHex, padding: 5 };
     return (
-        <TableCell style={colorStyle}>{props.value}</TableCell>
+        <TableCell style={colorStyle} align="center">{props.value}</TableCell>
     );
 }
 
@@ -58,9 +58,6 @@ function Line(props) {
 }
 
 class FirstInning extends Component {
-    constructor(props) {
-        super(props);
-    }
     getLines() {
         let d = [];
         for (let i = 0; i < this.props.pitch_data.length; i++) {
@@ -76,8 +73,8 @@ class FirstInning extends Component {
                 <Table size="small">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Range</TableCell>
-                            <TableCell>Count</TableCell>
+                            <TableCell align="center" style={{ padding: 5 }}>Range</TableCell>
+                            <TableCell align="center" style={{ padding: 5 }}>Count</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
