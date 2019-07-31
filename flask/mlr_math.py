@@ -66,7 +66,7 @@ def build_matrix(pitch_list):
     return ret_list
 
 def get_last_6_pitches(pitch_list):
-    pitches = pitch_list[-6:]
+    pitches = pitch_list[-10:]  # Actually Getting last 10 because why not
     l6 = []
     for pitch in pitches:
         l6.append({
