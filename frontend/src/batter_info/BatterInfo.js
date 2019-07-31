@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Card, Ca
 import PlayerSelect from '../data_components/PlayerSelect';
 import {PieChart, Pie, Cell, ResponsiveContainer} from 'recharts';
 import MediaQuery from 'react-responsive';
-let config = require('../config/config.json');
+import { API_URL } from "../config/Constants";
 const colors = ['#DF4400', '#000000'];
 
 const useStyles = theme => ({
@@ -122,7 +122,7 @@ class BatterInfo extends Component {
             return;
         }
         let teamName = encodeURIComponent(this.state.currentTeam.trim())
-        let url = this.props.api_url + "/api/get/team/name/" + teamName;
+        let url = API_URL + "/api/get/team/name/" + teamName;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -146,7 +146,7 @@ class BatterInfo extends Component {
     }
     getPlayers(){
         let teamID = this.state.team.tag;
-        let player_url = this.props.api_url + "/api/get/batter/team/" + teamID;
+        let player_url = API_URL + "/api/get/batter/team/" + teamID;
         fetch(player_url, {
             method: 'GET',
             headers: {
@@ -175,7 +175,7 @@ class BatterInfo extends Component {
         return label
     }
     getPlayerData(playerID) {
-        let url = this.props.api_url + "/api/info/batter/" + playerID;
+        let url = API_URL + "/api/info/batter/" + playerID;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -239,7 +239,7 @@ class BatterInfo extends Component {
                         </Paper>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        {this.state.players.length > 0 && <PlayerSelect players={this.state.players} api_url={this.props.api_url} getPlayerData={this.getPlayerData}/> }
+                        {this.state.players.length > 0 && <PlayerSelect players={this.state.players} api_url={API_URL} getPlayerData={this.getPlayerData}/> }
                     </Grid>
                     {this.state.playerData.length > 0  && (
                         <>
