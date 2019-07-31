@@ -258,7 +258,7 @@ class PitcherInfo extends Component {
                             <Container>
                                 <Paper className={classes.paper}>
                                     <Typography variant="h5">
-                                            Last 6 Pitches
+                                            Last 10 Pitches
                                     </Typography>
                                     <LastSix pitch_data={this.state.lastSix} />
                                 </Paper>
