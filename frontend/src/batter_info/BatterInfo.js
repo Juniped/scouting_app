@@ -145,7 +145,7 @@ class BatterInfo extends Component {
     }
     getPlayers(){
         let teamID = this.state.team.tag;
-        let player_url = API_URL + "/get/batter/team/" + teamID;
+        let player_url = API_URL + "/get/batters/team/" + teamID;
         fetch(player_url, {
             method: 'GET',
             headers: {
