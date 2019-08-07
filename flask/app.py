@@ -143,6 +143,13 @@ def get_pitcher_info(id):
     data['last_first'] = mlr_math.last_10_first_pitches(data['data'])
     # Get Jumps
     data['jumps'] = mlr_math.get_jumps(data['data'])
+    # Get Counts
+    pre_sorted_counts = mlr_math.get_counts(data['data'])
+    data['counts']  = sorted(pre_sorted_counts, key=lambda i: (i['pitch']))
+    
+    # print(data['counts'])
+    for pitch in data['counts']:
+        print(pitch)
     return jsonify(data)
 
 if __name__ == "__main__":

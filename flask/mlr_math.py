@@ -175,6 +175,20 @@ def get_jumps(pitch_list):
         ret_list.append(value)
     return ret_list
 
+def get_counts(pitch_list):
+    pitches = {}
+    for pitch in pitch_list:
+        pitch_num = pitch['pitch']
+        if pitch_num is None:
+            continue
+        if pitch_num not in pitches.keys():
+            pitches[pitch_num] = 1
+        else:
+            pitches[pitch_num] += 1
+    pitch_ret_list = []
+    for pitch, count in pitches.items():
+        pitch_ret_list.append({'pitch':pitch,'count':count})
+    return pitch_ret_list
 
 # def get_raw_split(pitch_list, pitcher_team):
 #     from_behind = []
