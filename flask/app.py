@@ -143,14 +143,19 @@ def get_pitcher_info(id):
     data['last_first'] = mlr_math.last_10_first_pitches(data['data'])
     # Get Jumps
     data['jumps'] = mlr_math.get_jumps(data['data'])
+
+    return jsonify(data)
+
+@app.route("/info/pitcher/counts/<id>")
+def get_pitcher_counts(id):
+    url = f"https://redditball.duckblade.com/api/v1/players/{id}/plays/pitching"
+    r = requests.get(url)
+    data = { "data": r.json()}
     # Get Counts
     pre_sorted_counts = mlr_math.get_counts(data['data'])
     data['counts']  = sorted(pre_sorted_counts, key=lambda i: (i['pitch']))
-    
-    # print(data['counts'])
-    for pitch in data['counts']:
-        print(pitch)
     return jsonify(data)
+
 
 if __name__ == "__main__":
     app.run(ssl_context='adhoc')
