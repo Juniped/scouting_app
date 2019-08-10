@@ -389,6 +389,56 @@ class PitcherInfo extends Component {
                 </Container>
               </Grid>
               <Grid item xs={12}>
+                {" "}
+                {/*Last 10 Pitch Graph */}
+                <Container>
+                  <Paper className={classes.paper}>
+                    <Typography variant="h5">
+                      last 10 Pitch Graph
+                    </Typography>
+                    <div style={{ width: "100%", height: 400 }}>
+                      <MediaQuery minWidth={601}>
+                        <ResponsiveContainer width="100%">
+                          <LineChart
+                            // width={730}
+                            height={250}
+                            data={this.state.lastSix}
+                          >
+                            {/* <CartesianGrid strokeDasharray="200 20" /> */}
+                            <XAxis
+                              dataKey="index"
+                              name="Pitch Number"
+                              unit=""
+                            />
+                            <YAxis
+                              dataKey="pitch"
+                              name="Pitch Value"
+                              unit=""
+                              domain={[0,1000]}
+                            />
+                            <Tooltip
+                              cursor={{ strokeDasharray: "200 20" }}
+                            />
+                            <Legend />
+                            <Line
+                              name="Pitch"
+                              dataKey="pitch"
+                              stroke="#d12e72"
+                              type="linear"
+                            />
+                            {/* <Scatter
+                              name="B school"
+                              data={data02}
+                              fill="#82ca9d"
+                            /> */}
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </MediaQuery>
+                    </div>
+                  </Paper>
+                </Container>
+              </Grid>
+              <Grid item xs={12}>
                 <Container>
                   <Paper className={classes.paper}>
                     <Typography variant="h5">Range Graph</Typography>
