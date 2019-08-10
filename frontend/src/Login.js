@@ -36,7 +36,6 @@ class Login extends Component{
         this.handleChangeUsername = this.handleChangeUsername.bind(this);
         this.handleChangepassword = this.handleChangepassword.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.checkLogin = this.props.checkLogin.bind(this);
   
     }
     
@@ -48,9 +47,9 @@ class Login extends Component{
     }
     handleSubmit(event) {
         event.preventDefault();
-        var username = this.state.username;
+        var username = this.state.username; 
         var password = this.state.password;
-        this.checkLogin(username, password);
+        this.props.checkLogin(username, password);
     }
     render(){
         const { classes } = this.props;

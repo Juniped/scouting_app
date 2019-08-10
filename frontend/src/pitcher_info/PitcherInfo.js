@@ -9,7 +9,22 @@ import {
   Container
 } from "@material-ui/core";
 import PlayerSelect from "../data_components/PlayerSelect";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  LineChart,
+  XAxis,
+  YAxis,
+  ZAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  Line,
+  Area,
+  AreaChart,
+} from "recharts";
 import MediaQuery from "react-responsive";
 import { API_URL } from "../config/Constants";
 import LastSix from "../data_components/LastSix";
@@ -46,76 +61,6 @@ const useStyles = theme => ({
   }
 });
 
-// function Line(props) {
-//   var basesOccupied = 0;
-//   if (props.value["beforeState"]["firstOccupied"]) {
-//     basesOccupied++;
-//   }
-//   if (props.value["beforeState"]["secondOccupied"]) {
-//     basesOccupied++;
-//   }
-//   if (props.value["beforeState"]["thirdOccupied"]) {
-//     basesOccupied++;
-//   }
-//   return (
-//     <TableRow>
-//       <TableCell padding="checkbox">{props.value["pitch"]}</TableCell>
-//       <TableCell padding="checkbox">{props.value["swing"]}</TableCell>
-//       <TableCell padding="checkbox">{props.value["result"]}</TableCell>
-//       <TableCell padding="none" align="center">
-//         {basesOccupied}
-//       </TableCell>
-//       <TableCell padding="none" align="center">
-//         {props.value["beforeState"]["outs"]}
-//       </TableCell>
-//       <TableCell padding="checkbox">
-//         {props.value["beforeState"]["inning"]}
-//       </TableCell>
-//       <TableCell padding="none">{props.value["pitcher"]["name"]}</TableCell>
-//     </TableRow>
-//   );
-// }
-
-// class PitcherTable extends Component {
-//   getLines() {
-//     let d = [];
-//     for (let i = 0; i < this.props.data.length; i++) {
-//       d.push(<Line value={this.props.data[i]} key={i} />);
-//     }
-//     return d;
-//   }
-//   render() {
-//     let body = (
-//       <>
-//         <TableHead>
-//           <TableRow style={{ backroundColor: "#737475" }}>
-//             <TableCell padding="checkbox">Pitch</TableCell>
-//             <TableCell padding="checkbox">Swing</TableCell>
-//             <TableCell padding="checkbox">Result</TableCell>
-//             <TableCell padding="none">OBC</TableCell>
-//             <TableCell padding="none">Outs</TableCell>
-//             <TableCell padding="checkbox">Inning</TableCell>
-//             <TableCell padding="none">Pitcher</TableCell>
-//           </TableRow>
-//         </TableHead>
-//         <TableBody stripedrows="true">{this.getLines()}</TableBody>
-//       </>
-//     );
-//     return (
-//       <div>
-//         <MediaQuery minWidth={601}>
-//           <Table size="small">{body}</Table>
-//         </MediaQuery>
-//         <MediaQuery maxWidth={600}>
-//           <Table size="small" style={{ width: "100%" }}>
-//             {body}
-//           </Table>
-//         </MediaQuery>
-//       </div>
-//     );
-//   }
-// }
-
 class PitcherInfo extends Component {
   constructor(props) {
     super(props);
@@ -131,6 +76,7 @@ class PitcherInfo extends Component {
       firstInning: [],
       jumps:[],
       lastFirst:[],
+      counts: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.getPlayerData = this.getPlayerData.bind(this);
@@ -145,7 +91,8 @@ class PitcherInfo extends Component {
         fav: "",
         lastSix: [],
         matrix: [],
-        firstInning: []
+        firstInning: [],
+        counts: [],
       });
       return;
     }
@@ -217,12 +164,31 @@ class PitcherInfo extends Component {
           matrix: result.matrix,
           firstInning: result.first_inning,
           jumps: result.jumps,
-          lastFirst: result.last_first,
+          lastFirst: result.last_first
         });
       })
-      .catch(() => {
+      .catch(error => {
+        console.log(error);
         console.log("Request Swallowed!");
       });
+    // Get Counts Seperate
+    let counturl = API_URL + "/info/pitcher/counts/" + playerID;
+     fetch(counturl, {
+       method: "GET",
+       headers: {
+         "Content-Type": "application/json"
+       }
+     })
+       .then(res => res.json())
+       .then(result => {
+         this.setState({
+           counts: result.counts
+         });
+       })
+       .catch((error) => {
+         console.log(error)
+         console.log("Request Swallowed!");
+       });
   }
   render() {
     const { classes } = this.props;
@@ -243,38 +209,59 @@ class PitcherInfo extends Component {
                 <NativeSelect
                   value={this.state.currentTeam}
                   onChange={this.handleChange}
-                  inputProps={{ name: "currentTeam", id: "team-native-simple" }}
+                  inputProps={{
+                    name: "currentTeam",
+                    id: "team-native-simple"
+                  }}
                 >
                   <option value="" />
                   <option value="Arizona Diamondbacks">
                     Arizona Diamondbacks
                   </option>
                   <option value="Atlanta Braves">Atlanta Braves</option>
-                  <option value="Baltimore Orioles">Baltimore Orioles</option>
+                  <option value="Baltimore Orioles">
+                    Baltimore Orioles
+                  </option>
                   <option value="Boston Red Sox">Boston Red Sox</option>
                   <option value="Chicago Cubs">Chicago Cubs</option>
-                  <option value="Chicago White Sox">Chicago White Sox</option>
+                  <option value="Chicago White Sox">
+                    Chicago White Sox
+                  </option>
                   <option value="Cincinnati Red">Cincinnati Red</option>
-                  <option value="Cleveland Indians">Cleveland Indians</option>
+                  <option value="Cleveland Indians">
+                    Cleveland Indians
+                  </option>
                   <option value="Colorado Rockies">Colorado Rockies</option>
                   <option value="Detroit Tigers">Detroit Tigers</option>
-                  <option value="Houston Colt 45's">Houston Colt 45's</option>
-                  <option value="Kansas City Royals">Kansas City Royals</option>
-                  <option value="Los Angeles Angels">Los Angeles Angels</option>
+                  <option value="Houston Colt 45's">
+                    Houston Colt 45's
+                  </option>
+                  <option value="Kansas City Royals">
+                    Kansas City Royals
+                  </option>
+                  <option value="Los Angeles Angels">
+                    Los Angeles Angels
+                  </option>
                   <option value="Los Angeles Dodgers">
                     Los Angeles Dodgers
                   </option>
                   <option value="Miami Marlins">Miami Marlins</option>
-                  <option value="Milwaukee Brewers">Milwaukee Brewers</option>
+                  <option value="Milwaukee Brewers">
+                    Milwaukee Brewers
+                  </option>
                   <option value="Minnesota Twins">Minnesota Twins</option>
                   <option value="Montreal Expos">Montreal Expos</option>
                   <option value="New York Mets">New York Mets</option>
                   <option value="New York Yankees">New York Yankees</option>
-                  <option value="Oakland Athletics">Oakland Athletics</option>
+                  <option value="Oakland Athletics">
+                    Oakland Athletics
+                  </option>
                   <option value="Philadelphia Phillies">
                     Philadelphia Phillies
                   </option>
-                  <option value="Pittsburgh Pirates">Pittsburgh Pirates</option>
+                  <option value="Pittsburgh Pirates">
+                    Pittsburgh Pirates
+                  </option>
                   <option value="San Diego Padres">San Diego Padres</option>
                   <option value="San Francisco Giants">
                     San Francisco Giants
@@ -287,7 +274,9 @@ class PitcherInfo extends Component {
                     Tampa Bay Devil Rays
                   </option>
                   <option value="Texas Rangers">Texas Rangers</option>
-                  <option value="Toronto Blue Jays">Toronto Blue Jays</option>
+                  <option value="Toronto Blue Jays">
+                    Toronto Blue Jays
+                  </option>
                 </NativeSelect>
               </FormControl>
             </Paper>
@@ -314,7 +303,9 @@ class PitcherInfo extends Component {
               <Grid item sm={12} md={6}>
                 <Container>
                   <Paper className={classes.paper}>
-                    <Typography variant="h5">Last 10 First Pitches</Typography>
+                    <Typography variant="h5">
+                      Last 10 First Pitches
+                    </Typography>
                     <LastFirst pitch_data={this.state.lastFirst} />
                   </Paper>
                 </Container>
@@ -382,7 +373,7 @@ class PitcherInfo extends Component {
                   </Paper>
                 </Container>
               </Grid>
-              
+
               <Grid item xs={12} sm={6} md={3}>
                 <Container className={classes.container}>
                   <Paper className={classes.paper}>
@@ -397,7 +388,76 @@ class PitcherInfo extends Component {
                   </Paper>
                 </Container>
               </Grid>
-
+              <Grid item xs={12}>
+                <Container>
+                  <Paper className={classes.paper}>
+                    <Typography variant="h5">Range Graph</Typography>
+                    <div style={{ width: "100%", height: 400 }}>
+                      <MediaQuery minWidth={601}>
+                        <ResponsiveContainer width="100%">
+                          <AreaChart
+                            // width={730}
+                            height={250}
+                            data={this.state.matrix}
+                          >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="range" />
+                            <YAxis />
+                            <Tooltip />
+                            {/* <Legend /> */}
+                            <Area
+                              name="Pitches"
+                              dataKey="total"
+                              stroke="#68c42b"
+                              type="step"
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </MediaQuery>
+                    </div>
+                  </Paper>
+                </Container>
+              </Grid>
+              <Grid item xs={12}>
+                <Container>
+                  <Paper className={classes.paper}>
+                    <Typography variant="h5">
+                      Individual Pitch Counts
+                    </Typography>
+                    <div style={{ width: "100%", height: 400 }}>
+                      <MediaQuery minWidth={601}>
+                        <ResponsiveContainer width="100%">
+                          <LineChart
+                            // width={730}
+                            height={250}
+                            data={this.state.counts}
+                          >
+                            {/* <CartesianGrid strokeDasharray="200 20" /> */}
+                            <XAxis dataKey="pitch" name="count" unit="" />
+                            <YAxis dataKey="count" name="pitch" unit="" />
+                            <Tooltip
+                              cursor={{ strokeDasharray: "200 20" }}
+                            />
+                            <Legend />
+                            <Line
+                              name="Pitches"
+                              dataKey="count"
+                              stroke="#8884d8"
+                              type="linear"
+                              dot={false}
+                            />
+                            {/* <Scatter
+                              name="B school"
+                              data={data02}
+                              fill="#82ca9d"
+                            /> */}
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </MediaQuery>
+                    </div>
+                  </Paper>
+                </Container>
+              </Grid>
               <Grid item xs={12}>
                 <hr />
                 <Container className={classes.container}>
