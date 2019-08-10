@@ -10,10 +10,20 @@ import { hasRole } from "./auth";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
 import { API_URL } from "./config/Constants";
+import bal_large from './static/bal_large.png';
 class Main extends Component {
   render() {
     return (
-      <div className="main">{/* <h1> More Features Coming Soon</h1> */}</div>
+      <div className="main">
+        <h1> Baltimore Orioles Scouting App</h1>
+        <p>
+          Use each individual section to get informationm on either a batter
+          or a pitcher. If you have any ideas or suggestions on what I might
+          be able to implement or add please just let me know. If there are
+          any bugs as well please let me know so I can fix it ASAP
+        </p>
+        <img src={bal_large} alt="Logo" />
+      </div>
     );
   }
 }
