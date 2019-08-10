@@ -68,6 +68,7 @@ def build_matrix(pitch_list):
 def get_last_6_pitches(pitch_list):
     pitches = pitch_list[-10:]  # Actually Getting last 10 because why not
     l6 = []
+    index = 10
     for pitch in pitches:
         l6.append({
             'pitch':pitch['pitch'],
@@ -75,7 +76,9 @@ def get_last_6_pitches(pitch_list):
             'diff':pitch['diff'],
             'result':pitch['result'],
             'change':0,
+            'index': index
         })
+        index -= 1
     for x in range(0, len(l6)-1 ):
         if "Auto" in l6[x+1]['result']:
             try:
