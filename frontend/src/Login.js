@@ -57,7 +57,7 @@ class Login extends Component{
         <div>
              <form onSubmit={this.handleSubmit} className={classes.container} >
                 <TextField autoFocus className={classes.textField} style={{ margin: 20 }} label="username" id="username" type="text" value={this.state.username} onChange={this.handleChangeUsername} variant="outlined" margin="normal" InputLabelProps={{shrink: true,}} />
-                <TextField className={classes.textField} style={{ margin: 20 }} label="username" id="password" type="text" value={this.state.password} onChange={this.handleChangepassword} variant="outlined" margin="normal" InputLabelProps={{shrink: true,}} />
+                <TextField className={classes.textField} style={{ margin: 20 }} label="password" id="password" type="text" value={this.state.password} onChange={this.handleChangepassword} variant="outlined" margin="normal" InputLabelProps={{shrink: true,}} />
                 <Button variant="contained" className={classes.button} type="submit" size="small" color="primary">Login</ Button>
             </form>
         </div>

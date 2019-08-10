@@ -389,12 +389,11 @@ class PitcherInfo extends Component {
                 </Container>
               </Grid>
               <Grid item xs={12}>
-                {" "}
                 {/*Last 10 Pitch Graph */}
                 <Container>
                   <Paper className={classes.paper}>
                     <Typography variant="h5">
-                      last 10 Pitch Graph
+                      Last 10 Pitch Graph
                     </Typography>
                     <div style={{ width: "100%", height: 400 }}>
                       <MediaQuery minWidth={601}>
@@ -404,18 +403,13 @@ class PitcherInfo extends Component {
                             height={250}
                             data={this.state.lastSix}
                           >
-                            {/* <CartesianGrid strokeDasharray="200 20" /> */}
+                            <CartesianGrid strokeDasharray="200 20" />
                             <XAxis
                               dataKey="index"
                               name="Pitch Number"
                               unit=""
                             />
-                            <YAxis
-                              dataKey="pitch"
-                              name="Pitch Value"
-                              unit=""
-                              domain={[0,1000]}
-                            />
+                            <YAxis type="number" domain={[0, 1000]} />
                             <Tooltip
                               cursor={{ strokeDasharray: "200 20" }}
                             />
@@ -426,11 +420,12 @@ class PitcherInfo extends Component {
                               stroke="#d12e72"
                               type="linear"
                             />
-                            {/* <Scatter
-                              name="B school"
-                              data={data02}
-                              fill="#82ca9d"
-                            /> */}
+                            <Line
+                              name="Difference"
+                              dataKey="diff"
+                              stroke="#31d6b0"
+                              type="linear"
+                            />
                           </LineChart>
                         </ResponsiveContainer>
                       </MediaQuery>
@@ -482,8 +477,7 @@ class PitcherInfo extends Component {
                             height={250}
                             data={this.state.counts}
                           >
-                            {/* <CartesianGrid strokeDasharray="200 20" /> */}
-                            <XAxis dataKey="pitch" name="count" unit="" />
+                            <XAxis dataKey="pitch" name="count" unit=""  type="number" domain={[0,1000]} />
                             <YAxis dataKey="count" name="pitch" unit="" />
                             <Tooltip
                               cursor={{ strokeDasharray: "200 20" }}
@@ -494,13 +488,8 @@ class PitcherInfo extends Component {
                               dataKey="count"
                               stroke="#8884d8"
                               type="linear"
-                              dot={false}
+                              dot={true}
                             />
-                            {/* <Scatter
-                              name="B school"
-                              data={data02}
-                              fill="#82ca9d"
-                            /> */}
                           </LineChart>
                         </ResponsiveContainer>
                       </MediaQuery>
