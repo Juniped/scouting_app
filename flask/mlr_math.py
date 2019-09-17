@@ -65,6 +65,77 @@ def build_matrix(pitch_list):
         ret_list.append(value)
     return ret_list
 
+def change_matrix(pitch_list):
+    pitch_dicts = []
+    for pitch in pitch_list:
+        pitch_dicts.append({
+            'pitch':pitch['pitch'],
+            'swing':pitch['swing'],
+            'diff':pitch['diff'],
+            'result':pitch['result'],
+            'change':0,
+        })
+    for x in range(0, len(pitch_dicts)-1 ):
+        if "Auto" in pitch_dicts[x+1]['result']:
+            try:
+                pitch_dicts[x]['change'] = pitch_dicts[x+2]['pitch'] - pitch_dicts[x]['pitch']
+            except IndexError:
+                pitch_dicts[x]['change']= "-"
+        elif "Auto" in pitch_dicts[x]['result']:
+            pitch_dicts[x]['change'] = "-"
+        else:
+            try:
+                pitch_dicts[x]['change'] = pitch_dicts[x+1]['pitch'] - pitch_dicts[x]['pitch']
+            except:
+                pitch_dicts[x]['change'] = "ER"
+        try:
+            if pitch_dicts[x]['change'] != "-" and pitch_dicts[x]['change'] != "ER":
+                if abs(pitch_dicts[x]['change']) > 500:
+                    pitch_dicts[x]['change'] = 1000 - abs(pitch_dicts[x]['change'])
+        except IndexError:
+            print("BURP")
+    ranges = [(1,100),(101,200),(201,300),(301,400),(401,500),(501,600),(601,700),(701,800),(801,900),(901,1000),]
+    
+    result_dict = {"HR":0,"3B":0,"2B":0,"1B":0,"BB":0,"FO":0,"K":0,"PO":0,"RGO":0,"LGO":0,"total":0,}
+    range_dict = {
+        "0":{**{"range":"1-100"}, **result_dict.copy()},
+        "1":{**{"range":"101-200"}, **result_dict.copy()},
+        "2":{**{"range":"201-300"}, **result_dict.copy()},
+        "3":{**{"range":"301-400"}, **result_dict.copy()},
+        "4":{**{"range":"401-500"}, **result_dict.copy()},
+        # "5":{**{"range":"501-600"}, **result_dict.copy()},
+        # "6":{**{"range":"601-700"}, **result_dict.copy()},
+        # "7":{**{"range":"701-900"}, **result_dict.copy()},
+        # "8":{**{"range":"801-900"}, **result_dict.copy()},
+        # "9":{**{"range":"901-1000"}, **result_dict.copy()},
+    }
+    for x in range(0,len(pitch_dicts)-1):
+        pitch_set = pitch_dicts[x]
+        # next_val = pitch_dicts[x + 1]['pitch']
+        change = pitch_dicts[x]['change']
+        if change != "-" and change != "ER":
+            
+            pitch_result = pitch_set['result']
+            if "Steal" in pitch_result or "CS" in pitch_result or "IBB" in pitch_result or "Auto" in pitch_result:
+                continue
+            elif "HRD HR" in pitch_result:
+                continue
+            elif "Bunt DP" in pitch_result:
+                pitch_result = "RGO"
+            try:
+                change = int(change)
+                for x in range(0,len(ranges)):
+                    if change >= ranges[x][0] and change <= ranges[x][1]:
+                        range_dict[str(x)][pitch_result] += 1
+                        range_dict[str(x)]['total'] += 1
+                        break
+            except:
+                pass #I don't know this result
+    ret_list = []
+    for key, value in range_dict.items():
+        ret_list.append(value)
+    return ret_list
+
 def get_last_6_pitches(pitch_list):
     pitches = pitch_list[-10:]  # Actually Getting last 10 because why not
     l6 = []

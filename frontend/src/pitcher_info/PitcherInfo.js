@@ -29,6 +29,7 @@ import MediaQuery from "react-responsive";
 import { API_URL } from "../config/Constants";
 import LastSix from "../data_components/LastSix";
 import PitchMatrix from "../data_components/PitchMatrix";
+import ChangeMatrix from "../data_components/ChangeMatrix";
 import RawData from "../data_components/RawData";
 import FirstInning from "../data_components/FirstInning";
 import Jumps from "../data_components/Jumps";
@@ -77,6 +78,7 @@ class PitcherInfo extends Component {
       jumps:[],
       lastFirst:[],
       counts: [],
+      changeMatrix:[],
     };
     this.handleChange = this.handleChange.bind(this);
     this.getPlayerData = this.getPlayerData.bind(this);
@@ -93,6 +95,7 @@ class PitcherInfo extends Component {
         matrix: [],
         firstInning: [],
         counts: [],
+        changeMatrix: [],
       });
       return;
     }
@@ -164,7 +167,8 @@ class PitcherInfo extends Component {
           matrix: result.matrix,
           firstInning: result.first_inning,
           jumps: result.jumps,
-          lastFirst: result.last_first
+          lastFirst: result.last_first,
+          changeMatrix: result.change_matrix
         });
       })
       .catch(error => {
@@ -370,6 +374,14 @@ class PitcherInfo extends Component {
                   <Paper className={classes.paper}>
                     <Typography variant="h5">Pitch Matrix</Typography>
                     <PitchMatrix pitch_data={this.state.matrix} />
+                  </Paper>
+                </Container>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Container>
+                  <Paper className={classes.paper}>
+                    <Typography variant="h5">Change Matrix</Typography>
+                    <ChangeMatrix pitch_data={this.state.changeMatrix} />
                   </Paper>
                 </Container>
               </Grid>
