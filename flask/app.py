@@ -143,6 +143,7 @@ def get_pitcher_info(id):
     data['last_first'] = mlr_math.last_10_first_pitches(data['data'])
     # Get Jumps
     data['jumps'] = mlr_math.get_jumps(data['data'])
+    data['change_matrix'] = mlr_math.change_matrix(data['data'])
 
     return jsonify(data)
 
