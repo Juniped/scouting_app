@@ -47,7 +47,7 @@ def login():
         return {'correct':False}
 
 @app.route("/get/team/name/<name>",methods=['GET'])
-def get_teams(name):
+def get_teams(name): 
     # Because we define our own names we should only be getting one back per attempt
     params = {"query": name}
     url = "https://redditball.duckblade.com/api/v1/teams/search"
@@ -56,7 +56,7 @@ def get_teams(name):
 
 @app.route("/get/batters/team/<team_id>", methods=['GET'])
 def get_batters_via_team_id(team_id):
-    url =  f"https://redditball.duckblade.com/api/v1/players/byTeam/{team_id}"
+    url =  f'https://redditball.duckblade.com/api/v1/players/byTeam/{ team_id }'
     r = requests.get(url)
     batters = []
     for player in r.json():
@@ -71,8 +71,8 @@ def get_pitchers_via_team_id(team_id):
     r = requests.get(url)
     pitchers = []
     for player in r.json():
-        if player['positionPrimary'] == "P":
-            pitchers.append(player)
+        # if player['positionPrimary'] == "P":
+        pitchers.append(player)
     sorted_pitchers = sorted(pitchers, key=lambda k: k['name']) 
     return jsonify(sorted_pitchers)
 
