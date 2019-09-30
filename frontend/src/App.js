@@ -6,6 +6,7 @@ import MainNavbar from "./MainNavbar";
 import Login from "./Login";
 import BatterInfo from "./batter_info/BatterInfo";
 import PitcherInfo from "./pitcher_info/PitcherInfo";
+import TeamSelector from "./TeamSelector";
 import { hasRole } from "./auth";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
@@ -90,6 +91,7 @@ class App extends Component {
                   <Route exact path="/" render={() => <Main />} />
                   <Route path="/info/pitchers" render={() => <PitcherInfo />} />
                   <Route path="/info/batters" render={() => <BatterInfo />} />
+                  <Route path="/test" render={() => <TeamSelector />} />
                 </>
               )}
               {!hasRole(this.state.userRoles, ["user"]) && (

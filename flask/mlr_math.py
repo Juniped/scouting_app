@@ -77,11 +77,6 @@ def change_matrix(pitch_list):
         })
     for x in range(0, len(pitch_dicts)-1 ):
         if "Auto" in pitch_dicts[x+1]['result']:
-            try:
-                pitch_dicts[x]['change'] = pitch_dicts[x+2]['pitch'] - pitch_dicts[x]['pitch']
-            except IndexError:
-                pitch_dicts[x]['change']= "-"
-        elif "Auto" in pitch_dicts[x]['result']:
             pitch_dicts[x]['change'] = "-"
         else:
             try:
@@ -94,7 +89,7 @@ def change_matrix(pitch_list):
                     pitch_dicts[x]['change'] = 1000 - abs(pitch_dicts[x]['change'])
         except IndexError:
             print("BURP")
-    ranges = [(1,100),(101,200),(201,300),(301,400),(401,500),(501,600),(601,700),(701,800),(801,900),(901,1000),]
+    ranges = [(1,100),(101,200),(201,300),(301,400),(401,500)]
     
     result_dict = {"HR":0,"3B":0,"2B":0,"1B":0,"BB":0,"FO":0,"K":0,"PO":0,"RGO":0,"LGO":0,"total":0,}
     range_dict = {
@@ -103,18 +98,11 @@ def change_matrix(pitch_list):
         "2":{**{"range":"201-300"}, **result_dict.copy()},
         "3":{**{"range":"301-400"}, **result_dict.copy()},
         "4":{**{"range":"401-500"}, **result_dict.copy()},
-        # "5":{**{"range":"501-600"}, **result_dict.copy()},
-        # "6":{**{"range":"601-700"}, **result_dict.copy()},
-        # "7":{**{"range":"701-900"}, **result_dict.copy()},
-        # "8":{**{"range":"801-900"}, **result_dict.copy()},
-        # "9":{**{"range":"901-1000"}, **result_dict.copy()},
     }
     for x in range(0,len(pitch_dicts)-1):
         pitch_set = pitch_dicts[x]
-        # next_val = pitch_dicts[x + 1]['pitch']
         change = pitch_dicts[x]['change']
         if change != "-" and change != "ER":
-            
             pitch_result = pitch_set['result']
             if "Steal" in pitch_result or "CS" in pitch_result or "IBB" in pitch_result or "Auto" in pitch_result:
                 continue
@@ -219,7 +207,7 @@ def last_10_first_pitches(pitch_list):
             game_id = pitch['game']['id']
         elif pitch['beforeState']['inning'] != inning:
             first_inning_pitches.append(pitch)
-            inning = pitch['beforeState']['inning']
+            inning = pitch['afterState']['inning']
     return first_inning_pitches[-10:]
 
 def get_jumps(pitch_list):
@@ -238,11 +226,11 @@ def get_jumps(pitch_list):
         if "Auto" not in current_pitch['result'] and "Auto" not in next_pitch['result']:
             if val is None or next_val is None:
                 continue
-            jump = int(val) - int(next_val)
-            if jump > 1000:
+            jump = abs(int(val) - int(next_val))
+            if jump > 500:
                 jump = 1000 - jump
             for r in range_dict.values():
-                if jump > r['range_min'] and jump <= r['range_max']:
+                if jump >= r['range_min'] and jump <= r['range_max']:
                     r['count'] += 1
     ret_list = []
     for key, value in range_dict.items():
