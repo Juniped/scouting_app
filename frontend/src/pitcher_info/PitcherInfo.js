@@ -79,6 +79,7 @@ class PitcherInfo extends Component {
       lastFirst:[],
       counts: [],
       changeMatrix:[],
+      milrData: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.getPlayerData = this.getPlayerData.bind(this);
@@ -96,6 +97,7 @@ class PitcherInfo extends Component {
         firstInning: [],
         counts: [],
         changeMatrix: [],
+        milrData: [],
       });
       return;
     }
@@ -168,7 +170,8 @@ class PitcherInfo extends Component {
           firstInning: result.first_inning,
           jumps: result.jumps,
           lastFirst: result.last_first,
-          changeMatrix: result.change_matrix
+          changeMatrix: result.change_matrix,
+          milrData: result.milrData
         });
       })
       .catch(error => {
@@ -512,7 +515,13 @@ class PitcherInfo extends Component {
               <Grid item xs={12}>
                 <hr />
                 <Container className={classes.container}>
-                  <RawData pitch_data={this.state.rawData} />
+                  <RawData pitch_data={this.state.rawData} type="Raw MLR Pitch Data" />
+                </Container>
+              </Grid>
+              <Grid item xs={12}>
+                <hr />
+                <Container className={classes.container}>
+                  <RawData pitch_data={this.state.milrData} type="Raw Minor League Pitch Data"/>
                 </Container>
               </Grid>
             </>

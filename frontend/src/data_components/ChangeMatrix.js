@@ -51,7 +51,7 @@ function Line(props) {
     }
     return (
         <TableRow>
-            <TableCell component="th" scope="row">{props.value['change']}</TableCell>
+            <TableCell component="th" scope="row">{props.value['range']}</TableCell>
             {getCell(props.value['HR'])}
             {getCell(props.value['3B'])}
             {getCell(props.value['2B'])}

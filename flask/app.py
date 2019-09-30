@@ -50,13 +50,13 @@ def login():
 def get_teams(name): 
     # Because we define our own names we should only be getting one back per attempt
     params = {"query": name}
-    url = "https://redditball.duckblade.com/api/v1/teams/search"
+    url = "https://redditball.xyz/api/v1/teams/search"
     r = requests.get(url, params=params)
     return jsonify(r.json())
 
 @app.route("/get/batters/team/<team_id>", methods=['GET'])
 def get_batters_via_team_id(team_id):
-    url =  f'https://redditball.duckblade.com/api/v1/players/byTeam/{ team_id }'
+    url =  f'https://redditball.xyz/api/v1/players/byTeam/{ team_id }'
     r = requests.get(url)
     batters = []
     for player in r.json():
@@ -67,7 +67,7 @@ def get_batters_via_team_id(team_id):
 
 @app.route("/get/pitchers/team/<team_id>", methods=['GET'])
 def get_pitchers_via_team_id(team_id):
-    url =  f"https://redditball.duckblade.com/api/v1/players/byTeam/{team_id}"
+    url =  f"https://redditball.xyz/api/v1/players/byTeam/{team_id}"
     r = requests.get(url)
     pitchers = []
     for player in r.json():
@@ -108,9 +108,11 @@ def get_batter_info(id):
 
 @app.route("/info/pitcher/<id>")
 def get_pitcher_info(id):
-    url = f"https://redditball.duckblade.com/api/v1/players/{id}/plays/pitching"
+    url = f"https://redditball.xyz/api/v1/players/{id}/plays/pitching"
     r = requests.get(url)
-    data = { "data": r.json(), "fav":0}
+    # print(r.json()[0]['game'])
+    data = { "data": [ d for d in r.json() if d['game']['homeTeam']['milr'] == False], "fav":0}
+    data['milrData'] = [d for d in r.json() if d['game']['homeTeam']['milr'] == True]    
     pitches = []
     edge_num = 0
     middle_num = 0
@@ -149,7 +151,7 @@ def get_pitcher_info(id):
 
 @app.route("/info/pitcher/counts/<id>")
 def get_pitcher_counts(id):
-    url = f"https://redditball.duckblade.com/api/v1/players/{id}/plays/pitching"
+    url = f"https://redditball.xyz/api/v1/players/{id}/plays/pitching"
     r = requests.get(url)
     data = { "data": r.json()}
     # Get Counts

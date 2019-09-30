@@ -94,7 +94,7 @@ class RawData extends Component{
             <Box>
                 <ExpansionPanel>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-                        <Typography className={classes.heading}>Raw Pitch Data</Typography>
+                        <Typography className={classes.heading}>{this.props.type}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                         <RawDataTable pitch_data={this.props.pitch_data} />

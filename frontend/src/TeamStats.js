@@ -16,10 +16,21 @@ const styles = theme => ({
 })
 
 class TeamStats extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          currentTeam: "",
+          team: "",
+          players: [],
+
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.getPlayerData = this.getPlayerData.bind(this);
+      }
     render(){
         return(
             <div className="Team Stats">
-                <h1> Coming Soon </h1>
+                
             </div>
         );
     }
