@@ -76,13 +76,14 @@ def change_matrix(pitch_list):
             'change':0,
         })
     for x in range(0, len(pitch_dicts)-1 ):
-        if "Auto" in pitch_dicts[x+1]['result']:
+        if "Auto" in pitch_dicts[x+1]['result'] or "Auto" in pitch_dicts[x]['result']:
             pitch_dicts[x]['change'] = "-"
         else:
             try:
-                pitch_dicts[x]['change'] = pitch_dicts[x+1]['pitch'] - pitch_dicts[x]['pitch']
+                pitch_dicts[x]['change'] = abs(pitch_dicts[x+1]['pitch'] - pitch_dicts[x]['pitch'])
             except:
                 pitch_dicts[x]['change'] = "ER"
+
         try:
             if pitch_dicts[x]['change'] != "-" and pitch_dicts[x]['change'] != "ER":
                 if abs(pitch_dicts[x]['change']) > 500:
@@ -180,7 +181,7 @@ def get_first_inning(pitch_list):
         "4":{"range":"401-500","count":0,"range_min":401,"range_max":500},
         "5":{"range":"501-600","count":0,"range_min":501,"range_max":600},
         "6":{"range":"601-700","count":0,"range_min":601,"range_max":700},
-        "7":{"range":"701-900","count":0,"range_min":701,"range_max":800},
+        "7":{"range":"701-800","count":0,"range_min":701,"range_max":800},
         "8":{"range":"801-900","count":0,"range_min":801,"range_max":900},
         "9":{"range":"901-1000","count":0,"range_min":901,"range_max":1001},
     }
@@ -226,7 +227,7 @@ def get_jumps(pitch_list):
         if "Auto" not in current_pitch['result'] and "Auto" not in next_pitch['result']:
             if val is None or next_val is None:
                 continue
-            jump = abs(int(val) - int(next_val))
+            jump = abs(int(next_val) - int(val))
             if jump > 500:
                 jump = 1000 - jump
             for r in range_dict.values():
