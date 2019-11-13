@@ -149,6 +149,49 @@ def get_pitcher_info(id):
 
     return jsonify(data)
 
+@app.route("/info/pitcher/milr/<id>")
+def get_milr_pitcher_info(id):
+    url = f"https://redditball.xyz/api/v1/players/{id}/plays/pitching"
+    r = requests.get(url)
+    # print(r.json()[0]['game'])
+    data = { "data": [ d for d in r.json() if d['game']['homeTeam']['milr'] == True], "fav":0}
+    # data['milrData'] = [d for d in r.json() if d['game']['homeTeam']['milr'] == True]    
+    pitches = []
+    edge_num = 0
+    middle_num = 0
+    for pitch in r.json():
+        pi = pitch['pitch']
+        try:
+            piint = int(pi)
+            if piint > 250 and piint < 750:
+                middle_num += 1
+            else:
+                edge_num += 1
+        except:
+            pass
+        pitches.append(pi)
+    data['eVm'] = [
+        {"name": "Edge", "value": edge_num},
+        {"name": "Middle", "value": middle_num},
+    ]
+    try:
+        data['fav'] = statistics.mode(pitches)
+    except:
+        data['fav'] = "No Favorite"
+    # Get Last 6
+    data['last_6'] = mlr_math.get_last_6_pitches(data['data'])
+    # Get Matrix
+    data['matrix'] = mlr_math.build_matrix(data['data'])
+    # Get First Inning
+    data['first_inning'] = mlr_math.get_first_inning(data['data'])
+    # Get last 10 starts:
+    data['last_first'] = mlr_math.last_10_first_pitches(data['data'])
+    # Get Jumps
+    data['jumps'] = mlr_math.get_jumps(data['data'])
+    data['change_matrix'] = mlr_math.change_matrix(data['data'])
+    print(data)
+    return jsonify(data)
+
 @app.route("/info/pitcher/counts/<id>")
 def get_pitcher_counts(id):
     url = f"https://redditball.xyz/api/v1/players/{id}/plays/pitching"

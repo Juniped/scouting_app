@@ -7,6 +7,7 @@ import Login from "./Login";
 import BatterInfo from "./batter_info/BatterInfo";
 import PitcherInfo from "./pitcher_info/PitcherInfo";
 import TeamSelector from "./TeamSelector";
+import Milr from './pitcher_info/Milr';
 import { hasRole } from "./auth";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
@@ -92,6 +93,7 @@ class App extends Component {
                   <Route path="/info/pitchers" render={() => <PitcherInfo />} />
                   <Route path="/info/batters" render={() => <BatterInfo />} />
                   <Route path="/test" render={() => <TeamSelector />} />
+                  <Route path="/info/milr" render={() => <Milr />} />
                 </>
               )}
               {!hasRole(this.state.userRoles, ["user"]) && (
