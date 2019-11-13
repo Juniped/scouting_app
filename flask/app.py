@@ -29,7 +29,7 @@ def index():
 
 # @app.route('/search/player/<player>', methods=['GET'])
 def player_search(player):
-    search_url = "https://redditball.xyz/api/v1/players/search"
+    search_url = "https://redditball.com/api/v1/players/search"
     params = {"query": player}
     r = requests.get(search_url, params=params)
     json_results = r.json()
@@ -50,13 +50,13 @@ def login():
 def get_teams(name): 
     # Because we define our own names we should only be getting one back per attempt
     params = {"query": name}
-    url = "https://redditball.xyz/api/v1/teams/search"
+    url = "https://redditball.com/api/v1/teams/search"
     r = requests.get(url, params=params)
     return jsonify(r.json())
 
 @app.route("/get/batters/team/<team_id>", methods=['GET'])
 def get_batters_via_team_id(team_id):
-    url =  f'https://redditball.xyz/api/v1/players/byTeam/{ team_id }'
+    url =  f'https://redditball.com/api/v1/players/byTeam/{ team_id }'
     r = requests.get(url)
     batters = []
     for player in r.json():
@@ -67,7 +67,7 @@ def get_batters_via_team_id(team_id):
 
 @app.route("/get/pitchers/team/<team_id>", methods=['GET'])
 def get_pitchers_via_team_id(team_id):
-    url =  f"https://redditball.xyz/api/v1/players/byTeam/{team_id}"
+    url =  f"https://redditball.com/api/v1/players/byTeam/{team_id}"
     r = requests.get(url)
     pitchers = []
     for player in r.json():
@@ -78,7 +78,7 @@ def get_pitchers_via_team_id(team_id):
 
 @app.route("/info/batter/<id>")
 def get_batter_info(id):
-    url = f"https://redditball.xyz/api/v1/players/{id}/plays/batting"
+    url = f"https://redditball.com/api/v1/players/{id}/plays/batting"
     r = requests.get(url)
     data = { "data": r.json(), "fav":0}
     swings = []
@@ -108,7 +108,7 @@ def get_batter_info(id):
 
 @app.route("/info/pitcher/<id>")
 def get_pitcher_info(id):
-    url = f"https://redditball.xyz/api/v1/players/{id}/plays/pitching"
+    url = f"https://redditball.com/api/v1/players/{id}/plays/pitching"
     r = requests.get(url)
     # print(r.json()[0]['game'])
     data = { "data": [ d for d in r.json() if d['game']['homeTeam']['milr'] == False], "fav":0}
@@ -151,7 +151,7 @@ def get_pitcher_info(id):
 
 @app.route("/info/pitcher/milr/<id>")
 def get_milr_pitcher_info(id):
-    url = f"https://redditball.xyz/api/v1/players/{id}/plays/pitching"
+    url = f"https://redditball.com/api/v1/players/{id}/plays/pitching"
     r = requests.get(url)
     # print(r.json()[0]['game'])
     data = { "data": [ d for d in r.json() if d['game']['homeTeam']['milr'] == True], "fav":0}
@@ -194,7 +194,7 @@ def get_milr_pitcher_info(id):
 
 @app.route("/info/pitcher/counts/<id>")
 def get_pitcher_counts(id):
-    url = f"https://redditball.xyz/api/v1/players/{id}/plays/pitching"
+    url = f"https://redditball.com/api/v1/players/{id}/plays/pitching"
     r = requests.get(url)
     data = { "data": r.json()}
     # Get Counts
