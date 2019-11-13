@@ -223,6 +223,7 @@ def get_jumps(pitch_list):
         next_pitch = pitch_list[i+1]
         val = current_pitch['pitch']
         next_val = next_pitch['pitch']
+        
         if "Auto" not in current_pitch['result'] and "Auto" not in next_pitch['result']:
             if val is None or next_val is None:
                 continue
