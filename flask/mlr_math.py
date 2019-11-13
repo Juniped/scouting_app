@@ -257,4 +257,19 @@ def get_counts(pitch_list):
 def random_stats(pitch_list):
     return "yadayadayadayadayadayadayadayadayadaydaydaydaydaydayda"
 
-    
+def double_down(pitch_list):
+    for pitch in pitch_list[1:]:
+        # Get the Pitch dictionaries
+        x = pitch_list.index(pitch)
+        if x + 1 > len(pitch_list):
+            break
+        prev_pitch = pitch_list[x - 1]
+        next_pitch = pitch_list[x + 1]
+        # Get the values
+        pitch_val = pitch['pitch']
+        prev_val = prev_pitch['pitch']
+        next_val = next_pitch['pitch']
+        # Get the results
+        pitch_result = pitch['result']
+        prev_result = prev_pitch['result']
+        next_result = next_pitch['result']
