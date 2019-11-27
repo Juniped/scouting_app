@@ -20,6 +20,10 @@ const rawStyles = theme => ({
 });
 
 function RawLine(props) {
+    var homeColor = "#" + props.value['game']['homeTeam']['colorDiscord'].toString(16);
+    var homeStyle = {backgroundColor:homeColor};
+    var awayColor = "#" + props.value['game']['awayTeam']['colorDiscord'].toString(16);
+    var awayStyle = {backgroundColor:awayColor};
     var basesOccupied = 0;
     if (props.value['beforeState']['firstOccupied']){
         basesOccupied ++;
@@ -38,6 +42,9 @@ function RawLine(props) {
             <TableCell align="center" style={{ padding: 5 }}>{basesOccupied}</TableCell>
             <TableCell align="center" style={{padding:5}} >{props.value['beforeState']['outs']}</TableCell>
             <TableCell align="center" style={{ padding: 5 }}>{props.value['beforeState']['inning']}</TableCell>
+            <TableCell style={homeStyle}>{props.value['game']['homeTeam']['tag']}</TableCell>
+            <TableCell style={awayStyle}>{props.value['game']['awayTeam']['tag']}</TableCell>
+            <TableCell>{props.value['batter']['name']}</TableCell>
         </TableRow>
     );
 }
@@ -57,12 +64,16 @@ class RawDataTable extends Component{
                 <TableHead >
                     <TableRow style={{backroundColor:"#737475"}}>
                         <TableCell align="center"  style={{padding:5}}>Pitch</TableCell>
-                        <TableCell align="center" style={{ padding: 5 }} >Swing</TableCell>
+                        <TableCell align="center" style={{ padding:5}} >Swing</TableCell>
                         <TableCell align="center"  style={{padding:5}} >Result</TableCell>
                         <TableCell align="center"  style={{padding:5}} >Diff</TableCell>
-                        <TableCell align="center" style={{ padding: 5 }} >OBC</TableCell>
+                        <TableCell align="center" style={{ padding:5}} >OBC</TableCell>
                         <TableCell align="center"  style={{padding:5}} >Outs</TableCell>
-                        <TableCell align="center" style={{ padding: 5 }}>Inning</TableCell>
+                        <TableCell align="center" style={{ padding:5}}>Inning</TableCell>
+                        <TableCell align="center" style={{ padding:5}}>Home Team</TableCell>
+                        <TableCell align="center" style={{ padding:5}}>Away Team</TableCell>
+                        <TableCell align="center" style={{ padding:5}}>Batter</TableCell>
+                        
                     </TableRow>
                 </TableHead>
                 <TableBody stripedrows="true">
