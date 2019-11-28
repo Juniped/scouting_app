@@ -6,7 +6,8 @@ import {
   Typography,
   Grid,
   Paper,
-  Container
+  Container,
+  Box,
 } from "@material-ui/core";
 import PlayerSelect from "../data_components/PlayerSelect";
 import {
@@ -34,6 +35,9 @@ import RawData from "../data_components/RawData";
 import FirstInning from "../data_components/FirstInning";
 import Jumps from "../data_components/Jumps";
 import LastFirst from "../data_components/LastFirst";
+import DoubleDown from "../data_components/DoubleDown";
+import DoubleDownResults from "../data_components/DoubleDownResults";
+
 
 
 const colors = ["#DF4400", "#000000"];
@@ -80,6 +84,8 @@ class PitcherInfo extends Component {
       counts: [],
       changeMatrix:[],
       milrData: [],
+      double_down:[],
+      double_down_results:[],
     };
     this.handleChange = this.handleChange.bind(this);
     this.getPlayerData = this.getPlayerData.bind(this);
@@ -98,6 +104,8 @@ class PitcherInfo extends Component {
         counts: [],
         changeMatrix: [],
         milrData: [],
+        double_down:[],
+        double_down_results:[],
       });
       return;
     }
@@ -171,7 +179,9 @@ class PitcherInfo extends Component {
           jumps: result.jumps,
           lastFirst: result.last_first,
           changeMatrix: result.change_matrix,
-          milrData: result.milrData
+          milrData: result.milrData,
+          double_down:result.double_down,
+          double_down_results: result.double_down_results
         });
       })
       .catch(error => {
@@ -388,7 +398,30 @@ class PitcherInfo extends Component {
                   </Paper>
                 </Container>
               </Grid>
+              <Grid item xs={12} md={6} >
+                {/* <Container> */}
+                
+                <Paper className={classes.paper} > 
+                <Typography variant="h5">
+                    Double Down Analysis 
+                </Typography>
+                <br />
+                    <Grid container>
+                    <Grid item xs={6}>
+                      <Paper className={classes.paper}> 
+                        <DoubleDown data={this.state.double_down}/>
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                    <Paper className={classes.paper}>
+                      <DoubleDownResults res={this.state.double_down_results} />
+                      </Paper>
+                    </Grid>
 
+                    </Grid>
+                </Paper>
+
+              </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <Container className={classes.container}>
                   <Paper className={classes.paper}>
@@ -403,6 +436,7 @@ class PitcherInfo extends Component {
                   </Paper>
                 </Container>
               </Grid>
+              
               <Grid item xs={12}>
                 {/*Last 10 Pitch Graph */}
                 <Container>
@@ -512,6 +546,7 @@ class PitcherInfo extends Component {
                   </Paper>
                 </Container>
               </Grid>
+              
               <Grid item xs={12}>
                 <hr />
                 <Container className={classes.container}>
