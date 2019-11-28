@@ -146,7 +146,9 @@ def get_pitcher_info(id):
     # Get Jumps
     data['jumps'] = mlr_math.get_jumps(data['data'])
     data['change_matrix'] = mlr_math.change_matrix(data['data'])
-    data['double_down'] = mlr_math.double_down_analysis(data['data'])
+    double_down_data = mlr_math.double_down_analysis(data['data'])
+    data['double_down'] = double_down_data[0]
+    data['double_down_results'] = double_down_data[1]
 
     return jsonify(data)
 

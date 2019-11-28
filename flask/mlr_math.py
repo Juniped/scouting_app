@@ -73,9 +73,12 @@ def change_matrix(pitch_list):
             'swing':pitch['swing'],
             'diff':pitch['diff'],
             'result':pitch['result'],
+            "game":pitch['game'],
             'change':0,
         })
     for x in range(0, len(pitch_dicts)-1 ):
+        if pitch_dicts[x]['game']['id'] != pitch_dicts[x + 1]['game']['id']:
+            continue
         if "Auto" in pitch_dicts[x+1]['result'] or "Auto" in pitch_dicts[x]['result']:
             pitch_dicts[x]['change'] = "-"
         else:
@@ -259,39 +262,7 @@ def random_stats(pitch_list):
 
 def double_down_analysis(pitch_list):
     dd = []
-    for pitch in pitch_list[1:]:
-        # Get the Pitch dictionaries
-        x = pitch_list.index(pitch)
-        if x + 1 > len(pitch_list):
-            break
-        prev_pitch = pitch_list[x - 1]
-        next_pitch = pitch_list[x + 1]
-        # Get the values
-        pitch_val = pitch['pitch']
-        prev_val = prev_pitch['pitch']
-        next_val = next_pitch['pitch']
-        # Get the results
-        pitch_result = pitch['result']
-        prev_result = prev_pitch['result']
-        next_result = next_pitch['result']
-        if abs(prev_val - pitch_val) < 50 
-            dd_item = {
-                "1st_pitch": prev_val,
-                "1st_result": prev_result,
-                "2nd_pitch":pitch_val,
-                "2nd_result": pitch_result
-            }
-            dd.append(dd_item)
-        if abs(next_val - pitch_val) < 50:
-            dd_item = {
-                "1st_pitch": pitch_val,
-                "1st_result": pitch_result,
-                "2nd_pitch":next_val,
-                "2nd_result": next_result
-            }
-            dd.append(dd_item)
-    # Analysis Time
-    result_count = {
+    pitch_dict = {
         "HR":0,
         "3B":0,
         "2B":0,
@@ -302,6 +273,63 @@ def double_down_analysis(pitch_list):
         "PO":0,
         "RGO":0,
         "LGO":0,
+        "total":0,
     }
+    results = {
+        'total': pitch_dict.copy(),
+        'count':pitch_dict.copy(),
+        'math':pitch_dict.copy()
+    }
+    for pitch in pitch_list[1:]:
+        # Get the Pitch dictionaries
+        x = pitch_list.index(pitch)
+        if x + 1 > len(pitch_list) - 1:
+            break
+        prev_pitch = pitch_list[x - 1]
+        next_pitch = pitch_list[x + 1]
+        # Get the values
+        pitch_val = pitch['pitch']
+        prev_val = prev_pitch['pitch']
+        # Get the results
+        pitch_result = pitch['result']
+        if pitch_result in pitch_dict.keys():
+            results['total'][pitch_result] += 1
+            results['total']['total'] += 1
+        prev_result = prev_pitch['result']
+        if abs(prev_val - pitch_val) < 50 and pitch['game']['id'] == prev_pitch['game']['id']:
+            dd_item = {
+                "pitch_1": prev_val,
+                "result_1": prev_result,
+                "pitch_2":pitch_val,
+                "result_2": pitch_result
+            }
+            dd.append(dd_item)
+        # if abs(next_val - pitch_val) < 50 and pitch['game']['id'] == next_pitch['game']['id']:
+        #     dd_item = {
+        #         "pitch_1": pitch_val,
+        #         "result_1": pitch_result,
+        #         "pitch_2":next_val,
+        #         "result_2": next_result
+        #     }
+        #     dd.append(dd_item)
+    # Analysis Time
+
     for double_down in dd:
-        if double_down['1st_result'] in result_count.keys():
+        if double_down['result_1'] in pitch_dict.keys():
+            results['count'][double_down['result_1']] += 1
+            results['count']['total'] += 1
+    for key in pitch_dict.keys():
+        total = results['total'][key]
+        count = results['count'][key]
+        math = "{:.2%}".format(float((count / total)))
+        results['math'][key] = math
+    results['total']['_3B'] = results['total']['3B']
+    results['total']['_2B'] = results['total']['2B']
+    results['total']['_1B'] = results['total']['1B']
+    results['count']['_3B'] = results['count']['3B']
+    results['count']['_2B'] = results['count']['2B']
+    results['count']['_1B'] = results['count']['1B']
+    results['math']['_3B'] = results['math']['3B']
+    results['math']['_2B'] = results['math']['2B']
+    results['math']['_1B'] = results['math']['1B']
+    return (dd, results)

@@ -71,7 +71,7 @@ class App extends Component {
           console.log("Successful Login Bitches");
           this.setState({ username: "Oriole_Player" });
           this.setState({ userRoles: ["user"] });
-          cookies.set("logged_in", true, { pathj: "/" });
+          cookies.set("logged_in", true, { pathj: "/" , maxAge:31622400});
         } else {
           alert("Invalid Username/Password, please try again");
         }
