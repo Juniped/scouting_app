@@ -257,7 +257,8 @@ def get_counts(pitch_list):
 def random_stats(pitch_list):
     return "yadayadayadayadayadayadayadayadayadaydaydaydaydaydayda"
 
-def double_down(pitch_list):
+def double_down_analysis(pitch_list):
+    dd = []
     for pitch in pitch_list[1:]:
         # Get the Pitch dictionaries
         x = pitch_list.index(pitch)
@@ -273,3 +274,34 @@ def double_down(pitch_list):
         pitch_result = pitch['result']
         prev_result = prev_pitch['result']
         next_result = next_pitch['result']
+        if abs(prev_val - pitch_val) < 50 
+            dd_item = {
+                "1st_pitch": prev_val,
+                "1st_result": prev_result,
+                "2nd_pitch":pitch_val,
+                "2nd_result": pitch_result
+            }
+            dd.append(dd_item)
+        if abs(next_val - pitch_val) < 50:
+            dd_item = {
+                "1st_pitch": pitch_val,
+                "1st_result": pitch_result,
+                "2nd_pitch":next_val,
+                "2nd_result": next_result
+            }
+            dd.append(dd_item)
+    # Analysis Time
+    result_count = {
+        "HR":0,
+        "3B":0,
+        "2B":0,
+        "1B":0,
+        "BB":0,
+        "FO":0,
+        "K":0,
+        "PO":0,
+        "RGO":0,
+        "LGO":0,
+    }
+    for double_down in dd:
+        if double_down['1st_result'] in result_count.keys():

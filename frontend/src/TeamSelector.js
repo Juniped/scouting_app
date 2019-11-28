@@ -81,7 +81,7 @@ class TeamSelector extends Component {
                   <option value="Chicago White Sox">
                     Chicago White Sox
                   </option>
-                  <option value="Cincinnati Red">Cincinnati Red</option>
+                  <option value="Cincinnati Reds">Cincinnati Reds</option>
                   <option value="Cleveland Indians">
                     Cleveland Indians
                   </option>
