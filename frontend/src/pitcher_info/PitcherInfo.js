@@ -37,6 +37,7 @@ import Jumps from "../data_components/Jumps";
 import LastFirst from "../data_components/LastFirst";
 import DoubleDown from "../data_components/DoubleDown";
 import DoubleDownResults from "../data_components/DoubleDownResults";
+import CurrentGame from '../data_components/CurrentGame';
 
 
 
@@ -86,6 +87,7 @@ class PitcherInfo extends Component {
       milrData: [],
       double_down:[],
       double_down_results:[],
+      current_game: [],
     };
     this.handleChange = this.handleChange.bind(this);
     this.getPlayerData = this.getPlayerData.bind(this);
@@ -106,6 +108,7 @@ class PitcherInfo extends Component {
         milrData: [],
         double_down:[],
         double_down_results:[],
+        current_game: [],
       });
       return;
     }
@@ -181,7 +184,8 @@ class PitcherInfo extends Component {
           changeMatrix: result.change_matrix,
           milrData: result.milrData,
           double_down:result.double_down,
-          double_down_results: result.double_down_results
+          double_down_results: result.double_down_results,
+          current_game:result.current_game,
         });
       })
       .catch(error => {
@@ -244,7 +248,7 @@ class PitcherInfo extends Component {
                   <option value="Chicago White Sox">
                     Chicago White Sox
                   </option>
-                  <option value="Cincinnati Red">Cincinnati Red</option>
+                  <option value="Cincinnati Reds">Cincinnati Reds</option>
                   <option value="Cleveland Indians">
                     Cleveland Indians
                   </option>
@@ -421,6 +425,9 @@ class PitcherInfo extends Component {
                     </Grid>
                 </Paper>
 
+              </Grid>
+              <Grid item xs={12}>
+                <CurrentGame data={this.state.current_game} />
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <Container className={classes.container}>

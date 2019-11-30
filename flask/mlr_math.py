@@ -260,6 +260,51 @@ def get_counts(pitch_list):
 def random_stats(pitch_list):
     return "yadayadayadayadayadayadayadayadayadaydaydaydaydaydayda"
 
+def current_game_stats(pitch_list):
+    return_data = {}
+    x = -1
+    while True:
+        if pitch_list[x]['game']['homeTeam']['milr'] == False:
+            most_recent_pitch = pitch_list[x]
+            current_game = most_recent_pitch['game']['id']
+            break
+    current_game_pitches = []
+    # total_diff = 0
+    pitch_count = 0
+    x = 1
+    for pitch in pitch_list:
+        if pitch['game']['id'] == current_game:
+            pitch['num'] = x
+            x += 1
+            current_game_pitches.append(pitch)
+            # total_jumps += int(pitch['pitch'])
+            # pitch_count += 1
+    return_data['pitches'] = current_game_pitches
+    x = 0
+    pitch_count = 0
+    total_jumps = 0
+    for pitch in current_game_pitches:
+        pitch_val = pitch['pitch']
+        try:
+            next_pitch = current_game_pitches[x + 1]['pitch']
+        except:
+            break
+        jump = abs(pitch_val - next_pitch)
+        pitch_count += 1
+        if jump > 500:
+            jump = 1000 - jump
+        total_jumps += jump
+    
+    # print(current_game_pitches)
+    print(total_jumps)
+    print(pitch_count)
+    avg_jump = total_jumps / pitch_count
+    return_data['avg_jump'] = avg_jump
+    return_data['matrix'] = build_matrix(current_game_pitches)
+    return return_data
+
+
+
 def double_down_analysis(pitch_list):
     dd = []
     pitch_dict = {
@@ -304,14 +349,6 @@ def double_down_analysis(pitch_list):
                 "result_2": pitch_result
             }
             dd.append(dd_item)
-        # if abs(next_val - pitch_val) < 50 and pitch['game']['id'] == next_pitch['game']['id']:
-        #     dd_item = {
-        #         "pitch_1": pitch_val,
-        #         "result_1": pitch_result,
-        #         "pitch_2":next_val,
-        #         "result_2": next_result
-        #     }
-        #     dd.append(dd_item)
     # Analysis Time
 
     for double_down in dd:

@@ -149,6 +149,7 @@ def get_pitcher_info(id):
     double_down_data = mlr_math.double_down_analysis(data['data'])
     data['double_down'] = double_down_data[0]
     data['double_down_results'] = double_down_data[1]
+    data['current_game'] = mlr_math.current_game_stats(data['data'])
 
     return jsonify(data)
 
