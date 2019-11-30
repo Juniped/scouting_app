@@ -341,14 +341,25 @@ def double_down_analysis(pitch_list):
             results['total'][pitch_result] += 1
             results['total']['total'] += 1
         prev_result = prev_pitch['result']
-        if abs(prev_val - pitch_val) < 50 and pitch['game']['id'] == prev_pitch['game']['id']:
-            dd_item = {
-                "pitch_1": prev_val,
-                "result_1": prev_result,
-                "pitch_2":pitch_val,
-                "result_2": pitch_result
-            }
-            dd.append(dd_item)
+        try:
+            if abs(prev_val - pitch_val) < 50 and pitch['game']['id'] == prev_pitch['game']['id']:
+                dd_item = {
+                    "pitch_1": prev_val,
+                    "result_1": prev_result,
+                    "pitch_2":pitch_val,
+                    "result_2": pitch_result
+                }
+                dd.append(dd_item)
+        except:
+            pass
+        # if abs(next_val - pitch_val) < 50 and pitch['game']['id'] == next_pitch['game']['id']:
+        #     dd_item = {
+        #         "pitch_1": pitch_val,
+        #         "result_1": pitch_result,
+        #         "pitch_2":next_val,
+        #         "result_2": next_result
+        #     }
+        #     dd.append(dd_item)
     # Analysis Time
 
     for double_down in dd:
@@ -358,7 +369,10 @@ def double_down_analysis(pitch_list):
     for key in pitch_dict.keys():
         total = results['total'][key]
         count = results['count'][key]
-        math = "{:.2%}".format(float((count / total)))
+        try:
+            math = "{:.2%}".format(float((count / total)))
+        except:
+            math = "0"
         results['math'][key] = math
     results['total']['_3B'] = results['total']['3B']
     results['total']['_2B'] = results['total']['2B']
