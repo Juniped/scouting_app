@@ -25,6 +25,7 @@ import {
     AreaChart,
   } from "recharts";
   import MediaQuery from "react-responsive";
+  import ChangeMatrix from "./ChangeMatrix";
 
  const useStyles = theme => ({
     root: {
@@ -44,7 +45,6 @@ class CurrentHistogram extends Component{
                 <MediaQuery minWidth={601}>
                     <ResponsiveContainer width="100%">
                     <AreaChart
-                        // width={730}
                         height={250}
                         data={this.props.data}
                     >
@@ -70,32 +70,40 @@ class CurrentHistogram extends Component{
 class CurrentGame extends Component{
     render(){
         const{ classes } = this.props;
-        return(
-            <Box className={classes.root}>
-                <Paper className={classes.paper}>
-                    <Typography variant="h3">
-                        Current Game Information
+        return (
+          <Box className={classes.root}>
+            <Paper className={classes.paper}>
+              <Typography variant="h3">Current Game Information</Typography>
+              <Grid container>
+                <Grid item xs={12} sm={6}>
+                  <Card>
+                    <CardContent>
+                      <Typography variant="body1">
+                        Average Jump = {this.props.data.avg_jump}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Paper className={classes.paper}>
+                    <Typography variant="h5">Change Matrix</Typography>
+                    <ChangeMatrix
+                      pitch_data={this.props.data.changeMatrix[0]}
+                    />
+                  </Paper>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Paper>
+                    <Typography variant="body1">
+                      Current Game Range Chart
                     </Typography>
-                    <Grid container>
-                        <Grid item xs={12} sm={6}>
-                            <Card>
-                                <CardContent>
-                                    <Typography variant="body1">
-                                       Average Jump = {this.props.data.avg_jump}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Paper>
-                                <Typography variant="body1">Current Game Range Chart</Typography>
-                                <CurrentHistogram data={this.props.data.matrix} />
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                </Paper>
-            </Box>
-        )
+                    <CurrentHistogram data={this.props.data.matrix} />
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Box>
+        );
     }
 }
 

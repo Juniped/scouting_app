@@ -54,6 +54,14 @@ def get_teams(name):
     r = requests.get(url, params=params)
     return jsonify(r.json())
 
+@app.route("/get/wbc/team/name/<name>",methods=['GET'])
+def get_wbc_teams(name): 
+    # Because we define our own names we should only be getting one back per attempt
+    params = {"query": name}
+    url = "https://wbc.redditball.com/api/v1/teams/search"
+    r = requests.get(url, params=params)
+    return jsonify(r.json())
+
 @app.route("/get/batters/team/<team_id>", methods=['GET'])
 def get_batters_via_team_id(team_id):
     url =  f'https://redditball.com/api/v1/players/byTeam/{ team_id }'
@@ -71,6 +79,16 @@ def get_pitchers_via_team_id(team_id):
     r = requests.get(url)
     pitchers = []
     for player in r.json():
+        pitchers.append(player)
+    sorted_pitchers = sorted(pitchers, key=lambda k: k['name']) 
+    return jsonify(sorted_pitchers)
+
+@app.route("/get/wbc/pitchers/team/<team_id>", methods=['GET'])
+def get_wbc_pitchers_via_team_id(team_id):
+    url =  f"https://wbc.redditball.com/api/v1/players/byTeam/{team_id}"
+    r = requests.get(url)
+    pitchers = []
+    for player in r.json():
         # if player['positionPrimary'] == "P":
         pitchers.append(player)
     sorted_pitchers = sorted(pitchers, key=lambda k: k['name']) 
@@ -80,7 +98,7 @@ def get_pitchers_via_team_id(team_id):
 def get_batter_info(id):
     url = f"https://redditball.com/api/v1/players/{id}/plays/batting"
     r = requests.get(url)
-    data = { "data": r.json(), "fav":0}
+    data = { "data": [ d for d in r.json() if d['game']['homeTeam']['milr'] == False], "fav":0}
     swings = []
     edge_num = 0
     middle_num = 0
@@ -150,7 +168,56 @@ def get_pitcher_info(id):
     data['double_down'] = double_down_data[0]
     data['double_down_results'] = double_down_data[1]
     data['current_game'] = mlr_math.current_game_stats(data['data'])
+    data['last20'] = mlr_math.get_last_x_pitches(data['data'], 20)
+    data['following'] = mlr_math.following_pitch(data['data'])
 
+    return jsonify(data)
+
+@app.route("/info/wbc/pitcher/<id>")
+def get_wbc_pitcher_info(id):
+    url = f"https://wbc.redditball.com/api/v1/players/{id}/plays/pitching"
+    r = requests.get(url)
+    # print(r.json()[0]['game'])
+    data = { "data": [ d for d in r.json() if d['game']['homeTeam']['milr'] == False], "fav":0}
+    data['milrData'] = [d for d in r.json() if d['game']['homeTeam']['milr'] == True]    
+    pitches = []
+    edge_num = 0
+    middle_num = 0
+    for pitch in r.json():
+        pi = pitch['pitch']
+        try:
+            piint = int(pi)
+            if piint > 250 and piint < 750:
+                middle_num += 1
+            else:
+                edge_num += 1
+        except:
+            pass
+        pitches.append(pi)
+    data['eVm'] = [
+        {"name": "Edge", "value": edge_num},
+        {"name": "Middle", "value": middle_num},
+    ]
+    try:
+        data['fav'] = statistics.mode(pitches)
+    except:
+        data['fav'] = "No Favorite"
+    # Get Last 6
+    data['last_6'] = mlr_math.get_last_6_pitches(data['data'])
+    # Get Matrix
+    data['matrix'] = mlr_math.build_matrix(data['data'])
+    # Get First Inning
+    data['first_inning'] = mlr_math.get_first_inning(data['data'])
+    # Get last 10 starts:
+    data['last_first'] = mlr_math.last_10_first_pitches(data['data'])
+    # Get Jumps
+    data['jumps'] = mlr_math.get_jumps(data['data'])
+    data['change_matrix'] = mlr_math.change_matrix(data['data'])
+    double_down_data = mlr_math.double_down_analysis(data['data'])
+    data['double_down'] = double_down_data[0]
+    data['double_down_results'] = double_down_data[1]
+    data['current_game'] = mlr_math.current_game_stats(data['data'])
+    data['last20'] = mlr_math.get_last_x_pitches(data['data'], 20)
     return jsonify(data)
 
 @app.route("/info/pitcher/milr/<id>")
@@ -199,6 +266,16 @@ def get_milr_pitcher_info(id):
 @app.route("/info/pitcher/counts/<id>")
 def get_pitcher_counts(id):
     url = f"https://redditball.com/api/v1/players/{id}/plays/pitching"
+    r = requests.get(url)
+    data = { "data": r.json()}
+    # Get Counts
+    pre_sorted_counts = mlr_math.get_counts(data['data'])
+    data['counts']  = sorted(pre_sorted_counts, key=lambda i: (i['pitch']))
+    return jsonify(data)
+
+@app.route("/info/wbc/pitcher/counts/<id>")
+def get_wbc_pitcher_counts(id):
+    url = f"https://wbc.redditball.com/api/v1/players/{id}/plays/pitching"
     r = requests.get(url)
     data = { "data": r.json()}
     # Get Counts

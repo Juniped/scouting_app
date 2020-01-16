@@ -78,8 +78,7 @@ function BMenu() {
         <Link to="info/pitchers" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>Pitchers</MenuItem></Link>
         <Link to="info/batters" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>Batters</MenuItem></Link>
         <Link to="info/milr" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>MiLR</MenuItem></Link>
-
-        {/* <Link to="info/pitchers/search" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>Search Pitchers</MenuItem></Link> */}
+        <Link to="info/wbc" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>WBC</MenuItem></Link>
       </Menu>
       </div>
         
@@ -103,8 +102,16 @@ export default function MainNavbar(props){
               <Tab label="Pitcher Info" to="/info/pitchers" component={Link} />
               <Tab label="Batter Info" to="/info/batters" component={Link}/>
               <Tab label="MiLR Info" to="/info/milr" component={Link} />
-
-              {/* <Tab label="Search Pitchers" component={Link} to="/info/pitchers/search" {...a11yProps(3)} /> */}
+            </Tabs>
+          </MediaQuery>
+        </Toolbar>}
+         {hasRole(props.user, ['wbc_user']) &&
+        <Toolbar>
+          <MediaQuery maxWidth={600}><BMenu /></MediaQuery>
+          <MediaQuery minWidth={601}>
+            <Tabs value={value} onChange={handleChange} aria-label="navtabs">
+              <Tab label="Home" to="/" component={Link} />
+              <Tab label="WBC" to="/info/wbc" component={Link} />
             </Tabs>
           </MediaQuery>
         </Toolbar>}
