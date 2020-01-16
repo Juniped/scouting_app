@@ -13,6 +13,7 @@ google-api-python-client = "*"
 google-auth-oauthlib = "*"
 google-auth-httplib2 = "*"
 flask-cors = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.7"

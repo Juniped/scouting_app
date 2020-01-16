@@ -47,6 +47,7 @@ function Line(props) {
         <TableRow>
             <TableCell padding="checkbox">{props.value['pitch']}</TableCell>
             <TableCell padding="checkbox">{props.value['swing']}</TableCell>
+            <TableCell padding="checkbox">{props.value['diff']}</TableCell>
             <TableCell padding="checkbox">{props.value['result']}</TableCell>
             <TableCell padding="none" align="center">{basesOccupied}</TableCell>
             <TableCell padding="none" align="center">{props.value['beforeState']['outs']}</TableCell>
@@ -67,22 +68,21 @@ class BatterTable extends Component{
     }
     render() {
         let body = (
-        <>
-            <TableHead >
-                <TableRow style={{ backroundColor: "#737475" }}>
-                    <TableCell padding="checkbox">Pitch</TableCell>
-                    <TableCell padding="checkbox">Swing</TableCell>
-                    <TableCell padding="checkbox">Result</TableCell>
-                    <TableCell padding="none">OBC</TableCell>
-                    <TableCell padding="none">Outs</TableCell>
-                    <TableCell padding="checkbox">Inning</TableCell>
-                    <TableCell padding="none">Pitcher</TableCell>
-                </TableRow>
+          <>
+            <TableHead>
+              <TableRow style={{ backroundColor: "#737475" }}>
+                <TableCell padding="checkbox">Pitch</TableCell>
+                <TableCell padding="checkbox">Swing</TableCell>
+                <TableCell padding="checkbox">Difference</TableCell>
+                <TableCell padding="checkbox">Result</TableCell>
+                <TableCell padding="none">OBC</TableCell>
+                <TableCell padding="none">Outs</TableCell>
+                <TableCell padding="checkbox">Inning</TableCell>
+                <TableCell padding="none">Pitcher</TableCell>
+              </TableRow>
             </TableHead>
-            <TableBody stripedrows="true">
-                {this.getLines()}
-            </TableBody>
-        </>
+            <TableBody stripedrows="true">{this.getLines()}</TableBody>
+          </>
         );
         return (
             <div>

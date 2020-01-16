@@ -67,8 +67,9 @@ function Line(props) {
     );
 }
 
-class PitchMatrix extends Component {
+class ChangeMatrix extends Component {
     getLines() {
+        console.log(this.props.pitch_data);
         let d = [];
         for (let i = 0; i < this.props.pitch_data.length; i++) {
             d.push(
@@ -116,4 +117,4 @@ class PitchMatrix extends Component {
     }
 }
 
-export default withStyles(useStyles)(PitchMatrix);
+export default withStyles(useStyles)(ChangeMatrix);

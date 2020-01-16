@@ -2,13 +2,7 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import NativeSelect from "@material-ui/core/NativeSelect";
-import {
-  Typography,
-  Grid,
-  Paper,
-  Container,
-  Box,
-} from "@material-ui/core";
+import { Typography, Grid, Paper, Container, Box } from "@material-ui/core";
 import PlayerSelect from "../data_components/PlayerSelect";
 import {
   PieChart,
@@ -24,7 +18,7 @@ import {
   Legend,
   Line,
   Area,
-  AreaChart,
+  AreaChart
 } from "recharts";
 import MediaQuery from "react-responsive";
 import { API_URL } from "../config/Constants";
@@ -37,10 +31,7 @@ import Jumps from "../data_components/Jumps";
 import LastFirst from "../data_components/LastFirst";
 import DoubleDown from "../data_components/DoubleDown";
 import DoubleDownResults from "../data_components/DoubleDownResults";
-import CurrentGame from '../data_components/CurrentGame';
-import FollowingMatrix from '../data_components/FollowingMatrix';
-
-
+import CurrentGame from "../data_components/CurrentGame";
 
 const colors = ["#DF4400", "#000000"];
 
@@ -68,7 +59,7 @@ const useStyles = theme => ({
   }
 });
 
-class PitcherInfo extends Component {
+class WBCScouting extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -81,16 +72,15 @@ class PitcherInfo extends Component {
       lastSix: [],
       matrix: [],
       firstInning: [],
-      jumps:[],
-      lastFirst:[],
+      jumps: [],
+      lastFirst: [],
       counts: [],
-      changeMatrix:[],
+      changeMatrix: [],
       milrData: [],
-      double_down:[],
-      double_down_results:[],
+      double_down: [],
+      double_down_results: [],
       current_game: [],
-      last20: [],
-      following:[],
+      last20: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.getPlayerData = this.getPlayerData.bind(this);
@@ -112,13 +102,12 @@ class PitcherInfo extends Component {
         double_down: [],
         double_down_results: [],
         current_game: [],
-        last20: [],
-        following:[],
+        last20: []
       });
       return;
     }
     let teamName = encodeURIComponent(this.state.currentTeam.trim());
-    let url = API_URL + "/get/team/name/" + teamName;
+    let url = API_URL + "/get/wbc/team/name/" + teamName;
     fetch(url, {
       method: "GET",
       headers: {
@@ -139,7 +128,7 @@ class PitcherInfo extends Component {
   }
   getPlayers() {
     let teamID = this.state.team.tag;
-    let player_url = API_URL + "/get/pitchers/team/" + teamID;
+    let player_url = API_URL + "/get/wbc/pitchers/team/" + teamID;
     fetch(player_url, {
       method: "GET",
       headers: {
@@ -167,7 +156,7 @@ class PitcherInfo extends Component {
     return label;
   };
   getPlayerData(playerID) {
-    let url = API_URL + "/info/pitcher/" + playerID;
+    let url = API_URL + "/info/wbc/pitcher/" + playerID;
     fetch(url, {
       method: "GET",
       headers: {
@@ -188,11 +177,10 @@ class PitcherInfo extends Component {
           lastFirst: result.last_first,
           changeMatrix: result.change_matrix,
           milrData: result.milrData,
-          double_down:result.double_down,
+          double_down: result.double_down,
           double_down_results: result.double_down_results,
-          current_game:result.current_game,
-          last20: result.last20,
-          following: result.following,
+          current_game: result.current_game,
+          last20: result.last20
         });
       })
       .catch(error => {
@@ -200,23 +188,23 @@ class PitcherInfo extends Component {
         console.log("Request Swallowed!");
       });
     // Get Counts Seperate
-    let counturl = API_URL + "/info/pitcher/counts/" + playerID;
-     fetch(counturl, {
-       method: "GET",
-       headers: {
-         "Content-Type": "application/json"
-       }
-     })
-       .then(res => res.json())
-       .then(result => {
-         this.setState({
-           counts: result.counts
-         });
-       })
-       .catch((error) => {
-         console.log(error)
-         console.log("Request Swallowed!");
-       });
+    let counturl = API_URL + "/info/wbc/pitcher/counts/" + playerID;
+    fetch(counturl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(result => {
+        this.setState({
+          counts: result.counts
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        console.log("Request Swallowed!");
+      });
   }
   render() {
     const { classes } = this.props;
@@ -243,48 +231,16 @@ class PitcherInfo extends Component {
                   }}
                 >
                   <option value="" />
-                  <option value="Arizona Diamondbacks">
-                    Arizona Diamondbacks
+                  <option value="Barbados">
+                    Barbados
                   </option>
-                  <option value="Atlanta Braves">Atlanta Braves</option>
-                  <option value="Baltimore Orioles">Baltimore Orioles</option>
-                  <option value="Boston Red Sox">Boston Red Sox</option>
-                  <option value="Chicago Cubs">Chicago Cubs</option>
-                  <option value="Chicago White Sox">Chicago White Sox</option>
-                  <option value="Cincinnati Reds">Cincinnati Reds</option>
-                  <option value="Cleveland Indians">Cleveland Indians</option>
-                  <option value="Colorado Rockies">Colorado Rockies</option>
-                  <option value="Detroit Tigers">Detroit Tigers</option>
-                  <option value="Houston Colt 45's">Houston Colt 45's</option>
-                  <option value="Kansas City Royals">Kansas City Royals</option>
-                  <option value="Los Angeles Angels">Los Angeles Angels</option>
-                  <option value="Los Angeles Dodgers">
-                    Los Angeles Dodgers
-                  </option>
-                  <option value="Miami Marlins">Miami Marlins</option>
-                  <option value="Milwaukee Brewers">Milwaukee Brewers</option>
-                  <option value="Minnesota Twins">Minnesota Twins</option>
-                  <option value="Montreal Expos">Montreal Expos</option>
-                  <option value="New York Mets">New York Mets</option>
-                  <option value="New York Yankees">New York Yankees</option>
-                  <option value="Oakland Athletics">Oakland Athletics</option>
-                  <option value="Philadelphia Phillies">
-                    Philadelphia Phillies
-                  </option>
-                  <option value="Pittsburgh Pirates">Pittsburgh Pirates</option>
-                  <option value="San Diego Padres">San Diego Padres</option>
-                  <option value="San Francisco Giants">
-                    San Francisco Giants
-                  </option>
-                  <option value="Seattle Mariners">Seattle Mariners</option>
-                  <option value="St. Louis Cardinals">
-                    St. Louis Cardinals
-                  </option>
-                  <option value="Tampa Bay Devil Rays">
-                    Tampa Bay Devil Rays
-                  </option>
-                  <option value="Texas Rangers">Texas Rangers</option>
-                  <option value="Toronto Blue Jays">Toronto Blue Jays</option>
+                  <option value="Bosnia and Herzgovina">Bosnia and Herzgovina</option>
+                  <option value="Greece">Greece</option>
+                  <option value="Jamaica">Jamaica</option>
+                  <option value="San Marino">San Marino</option>
+                  <option value="Scotland">Scotland</option>
+                  <option value="Swaziland">Swaziland</option>
+                  <option value="Vatican City">Vatican City</option>
                 </NativeSelect>
               </FormControl>
             </Paper>
@@ -382,44 +338,10 @@ class PitcherInfo extends Component {
               <Grid item sm={12} md={6}>
                 <Container>
                   <Paper className={classes.paper}>
-                    <Typography variant="h5">Following Pitch Matrix</Typography>
-                    <Typography variant="p">Inital Pitch is on the top row and following pitch range as you go down.</Typography>
-                    <FollowingMatrix pitch_data={this.state.following} />
-                  </Paper>
-                </Container>
-              </Grid>
-              <Grid item sm={12} md={6}>
-                <Container>
-                  <Paper className={classes.paper}>
                     <Typography variant="h5">Change Matrix</Typography>
                     <ChangeMatrix pitch_data={this.state.changeMatrix} />
                   </Paper>
                 </Container>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                {/* <Container> */}
-
-                <Paper className={classes.paper}>
-                  <Typography variant="h5">Double Down Analysis</Typography>
-                  <br />
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <Paper className={classes.paper}>
-                        <DoubleDown data={this.state.double_down} />
-                      </Paper>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Paper className={classes.paper}>
-                        <DoubleDownResults
-                          res={this.state.double_down_results}
-                        />
-                      </Paper>
-                    </Grid>
-                  </Grid>
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <CurrentGame data={this.state.current_game} />
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <Container className={classes.container}>
@@ -432,48 +354,6 @@ class PitcherInfo extends Component {
                 <Container className={classes.container}>
                   <Paper className={classes.paper}>
                     <Jumps pitch_data={this.state.jumps} />
-                  </Paper>
-                </Container>
-              </Grid>
-
-              <Grid item xs={12}>
-                {/*Last 10 Pitch Graph */}
-                <Container>
-                  <Paper className={classes.paper}>
-                    <Typography variant="h5">Last 20 Pitch Graph</Typography>
-                    <div style={{ width: "100%", height: 400 }}>
-                      <MediaQuery minWidth={401}>
-                        <ResponsiveContainer width="100%">
-                          <LineChart
-                            // width={730}
-                            height={250}
-                            data={this.state.last20}
-                          >
-                            <CartesianGrid strokeDasharray="200 20" />
-                            <XAxis
-                              dataKey="index"
-                              name="Pitch Number"
-                              unit=""
-                            />
-                            <YAxis type="number" domain={[0, 1000]} />
-                            <Tooltip cursor={{ strokeDasharray: "200 20" }} />
-                            <Legend />
-                            <Line
-                              name="Pitch"
-                              dataKey="pitch"
-                              stroke="#d12e72"
-                              type="linear"
-                            />
-                            <Line
-                              name="Difference"
-                              dataKey="diff"
-                              stroke="#31d6b0"
-                              type="linear"
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </MediaQuery>
-                    </div>
                   </Paper>
                 </Container>
               </Grid>
@@ -507,44 +387,6 @@ class PitcherInfo extends Component {
                   </Paper>
                 </Container>
               </Grid>
-              <Grid item xs={12}>
-                <Container>
-                  <Paper className={classes.paper}>
-                    <Typography variant="h5">
-                      Individual Pitch Counts
-                    </Typography>
-                    <div style={{ width: "100%", height: 400 }}>
-                      <MediaQuery minWidth={401}>
-                        <ResponsiveContainer width="100%">
-                          <LineChart
-                            // width={730}
-                            height={250}
-                            data={this.state.counts}
-                          >
-                            <XAxis
-                              dataKey="pitch"
-                              name="count"
-                              unit=""
-                              type="number"
-                              domain={[0, 1000]}
-                            />
-                            <YAxis dataKey="count" name="pitch" unit="" />
-                            <Tooltip cursor={{ strokeDasharray: "200 20" }} />
-                            <Legend />
-                            <Line
-                              name="Pitches"
-                              dataKey="count"
-                              stroke="#8884d8"
-                              type="linear"
-                              dot={true}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </MediaQuery>
-                    </div>
-                  </Paper>
-                </Container>
-              </Grid>
 
               <Grid item xs={12}>
                 <hr />
@@ -572,4 +414,4 @@ class PitcherInfo extends Component {
   }
 }
 
-export default withStyles(useStyles)(PitcherInfo);
+export default withStyles(useStyles)(WBCScouting);

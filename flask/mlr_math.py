@@ -1,4 +1,4 @@
-
+import copy
 
 def build_matrix(pitch_list):
     ranges = [
@@ -165,6 +165,46 @@ def get_last_6_pitches(pitch_list):
             # l6[x]['change']
     return l6
 
+def get_last_x_pitches(pitch_list, num):
+    negative_num = -1 * num
+    pitches = pitch_list[negative_num:]
+    last = []
+    index = num
+    for pitch in pitches:
+        last.append({
+            'pitch':pitch['pitch'],
+            'swing':pitch['swing'],
+            'diff':pitch['diff'],
+            'result':pitch['result'],
+            'change':0,
+            'index': index
+        })
+        index -= 1
+    for x in range(0, len(last)-1 ):
+        if "Auto" in last[x+1]['result']:
+            try:
+                last[x]['change'] = last[x+2]['pitch'] - last[x]['pitch']
+            except IndexError:
+                last[x]['change']= "-"
+            except:
+                continue
+        elif "Auto" in last[x]['result']:
+            last[x]['change'] = "-"
+        else:
+            try:
+                last[x]['change'] = last[x+1]['pitch'] - last[x]['pitch']
+            except:
+                last[x]['change'] = "ER"
+        try:
+            if last[x]['change'] != "-" and last[x]['change'] != "ER":
+                if abs(last[x]['change']) > 500:
+                    last[x]['change'] = 1000 - abs(last[x]['change'])
+        except IndexError:
+            print("BURP")
+        # except TypeError as :
+            # last[x]['change']
+    return last
+
 def get_first_inning(pitch_list):
     first_inning_pitches = []
     inning = ""
@@ -257,17 +297,21 @@ def get_counts(pitch_list):
         pitch_ret_list.append({'pitch':pitch,'count':count})
     return pitch_ret_list
 
-def random_stats(pitch_list):
-    return "yadayadayadayadayadayadayadayadayadaydaydaydaydaydayda"
-
 def current_game_stats(pitch_list):
     return_data = {}
     x = -1
-    while True:
-        if pitch_list[x]['game']['homeTeam']['milr'] == False:
-            most_recent_pitch = pitch_list[x]
-            current_game = most_recent_pitch['game']['id']
-            break
+    try:
+        while True:
+            if pitch_list[x]['game']['homeTeam']['milr'] == False:
+                most_recent_pitch = pitch_list[x]
+                current_game = most_recent_pitch['game']['id']
+                break
+    except:
+        return {
+            'avg_jump': "N/A",
+            'changeMatrix': change_matrix(current_game_pitches),
+            'matrix': build_matrix(current_game_pitches)
+        }
     current_game_pitches = []
     # total_diff = 0
     pitch_count = 0
@@ -277,8 +321,6 @@ def current_game_stats(pitch_list):
             pitch['num'] = x
             x += 1
             current_game_pitches.append(pitch)
-            # total_jumps += int(pitch['pitch'])
-            # pitch_count += 1
     return_data['pitches'] = current_game_pitches
     x = 0
     pitch_count = 0
@@ -287,22 +329,23 @@ def current_game_stats(pitch_list):
         pitch_val = pitch['pitch']
         try:
             next_pitch = current_game_pitches[x + 1]['pitch']
+            jump = abs(pitch_val - next_pitch)
         except:
             break
-        jump = abs(pitch_val - next_pitch)
         pitch_count += 1
         if jump > 500:
             jump = 1000 - jump
         total_jumps += jump
-    
-    # print(current_game_pitches)
-    print(total_jumps)
-    print(pitch_count)
-    avg_jump = total_jumps / pitch_count
+    if(pitch_count) == 0:
+        pitch_count = 1
+    try:
+        avg_jump = total_jumps / pitch_count
+    except:
+        avg_jump = total_jumps
     return_data['avg_jump'] = avg_jump
+    return_data['changeMatrix'] = change_matrix(current_game_pitches),
     return_data['matrix'] = build_matrix(current_game_pitches)
     return return_data
-
 
 
 def double_down_analysis(pitch_list):
@@ -384,3 +427,46 @@ def double_down_analysis(pitch_list):
     results['math']['_2B'] = results['math']['2B']
     results['math']['_1B'] = results['math']['1B']
     return (dd, results)
+
+def following_pitch(pitch_list):
+    pitch_dict = [
+        {"range":"1-100","count":0,"range_min":1,"range_max":100},
+        {"range":"1-100","count":0,"range_min":101,"range_max":200},
+        {"range":"1-100","count":0,"range_min":201,"range_max":300},
+        {"range":"1-100","count":0,"range_min":301,"range_max":400},
+        {"range":"1-100","count":0,"range_min":401,"range_max":500},
+        {"range":"1-100","count":0,"range_min":501,"range_max":600},
+        {"range":"1-100","count":0,"range_min":601,"range_max":700},
+        {"range":"1-100","count":0,"range_min":701,"range_max":800},
+        {"range":"1-100","count":0,"range_min":801,"range_max":900},
+        {"range":"1-100","count":0,"range_min":901,"range_max":1000},
+    ]
+    range_list = [
+        {"range":"1-100","range_min":1,"range_max":100, "following":copy.deepcopy(pitch_dict)},
+        {"range":"101-200","range_min":101,"range_max":200, "following":copy.deepcopy(pitch_dict)},
+        {"range":"201-300","range_min":201,"range_max":300, "following":copy.deepcopy(pitch_dict)},
+        {"range":"301-400","range_min":301,"range_max":400, "following":copy.deepcopy(pitch_dict)},
+        {"range":"401-500","range_min":401,"range_max":500, "following":copy.deepcopy(pitch_dict)},
+        {"range":"501-600","range_min":501,"range_max":600, "following":copy.deepcopy(pitch_dict)},
+        {"range":"601-700","range_min":601,"range_max":700, "following":copy.deepcopy(pitch_dict)},
+        {"range":"701-800","range_min":701,"range_max":800, "following":copy.deepcopy(pitch_dict)},
+        {"range":"801-900","range_min":801,"range_max":900, "following":copy.deepcopy(pitch_dict)},
+        {"range":"901-1000","range_min":901,"range_max":1001,  "following":copy.deepcopy(pitch_dict)},
+    ]
+    for x in range(0, len(pitch_list) -1):
+        try:
+            pitch = int(pitch_list[x]['pitch'])
+            next_val = int(pitch_list[x + 1]['pitch'])
+        except:
+            continue
+        if pitch_list[x]['game']['id'] != pitch_list[x + 1]['game']['id']:
+            continue
+        for values in range_list:
+            if (next_val >= values['range_min']) and (next_val <= values['range_max']):
+                flist = values['following']
+                for fvalue in flist:
+                    if( pitch >= fvalue['range_min']) and (pitch <= fvalue['range_max']):
+                        fvalue['count'] += 1
+
+    return range_list
+

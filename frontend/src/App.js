@@ -8,6 +8,7 @@ import BatterInfo from "./batter_info/BatterInfo";
 import PitcherInfo from "./pitcher_info/PitcherInfo";
 import TeamSelector from "./TeamSelector";
 import Milr from './pitcher_info/Milr';
+import WBCScouting from './pitcher_info/WBCScouting'
 import { hasRole } from "./auth";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
@@ -19,7 +20,7 @@ class Main extends Component {
       <div className="main">
         <h1> Baltimore Orioles Scouting App</h1>
         <p>
-          Use each individual section to get informationm on either a batter
+          Use each individual section to get information on either a batter
           or a pitcher. If you have any ideas or suggestions on what I might
           be able to implement or add please just let me know. If there are
           any bugs as well please let me know so I can fix it ASAP
@@ -46,9 +47,12 @@ class App extends Component {
   }
   componentWillMount() {
     const { cookies } = this.props;
-    if (cookies.get("logged_in")) {
+    if (cookies.get("logged_in_o")) {
       this.setState({ username: "Oriole_Player" });
       this.setState({ userRoles: ["user"] });
+    } else if (cookies.get("logged_in_wbc")) {
+      this.setState({ username: "WBC_Player" });
+      this.setState({ userRoles: ["wbc_user"] });
     }
   }
   checkLogin(username, password) {
@@ -66,12 +70,16 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(result => {
-        if (result["correct"]) {
+        if (result["correct"] === "oslogin") {
           const { cookies } = this.props;
-          console.log("Successful Login Bitches");
           this.setState({ username: "Oriole_Player" });
           this.setState({ userRoles: ["user"] });
-          cookies.set("logged_in", true, { pathj: "/" , maxAge:31622400});
+          cookies.set("logged_in_o", true, { pathj: "/" , maxAge:31622400});
+        } else if (result["correct"] === "wbclogin") {
+          const { cookies } = this.props;
+          this.setState({ username: "WBC_Player" });
+          this.setState({ userRoles: ["wbc_user"] });
+          cookies.set("logged_in_wbc", true, { pathj: "/" , maxAge:31622400});
         } else {
           alert("Invalid Username/Password, please try again");
         }
@@ -96,7 +104,13 @@ class App extends Component {
                   <Route path="/info/milr" render={() => <Milr />} />
                 </>
               )}
-              {!hasRole(this.state.userRoles, ["user"]) && (
+              {hasRole(this.state.userRoles, ["wbc_user"]) && (
+                <>
+                  <Route exact path="/" render={() => <Main />} />
+                  <Route path="/info/wbc" render={() => <WBCScouting />} />
+                </>
+              )}
+              {!hasRole(this.state.userRoles, ["user", "wbc_user"]) && (
                 <Login
                   checkLogin={this.checkLogin}
                   cookies={this.props.cookies}

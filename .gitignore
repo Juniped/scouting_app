@@ -214,3 +214,4 @@ dmypy.json
 **/credentials.json
 **/credentuals.py
 **/token.pickle
+flask/passfile.yaml
