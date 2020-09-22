@@ -9,6 +9,7 @@ import PitcherInfo from "./pitcher_info/PitcherInfo";
 import TeamSelector from "./TeamSelector";
 import Milr from './pitcher_info/Milr';
 import WBCScouting from './pitcher_info/WBCScouting'
+import FCB from './pitcher_info/FCB'
 import { hasRole } from "./auth";
 import { instanceOf } from "prop-types";
 import { withCookies, Cookies } from "react-cookie";
@@ -70,7 +71,7 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(result => {
-        if (result["correct"] === "oslogin") {
+        if (result["correct"] != False) {
           const { cookies } = this.props;
           this.setState({ username: "Oriole_Player" });
           this.setState({ userRoles: ["user"] });
@@ -102,6 +103,7 @@ class App extends Component {
                   <Route path="/info/batters" render={() => <BatterInfo />} />
                   <Route path="/test" render={() => <TeamSelector />} />
                   <Route path="/info/milr" render={() => <Milr />} />
+                  <Route path="/info/fcb" render={() => <FCB />} />
                 </>
               )}
               {hasRole(this.state.userRoles, ["wbc_user"]) && (

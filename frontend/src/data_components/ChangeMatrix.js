@@ -69,7 +69,6 @@ function Line(props) {
 
 class ChangeMatrix extends Component {
     getLines() {
-        console.log(this.props.pitch_data);
         let d = [];
         for (let i = 0; i < this.props.pitch_data.length; i++) {
             d.push(

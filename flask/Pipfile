@@ -14,6 +14,10 @@ google-auth-oauthlib = "*"
 google-auth-httplib2 = "*"
 flask-cors = "*"
 pyyaml = "*"
+sqlalchemy = "*"
+mysql-connector-python = "*"
+mysqlclient = "*"
+werkzeug = "*"
 
 [requires]
 python_version = "3.7"

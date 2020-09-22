@@ -82,18 +82,18 @@ class RawDataTable extends Component{
             </>
         );
         return (
-            <div>
-                <MediaQuery minWidth={661}>
-                    <Table size="small" padding="checkbox">
-                        {body}
-                    </Table>
-                </MediaQuery>
-                <MediaQuery maxWidth={660}>
-                    <Table size="small" padding="none" style={{ width: '100%' }}>
-                        {body}
-                    </Table>
-                </MediaQuery>
-            </div>
+          <div>
+            <MediaQuery minWidth={661}>
+              <Table size="small" padding="checkbox" stickyHeader>
+                {body}
+              </Table>
+            </MediaQuery>
+            <MediaQuery maxWidth={660}>
+              <Table size="small" padding="none" style={{ width: "100%" }}>
+                {body}
+              </Table>
+            </MediaQuery>
+          </div>
         );
     }
 }

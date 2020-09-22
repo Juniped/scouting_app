@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import {Typography, Paper } from '@material-ui/core';
+import {Typography, Paper,IconButton } from '@material-ui/core';
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 const useStyles = theme => ({
     root: {
@@ -66,6 +67,9 @@ class PlayerSelect extends Component {
                             {this.getOptions()}
                         </NativeSelect>
                     </FormControl>
+                    <IconButton color="primary" onClick={this.props.refreshPlayerData} >
+                        <RefreshIcon />
+                    </IconButton>
             </Paper>
 
         )

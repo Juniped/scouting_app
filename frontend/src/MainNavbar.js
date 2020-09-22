@@ -78,6 +78,7 @@ function BMenu() {
         <Link to="info/pitchers" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>Pitchers</MenuItem></Link>
         <Link to="info/batters" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>Batters</MenuItem></Link>
         <Link to="info/milr" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>MiLR</MenuItem></Link>
+        <Link to="info/fcb" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>FCB</MenuItem></Link>
         <Link to="info/wbc" style={{ textDecoration: 'none', color: '#000000' }}><MenuItem onClick={handleClose}>WBC</MenuItem></Link>
       </Menu>
       </div>
@@ -102,6 +103,8 @@ export default function MainNavbar(props){
               <Tab label="Pitcher Info" to="/info/pitchers" component={Link} />
               <Tab label="Batter Info" to="/info/batters" component={Link}/>
               <Tab label="MiLR Info" to="/info/milr" component={Link} />
+              <Tab label="FCB" to="/info/fcb" component={Link} />
+
             </Tabs>
           </MediaQuery>
         </Toolbar>}

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withStyles} from '@material-ui/core/styles';
-// import { Grid, Box, Paper, Card, Typography, CardContent } from "@material-ui/core";
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import MediaQuery from 'react-responsive';
 

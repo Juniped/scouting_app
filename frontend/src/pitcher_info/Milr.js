@@ -215,7 +215,7 @@ class Milr extends Component {
                   onChange={this.handleChange}
                   inputProps={{
                     name: "currentTeam",
-                    id: "team-native-simple"
+                    id: "team-native-simple",
                   }}
                 >
                   <option value="" />
@@ -223,49 +223,31 @@ class Milr extends Component {
                     Arizona Diamondbacks
                   </option>
                   <option value="Atlanta Braves">Atlanta Braves</option>
-                  <option value="Baltimore Orioles">
-                    Baltimore Orioles
-                  </option>
+                  <option value="Baltimore Orioles">Baltimore Orioles</option>
                   <option value="Boston Red Sox">Boston Red Sox</option>
                   <option value="Chicago Cubs">Chicago Cubs</option>
-                  <option value="Chicago White Sox">
-                    Chicago White Sox
-                  </option>
+                  <option value="Chicago White Sox">Chicago White Sox</option>
                   <option value="Cincinnati Red">Cincinnati Red</option>
-                  <option value="Cleveland Indians">
-                    Cleveland Indians
-                  </option>
+                  <option value="Cleveland Indians">Cleveland Indians</option>
                   <option value="Colorado Rockies">Colorado Rockies</option>
                   <option value="Detroit Tigers">Detroit Tigers</option>
-                  <option value="Houston Colt 45's">
-                    Houston Colt 45's
-                  </option>
-                  <option value="Kansas City Royals">
-                    Kansas City Royals
-                  </option>
-                  <option value="Los Angeles Angels">
-                    Los Angeles Angels
-                  </option>
+                  <option value="Houston Colt 45's">Houston Colt 45's</option>
+                  <option value="Kansas City Royals">Kansas City Royals</option>
+                  <option value="Los Angeles Angels">Los Angeles Angels</option>
                   <option value="Los Angeles Dodgers">
                     Los Angeles Dodgers
                   </option>
                   <option value="Miami Marlins">Miami Marlins</option>
-                  <option value="Milwaukee Brewers">
-                    Milwaukee Brewers
-                  </option>
+                  <option value="Milwaukee Brewers">Milwaukee Brewers</option>
                   <option value="Minnesota Twins">Minnesota Twins</option>
                   <option value="Montreal Expos">Montreal Expos</option>
                   <option value="New York Mets">New York Mets</option>
                   <option value="New York Yankees">New York Yankees</option>
-                  <option value="Oakland Athletics">
-                    Oakland Athletics
-                  </option>
+                  <option value="Oakland Athletics">Oakland Athletics</option>
                   <option value="Philadelphia Phillies">
                     Philadelphia Phillies
                   </option>
-                  <option value="Pittsburgh Pirates">
-                    Pittsburgh Pirates
-                  </option>
+                  <option value="Pittsburgh Pirates">Pittsburgh Pirates</option>
                   <option value="San Diego Padres">San Diego Padres</option>
                   <option value="San Francisco Giants">
                     San Francisco Giants
@@ -274,13 +256,9 @@ class Milr extends Component {
                   <option value="St. Louis Cardinals">
                     St. Louis Cardinals
                   </option>
-                  <option value="Tampa Bay Devil Rays">
-                    Tampa Bay Devil Rays
-                  </option>
+                  <option value="Tampa Bay Rays">Tampa Bay Rays</option>
                   <option value="Texas Rangers">Texas Rangers</option>
-                  <option value="Toronto Blue Jays">
-                    Toronto Blue Jays
-                  </option>
+                  <option value="Toronto Blue Jays">Toronto Blue Jays</option>
                 </NativeSelect>
               </FormControl>
             </Paper>
@@ -307,9 +285,7 @@ class Milr extends Component {
               <Grid item sm={12} md={6}>
                 <Container>
                   <Paper className={classes.paper}>
-                    <Typography variant="h5">
-                      Last 10 First Pitches
-                    </Typography>
+                    <Typography variant="h5">Last 10 First Pitches</Typography>
                     <LastFirst pitch_data={this.state.lastFirst} />
                   </Paper>
                 </Container>
@@ -404,9 +380,7 @@ class Milr extends Component {
                 {/*Last 10 Pitch Graph */}
                 <Container>
                   <Paper className={classes.paper}>
-                    <Typography variant="h5">
-                      Last 10 Pitch Graph
-                    </Typography>
+                    <Typography variant="h5">Last 10 Pitch Graph</Typography>
                     <div style={{ width: "100%", height: 400 }}>
                       <MediaQuery minWidth={601}>
                         <ResponsiveContainer width="100%">
@@ -422,9 +396,7 @@ class Milr extends Component {
                               unit=""
                             />
                             <YAxis type="number" domain={[0, 1000]} />
-                            <Tooltip
-                              cursor={{ strokeDasharray: "200 20" }}
-                            />
+                            <Tooltip cursor={{ strokeDasharray: "200 20" }} />
                             <Legend />
                             <Line
                               name="Pitch"
@@ -489,11 +461,15 @@ class Milr extends Component {
                             height={250}
                             data={this.state.counts}
                           >
-                            <XAxis dataKey="pitch" name="count" unit=""  type="number" domain={[0,1000]} />
-                            <YAxis dataKey="count" name="pitch" unit="" />
-                            <Tooltip
-                              cursor={{ strokeDasharray: "200 20" }}
+                            <XAxis
+                              dataKey="pitch"
+                              name="count"
+                              unit=""
+                              type="number"
+                              domain={[0, 1000]}
                             />
+                            <YAxis dataKey="count" name="pitch" unit="" />
+                            <Tooltip cursor={{ strokeDasharray: "200 20" }} />
                             <Legend />
                             <Line
                               name="Pitches"
@@ -512,7 +488,10 @@ class Milr extends Component {
               <Grid item xs={12}>
                 <hr />
                 <Container className={classes.container}>
-                  <RawData pitch_data={this.state.rawData} type="RawPitch Data" />
+                  <RawData
+                    pitch_data={this.state.rawData}
+                    type="RawPitch Data"
+                  />
                 </Container>
               </Grid>
             </>

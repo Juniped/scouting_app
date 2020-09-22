@@ -9,9 +9,14 @@ import {
   Pie,
   Cell,
   ResponsiveContainer,
+  LineChart,
   XAxis,
   YAxis,
+  ZAxis,
+  CartesianGrid,
   Tooltip,
+  Legend,
+  Line,
   Area,
   AreaChart
 } from "recharts";
@@ -27,6 +32,7 @@ import LastFirst from "../data_components/LastFirst";
 import DoubleDown from "../data_components/DoubleDown";
 import DoubleDownResults from "../data_components/DoubleDownResults";
 import CurrentGame from "../data_components/CurrentGame";
+import FollowingMatrix from "../data_components/FollowingMatrix";
 
 const colors = ["#DF4400", "#000000"];
 
@@ -54,7 +60,8 @@ const useStyles = theme => ({
   }
 });
 
-class WBCScouting extends Component {
+class FCB
+ extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,7 +82,8 @@ class WBCScouting extends Component {
       double_down: [],
       double_down_results: [],
       current_game: [],
-      last20: []
+      last20: [],
+      following: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.getPlayerData = this.getPlayerData.bind(this);
@@ -97,12 +105,13 @@ class WBCScouting extends Component {
         double_down: [],
         double_down_results: [],
         current_game: [],
-        last20: []
+        last20: [],
+        following: []
       });
       return;
     }
     let teamName = encodeURIComponent(this.state.currentTeam.trim());
-    let url = API_URL + "/get/wbc/team/name/" + teamName;
+    let url = API_URL + "/get/fcb/team/name/" + teamName;
     fetch(url, {
       method: "GET",
       headers: {
@@ -123,7 +132,7 @@ class WBCScouting extends Component {
   }
   getPlayers() {
     let teamID = this.state.team.tag;
-    let player_url = API_URL + "/get/wbc/pitchers/team/" + teamID;
+    let player_url = API_URL + "/get/fcb/pitchers/team/" + teamID;
     fetch(player_url, {
       method: "GET",
       headers: {
@@ -151,7 +160,7 @@ class WBCScouting extends Component {
     return label;
   };
   getPlayerData(playerID) {
-    let url = API_URL + "/info/wbc/pitcher/" + playerID;
+    let url = API_URL + "/info/fcb/pitcher/" + playerID;
     fetch(url, {
       method: "GET",
       headers: {
@@ -175,7 +184,8 @@ class WBCScouting extends Component {
           double_down: result.double_down,
           double_down_results: result.double_down_results,
           current_game: result.current_game,
-          last20: result.last20
+          last20: result.last20,
+          following: result.following
         });
       })
       .catch(error => {
@@ -183,7 +193,7 @@ class WBCScouting extends Component {
         console.log("Request Swallowed!");
       });
     // Get Counts Seperate
-    let counturl = API_URL + "/info/wbc/pitcher/counts/" + playerID;
+    let counturl = API_URL + "/info/fcb/pitcher/counts/" + playerID;
     fetch(counturl, {
       method: "GET",
       headers: {
@@ -226,16 +236,17 @@ class WBCScouting extends Component {
                   }}
                 >
                   <option value="" />
-                  <option value="Barbados">
-                    Barbados
+                  <option value="Arizona Diamondbacks">
+                    Arizona Diamondbacks
                   </option>
-                  <option value="Bosnia and Herzgovina">Bosnia and Herzgovina</option>
-                  <option value="Greece">Greece</option>
-                  <option value="Jamaica">Jamaica</option>
-                  <option value="San Marino">San Marino</option>
-                  <option value="Scotland">Scotland</option>
-                  <option value="Swaziland">Swaziland</option>
-                  <option value="Vatican City">Vatican City</option>
+                  <option value="Coastal Carolina Chanticleers">Coastal Carolina Chanticleers</option>
+                  <option value="Georgia Tech Yellow Jackets">Georgia Tech Yellow Jackets</option>
+                  <option value="Louisville Cardinals">Louisville Cardinals</option>
+                  <option value="Nebraska Cornhuskers">Nebraska Cornhuskers</option>
+                  <option value="North Carolina State University">North Carolina State University</option>
+                  <option value="North Carolina Tar Heels">North Carolina Tar Heels</option>
+                  <option value="Sarah Lawrence College">Sarah Lawrence College</option>
+                  <option value="Wichita State Shockers">Wichita State Shockers</option>
                 </NativeSelect>
               </FormControl>
             </Paper>
@@ -333,10 +344,47 @@ class WBCScouting extends Component {
               <Grid item sm={12} md={6}>
                 <Container>
                   <Paper className={classes.paper}>
+                    <Typography variant="h5">Following Pitch Matrix</Typography>
+                    <Typography variant="p">
+                      Inital Pitch is on the top row and following pitch range
+                      as you go down.
+                    </Typography>
+                    <FollowingMatrix pitch_data={this.state.following} />
+                  </Paper>
+                </Container>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Container>
+                  <Paper className={classes.paper}>
                     <Typography variant="h5">Change Matrix</Typography>
                     <ChangeMatrix pitch_data={this.state.changeMatrix} />
                   </Paper>
                 </Container>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                {/* <Container> */}
+
+                <Paper className={classes.paper}>
+                  <Typography variant="h5">Double Down Analysis</Typography>
+                  <br />
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <Paper className={classes.paper}>
+                        <DoubleDown data={this.state.double_down} />
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Paper className={classes.paper}>
+                        <DoubleDownResults
+                          res={this.state.double_down_results}
+                        />
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <CurrentGame data={this.state.current_game} />
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <Container className={classes.container}>
@@ -349,6 +397,48 @@ class WBCScouting extends Component {
                 <Container className={classes.container}>
                   <Paper className={classes.paper}>
                     <Jumps pitch_data={this.state.jumps} />
+                  </Paper>
+                </Container>
+              </Grid>
+
+              <Grid item xs={12}>
+                {/*Last 10 Pitch Graph */}
+                <Container>
+                  <Paper className={classes.paper}>
+                    <Typography variant="h5">Last 20 Pitch Graph</Typography>
+                    <div style={{ width: "100%", height: 400 }}>
+                      <MediaQuery minWidth={401}>
+                        <ResponsiveContainer width="100%">
+                          <LineChart
+                            // width={730}
+                            height={250}
+                            data={this.state.last20}
+                          >
+                            <CartesianGrid strokeDasharray="200 20" />
+                            <XAxis
+                              dataKey="index"
+                              name="Pitch Number"
+                              unit=""
+                            />
+                            <YAxis type="number" domain={[0, 1000]} />
+                            <Tooltip cursor={{ strokeDasharray: "200 20" }} />
+                            <Legend />
+                            <Line
+                              name="Pitch"
+                              dataKey="pitch"
+                              stroke="#d12e72"
+                              type="linear"
+                            />
+                            <Line
+                              name="Difference"
+                              dataKey="diff"
+                              stroke="#31d6b0"
+                              type="linear"
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </MediaQuery>
+                    </div>
                   </Paper>
                 </Container>
               </Grid>
@@ -382,13 +472,51 @@ class WBCScouting extends Component {
                   </Paper>
                 </Container>
               </Grid>
+              <Grid item xs={12}>
+                <Container>
+                  <Paper className={classes.paper}>
+                    <Typography variant="h5">
+                      Individual Pitch Counts
+                    </Typography>
+                    <div style={{ width: "100%", height: 400 }}>
+                      <MediaQuery minWidth={401}>
+                        <ResponsiveContainer width="100%">
+                          <LineChart
+                            // width={730}
+                            height={250}
+                            data={this.state.counts}
+                          >
+                            <XAxis
+                              dataKey="pitch"
+                              name="count"
+                              unit=""
+                              type="number"
+                              domain={[0, 1000]}
+                            />
+                            <YAxis dataKey="count" name="pitch" unit="" />
+                            <Tooltip cursor={{ strokeDasharray: "200 20" }} />
+                            <Legend />
+                            <Line
+                              name="Pitches"
+                              dataKey="count"
+                              stroke="#8884d8"
+                              type="linear"
+                              dot={true}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </MediaQuery>
+                    </div>
+                  </Paper>
+                </Container>
+              </Grid>
 
               <Grid item xs={12}>
                 <hr />
                 <Container className={classes.container}>
                   <RawData
                     pitch_data={this.state.rawData}
-                    type="Raw MLR Pitch Data"
+                    type="Raw FCB Pitch Data"
                   />
                 </Container>
               </Grid>
@@ -400,4 +528,5 @@ class WBCScouting extends Component {
   }
 }
 
-export default withStyles(useStyles)(WBCScouting);
+export default withStyles(useStyles)(FCB
+    );

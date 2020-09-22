@@ -35,7 +35,7 @@ def build_matrix(pitch_list):
         "4":{**{"range":"401-500"}, **pitch_dict.copy()},
         "5":{**{"range":"501-600"}, **pitch_dict.copy()},
         "6":{**{"range":"601-700"}, **pitch_dict.copy()},
-        "7":{**{"range":"701-900"}, **pitch_dict.copy()},
+        "7":{**{"range":"701-800"}, **pitch_dict.copy()},
         "8":{**{"range":"801-900"}, **pitch_dict.copy()},
         "9":{**{"range":"901-1000"}, **pitch_dict.copy()},
     }
@@ -148,6 +148,8 @@ def get_last_6_pitches(pitch_list):
                 l6[x]['change'] = l6[x+2]['pitch'] - l6[x]['pitch']
             except IndexError:
                 l6[x]['change']= "-"
+            except TypeError:
+                 l6[x]['change'] = "-"
         elif "Auto" in l6[x]['result']:
             l6[x]['change'] = "-"
         else:
@@ -299,14 +301,16 @@ def get_counts(pitch_list):
 
 def current_game_stats(pitch_list):
     return_data = {}
+    
     x = -1
     try:
         while True:
-            if pitch_list[x]['game']['homeTeam']['milr'] == False:
-                most_recent_pitch = pitch_list[x]
-                current_game = most_recent_pitch['game']['id']
-                break
+            # if pitch_list[x]['game']['homeTeam']['milr'] == False:
+            most_recent_pitch = pitch_list[x]
+            current_game = most_recent_pitch['game']['id']
+            break
     except:
+        current_game_pitches = []
         return {
             'avg_jump': "N/A",
             'changeMatrix': change_matrix(current_game_pitches),
@@ -346,7 +350,6 @@ def current_game_stats(pitch_list):
     return_data['changeMatrix'] = change_matrix(current_game_pitches),
     return_data['matrix'] = build_matrix(current_game_pitches)
     return return_data
-
 
 def double_down_analysis(pitch_list):
     dd = []
@@ -395,14 +398,6 @@ def double_down_analysis(pitch_list):
                 dd.append(dd_item)
         except:
             pass
-        # if abs(next_val - pitch_val) < 50 and pitch['game']['id'] == next_pitch['game']['id']:
-        #     dd_item = {
-        #         "pitch_1": pitch_val,
-        #         "result_1": pitch_result,
-        #         "pitch_2":next_val,
-        #         "result_2": next_result
-        #     }
-        #     dd.append(dd_item)
     # Analysis Time
 
     for double_down in dd:
@@ -469,4 +464,26 @@ def following_pitch(pitch_list):
                         fvalue['count'] += 1
 
     return range_list
+
+def get_bounceback(data):
+    bounceback_list= []
+    for x in range(0,len(data)-3):
+        # Pull all three pitches then check to see if pitch 1 and 3 are within 75 of each other
+        pitch1 = data[x]
+        pitch2 = data[x+1]
+        pitch3 = data[x+2]
+        print(pitch1['pitch'])
+        print(pitch3['pitch'])
+        try:
+            # if they are within 75n of each other add to the bounceback list
+            if abs(pitch1['pitch'] - pitch3['pitch']) <75:
+                new_bounceback = {
+                    'p1': pitch1,
+                    'p2': pitch2,
+                    'p3':pitch3, 
+                }
+                bounceback_list.append(new_bounceback)
+        except:
+            pass
+    return bounceback_list
 
